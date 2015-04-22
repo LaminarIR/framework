@@ -1,2 +1,2 @@
 # codegen
-Code generator of LaminarIR
+Backends of LaminarIR
