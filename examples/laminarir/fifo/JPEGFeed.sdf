@@ -1,0 +1,484 @@
+preamble
+{
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+#define PI 3.1415927
+
+volatile long long sum=0;
+
+static const int out[64] = 
+    {139, 144, 149, 153, 155, 155, 155, 155,
+     144, 151, 153, 156, 149, 156, 156, 156,
+     150, 155, 160, 163, 158, 156, 156, 156,
+     159, 161, 162, 160, 160, 159, 159, 159,
+     159, 160, 161, 162, 162, 155, 155, 155,
+     161, 161, 161, 161, 160, 157, 157, 157,
+     162, 162, 161, 163, 162, 157, 157, 157,
+     162, 162, 161, 161, 163, 158, 158, 158};
+
+static const int quantizationTable[64] = 
+   {16, 11, 10, 16, 24, 40, 51, 61,
+    12, 12, 14, 19, 26, 58, 60, 55,
+	14, 13, 16, 24, 40, 57, 69, 56,
+	14, 17, 22, 29, 51, 87, 80, 62,
+	18, 22, 37, 56, 68, 109, 103, 77,
+	24, 35, 55, 64, 81, 104, 113, 92,
+	49, 64, 78, 87, 103, 121, 120, 101,
+	72, 92, 95, 98, 112, 100, 103, 99};
+
+static const int Ordering[64] = 
+   { 0,  1,  8, 16,  9,  2,  3, 10, 
+    17, 24, 32, 25, 18, 11,  4,  5,
+    12, 19, 26, 33, 40, 48, 41, 34,
+    27, 20, 13,  6,  7, 14, 21, 28,
+    35, 42, 49, 56, 57, 50, 43, 36, 
+    29, 22, 15, 23, 30, 37, 44, 51, 
+    58, 59, 52, 45, 38, 31, 39, 46,
+    53, 60, 61, 54, 47, 55, 62, 63};
+
+static const int UnOrdering[64] = 
+   { 0,  1,  5,  6, 14, 15, 27, 28,
+     2,  4,  7, 13, 16, 26, 29, 42,
+     3,  8, 12, 17, 25, 30, 41, 43,
+     9, 11, 18, 24, 31, 40, 44, 53,
+    10, 19, 23, 32, 39, 45, 52, 54,
+    20, 22, 33, 38, 46, 51, 55, 60,
+    21, 34, 37, 47, 50, 56, 59, 61,
+    35, 36, 48, 49, 57, 58, 62, 63};
+
+}
+
+sdf JPEGFeed {
+  int ACMSample8BitBlock -> Int2Float;
+  float Int2Float -> Add;
+
+  float Add -> DCT_X_Splitter (64);
+  for (int size_x=0:7)
+  begin
+    float DCT_X_Splitter (8) -> DCT_X[size_x];
+    float DCT_X[size_x] -> DCT_X_Joiner (8);
+  end
+  float DCT_X_Joiner (64) -> DCT_Y_Splitter (8);
+  for (int size_y=0:7)
+  begin
+    float DCT_Y_Splitter (1) -> DCT_Y[size_y];
+    float DCT_Y[size_y] -> DCT_Y_Joiner (1);
+  end
+  float DCT_Y_Joiner (8) -> staticExampleLuminanceQuantization;
+  int staticExampleLuminanceQuantization -> EncoderSplitter (64);
+
+  int EncoderSplitter (1) -> EncoderFeedJoiner (1);
+  int EncoderSplitter (63) -> EncoderId ;
+  int EncoderFeedSplitter (1) -> EncoderFeedJoiner (1) = { { 0 } };
+  int EncoderFeedJoiner (2) -> AnonEncoder;
+  int AnonEncoder -> EncoderFeedSplitter (2);
+  int EncoderFeedSplitter (1) -> EncoderJoiner (1);
+  int EncoderId -> EncoderJoiner (63);
+
+  int EncoderJoiner (64) -> ZigZagOrdering;
+  int ZigZagOrdering -> RunLengthEncoder;
+  int RunLengthEncoder -> RunLengthDecoder;
+  int RunLengthDecoder -> ZigZagUnordering;
+  int ZigZagUnordering -> DecoderSplitter (64);
+
+  int DecoderSplitter (1) -> DecoderFeedJoiner (1);
+  int DecoderSplitter (63) -> DecoderId;
+  int DecoderFeedSplitter (1) -> DecoderFeedJoiner (1) = { { 0 } };
+  int DecoderFeedJoiner (2) -> AnonDecoder;
+  int AnonDecoder -> DecoderFeedSplitter (2);
+  int DecoderFeedSplitter (1) -> DecoderJoiner (1);
+  int DecoderId -> DecoderJoiner (63);
+
+  int DecoderJoiner (64) -> staticExampleLuminanceDeQuantization;
+  float staticExampleLuminanceDeQuantization -> iDCT_X_Splitter (64);
+  for (int isize_x=0:7)
+  begin
+    float iDCT_X_Splitter (8) -> iDCT_X[isize_x];
+    float iDCT_X[isize_x] -> iDCT_X_Joiner (8);
+  end
+  float iDCT_X_Joiner (64) -> iDCT_Y_Splitter (8);
+  for (int isize_y=0:7)
+  begin
+    float iDCT_Y_Splitter (1) -> iDCT_Y[isize_y];
+    float iDCT_Y[isize_y] -> iDCT_Y_Joiner (1);
+  end
+  float iDCT_Y_Joiner (8) -> iAdd;
+  float iAdd -> Float2Int;
+  int Float2Int -> Display8BitIntBlock;
+
+  actor EncoderId {
+    input: 
+      EncoderSplitter: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      EncoderJoiner: y1;
+  }
+
+  actor DecoderId {
+    input: 
+      DecoderSplitter: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DecoderJoiner: y1;
+  }
+
+
+  actor ACMSample8BitBlock {
+    firing:
+    {
+        int i;
+        for (i = 0; i < 64; i++) {
+          push(out[i]);
+        }
+    }
+    output:
+        Int2Float: x[1-64];
+  }
+
+  actor Int2Float {
+    input:
+      ACMSample8BitBlock: x1;
+    firing:{
+        push((float) pop());
+    }
+    output:
+      Add: y1;
+  }
+
+  actor Add {
+    input: 
+      Int2Float: x1;
+    firing:
+    {
+      push(pop() -128);
+    }
+    output:
+      DCT_X_Splitter: y1;
+  }
+
+  actor DCT_X {
+    input:
+      DCT_X_Splitter: x[1-8];
+    firing:
+    {
+      float Cu;
+      int u;
+      int x;
+      for (u = 0; u < 8; u++) {
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        float tempsum = 0;
+        for (x = 0; x < 8; x++) {
+          tempsum += peek(x)*cos(u*PI*(2.0*x+1)/(2.0*8));
+        }
+        push((1.0/2.0)*Cu*tempsum);
+      }
+      for (x = 0; x < 8; x++) {
+        pop();
+      }
+    }
+    output:
+      DCT_X_Joiner: y[1-8];
+  }
+
+  actor DCT_Y {
+    input:
+      DCT_Y_Splitter: x[1-8];
+    firing:
+    {
+      float Cu;
+      int u;
+      int x;
+      for (u = 0; u < 8; u++) {
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        float tempsum = 0;
+        for (x = 0; x < 8; x++) {
+          tempsum += peek(x)*cos(u*PI*(2.0*x+1)/(2.0*8));
+        }
+        push((1.0/2.0)*Cu*tempsum);
+      }
+      for (x = 0; x < 8; x++) {
+        pop();
+      }
+    }
+    output:
+      DCT_Y_Joiner: y[1-8];
+  }
+
+  actor staticExampleLuminanceQuantization {
+    input:
+      DCT_Y_Joiner: x[1-64];
+    firing:
+    {
+      int i;
+      float val;
+      float tmp;
+      for (i = 0; i < 64; i++) {
+        val = pop() / quantizationTable[i];
+        push((int) (round(val)));
+      }
+    }
+    output:
+      EncoderSplitter: y[1-64];
+  }
+
+  actor AnonEncoder {
+    input:
+      EncoderFeedJoiner: x1,x2;
+    firing:
+    {
+      push(peek(0));
+      push(peek(0) - peek(1));
+      pop(); pop();
+    }
+    output:
+      EncoderFeedSplitter:y1,y2;
+  }
+
+  actor ZigZagOrdering {
+    input:
+      EncoderJoiner: x[1-64];
+    firing:
+    {
+        int i;
+        for (i = 0; i < 64; i++){
+          push(peek(Ordering[i]));
+        }
+        for (i = 0; i < 64; i++){
+          pop();
+        }
+    }
+    output:
+      RunLengthEncoder: y[1-64];
+  }
+
+  actor RunLengthEncoder {
+    input: 
+      ZigZagOrdering: x[1-64];
+    firing:
+    {
+      int i;
+      int lastInt = 0;
+      int count = 0;
+      int starting = 1;
+      int push_counter = 0;
+      for (i = 0; i < 64; i++) {
+          int curPosition = i;
+          int curInt = peek(i);
+          if (starting) {
+              lastInt = curInt;
+              count = 1;
+              starting = 0;
+          } else {
+              if (curInt == lastInt) {
+                  count++;
+              } else {
+                  push(count);
+                  push_counter++;
+                  push(lastInt);
+                  push_counter++;
+                  lastInt = curInt;
+                  count = 1;
+              }
+          }
+      }
+      push(count);
+      push_counter++;
+      push(lastInt); 
+      push_counter++;
+
+      for (i = 0; i < 64-push_counter+1; i++) {
+        push(0);
+      }
+    }
+    output:
+      RunLengthDecoder: y[1-64];
+  }
+
+  actor RunLengthDecoder {
+    input: 
+      RunLengthEncoder: x[1-2];
+    firing:
+    {
+        int i;
+        int count = pop();
+        int curInt = pop();
+        for (i = 0; i < count; i++) {
+          push(curInt);
+        }
+    }
+    output:
+      ZigZagUnordering: y[1-2];
+  }
+
+  actor ZigZagUnordering {
+    input:
+      RunLengthDecoder: x[1-64];
+    firing:
+    {
+        int i;
+        for (i = 0; i < 64; i++){
+          push(peek(UnOrdering[i]));
+        }
+        for (i = 0; i < 64; i++){
+          pop();
+        }
+    }
+    output:
+      DecoderSplitter: y[1-64];
+  }
+
+  actor AnonDecoder {
+    input:
+      DecoderFeedJoiner: x1,x2;
+    firing:
+    {
+      push(peek(1));
+      push(peek(0) + peek(1));
+      pop(); pop();
+    }
+    output:
+      DecoderFeedSplitter: y1,y2;
+  }
+
+  actor staticExampleLuminanceDeQuantization {
+    input:
+      DecoderJoiner: x[1-64];
+    firing:
+    {
+        int i;
+        for (i = 0; i < 64; i++) {
+          int val = pop() * quantizationTable[i];
+          push((float) val);
+        }
+    }
+    output:
+      iDCT_X_Splitter: y[1-64];
+  }
+
+  actor iDCT_X {
+    input: 
+      iDCT_X_Splitter: x[1-8];
+    firing:
+    {
+        int x;
+        int u;
+        float Cu;
+        for (x = 0; x < 8; x++) {
+          float tempsum = 0;
+          for (u = 0; u < 8; u++) {
+            if (u == 0){
+              Cu = 1/sqrt(2);
+            }else{
+              Cu = 1;
+            }
+            tempsum += Cu*peek(u)*cos(u*PI*(2.0*x+1)/(2.0*8));
+          }
+          push((1.0/2.0)*tempsum);
+        }
+        for (x = 0; x < 8; x++) {
+          pop();
+        }
+    }
+    output:
+      iDCT_X_Joiner: y[1-8];
+  }
+
+  actor iDCT_Y {
+    input:
+      iDCT_Y_Splitter: x[1-8];
+    firing:
+    {
+        int x;
+        int u;
+        float Cu;
+        for (x = 0; x < 8; x++) {
+          float tempsum = 0;
+          for (u = 0; u < 8; u++) {
+            if (u == 0){
+              Cu = 1/sqrt(2);
+            }else{
+              Cu = 1;
+            }
+            tempsum += Cu*peek(u)*cos(u*PI*(2.0*x+1)/(2.0*8));
+          }
+          push((1.0/2.0)*tempsum);
+        }
+        for (x = 0; x < 8; x++) {
+          pop();
+        }
+    }
+    output:
+      iDCT_Y_Joiner: y[1-8];
+  }
+
+  actor iAdd {
+    input: 
+      iDCT_Y_Joiner: x1;
+    firing:
+    {
+      push(pop() + 128);
+    }
+    output:
+      Float2Int: y1;
+  }
+
+  actor Float2Int {
+    input:
+      iAdd: x1;
+    firing:
+    {
+        push((int) round(pop()));
+    }
+    output:
+      Display8BitIntBlock: y1;
+  }
+
+  actor Display8BitIntBlock {
+    input:
+      Float2Int: x[1-8];
+    firing:
+    {
+        int i;
+        int x[8]={0};
+        x[0] = pop();
+        x[1] = pop();
+        x[2] = pop();
+        x[3] = pop();
+        x[4] = pop();
+        x[5] = pop();
+        x[6] = pop();
+        x[7] = pop();
+        //printf("NEWLINE\n");
+        for (i = 0; i < 8; i++) {
+          //printf("%d\n", x[i]);
+          sum+=x[i];
+        }
+    }
+  }
+}
+
+
+postamble
+{
+int main(){
+    JPEGFeed();
+    printf("%lld\n", sum);
+    return 0;
+}
+}

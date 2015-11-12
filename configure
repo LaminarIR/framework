@@ -1,0 +1,224 @@
+#!/bin/bash
+PROGNAME=${0##*/}
+
+#-------------------------------------------------------
+#   Definitions of variables
+#-------------------------------------------------------
+CURDIR=`pwd`
+HOSTNAME=`hostname`
+CODEGEN="LAMINAR"
+# Set MACHINE to the CPU architecture that the framework 
+# will run on. Following is the list of values supported 
+# by this distribution:
+# VIRTUALBOX
+# SANDY_BRIDGE
+# IVY_BRIDGE
+# HASWELL
+# OPTERON
+# LINARO
+# XEON_PHI
+# UNKNOWN
+# 
+# NOTE: In case you want to run on a machine that is not
+# shown in the list above, put ``UNKNOWN'' for execution
+# time only measurements.
+MACHINE="UNKNOWN" 
+
+#-------------------------------------------------------
+#   Helper function
+#-------------------------------------------------------
+usage() 
+{ 
+  cat<<EOF
+        Usage: $PROGNAME [options] 
+
+        Options: 
+
+        -h|--help & show this output 
+
+        -l|--laminar & configure setting for laminar 
+
+        -s|--streamit & configure setting for streamit
+EOF
+}
+
+#-------------------------------------------------------
+#   Parse Command-line arguments
+#-------------------------------------------------------
+SHORTOPTS="hls"
+LONGOPTS="help,laminar,streamit"
+
+ARGS=$(getopt -s bash --options $SHORTOPTS \
+              --longoptions $LONGOPTS --name $PROGNAME -- "$@" ) 
+
+eval set -- "$ARGS" 
+
+while true; do
+    case $1 in
+        -h|--help)
+            usage
+            exit 1
+            ;;
+        -l|--laminar)
+            CODEGEN=LAMINAR
+            ;;
+        -s|--streamit)
+            CODEGEN=STREAMIT
+            ;;
+
+        --)
+            shift
+            break
+            ;;
+        ?)
+            usage
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+getPath()
+{
+ p=`which $1`
+ if [[ -z ${p} ]]; then
+  echo "$1 not found. Exiting..."
+  exit 1
+ fi
+ echo "${p}" | sed -e 's/\/bin.*//g'
+}
+
+
+#-------------------------------------------------------
+#   Remove existing output file if there is
+#-------------------------------------------------------
+rm -f Defines.make 
+
+#-------------------------------------------------------
+#   Check availability of prerequisites
+#-------------------------------------------------------
+if [ -n "$(python -c "import pygraph.classes.digraph" 2>&1 > /dev/null)" ]; then
+       echo >&2 "ERROR: pygraph package not found. Visit
+       https://code.google.com/p/python-graph/
+       for more information. Exiting..." 
+       exit 1
+fi
+command -v strc >/dev/null 2>&1 || { echo >&2 "ERROR: strc not found. Visit
+       http://groups.csail.mit.edu/cag/streamit/ 
+       for more information. Exiting..."; exit 1; }
+command -v likwid-pin >/dev/null 2>&1 || { echo >&2 "ERROR: LIKWID not found. Visit
+       https://code.google.com/p/likwid/
+       for more information. Exiting..."; exit 1; }
+command -v papi_version >/dev/null 2>&1 || { echo >&2 "ERROR: PAPI not found. Visit
+       http://icl.cs.utk.edu/papi/
+       for more information. Exiting..."; exit 1; }
+
+pPAPI=`getPath papi_version`
+pLIKWID=`getPath likwid-pin`
+
+
+#-------------------------------------------------------
+#   Generate Defines.make
+#-------------------------------------------------------
+echo "Generating Defines.make ..."
+echo "* TARGET MACHINE: ${MACHINE}"
+echo "* HOST NAME     : ${HOSTNAME}"
+echo "* CODE GENERATOR: ${CODEGEN}"
+
+
+echo "######################################################################"\
+ >Defines.make
+echo "# This file is a generated file, changes will be lost with the next  #"\
+ >>Defines.make
+echo "# run of ./configure.                                                #"\
+ >>Defines.make
+echo "# Edit Defines.make.in and run ./configure for permanent changes.    #"\
+ >>Defines.make
+echo "# Do *not* add this file to the repository.                          #"\
+ >>Defines.make
+echo "######################################################################"\
+ >>Defines.make
+echo ""\
+ >>Defines.make
+echo "# TARGET MACHINE: ${MACHINE}"\
+ >>Defines.make
+echo "# HOST NAME     : ${HOSTNAME}"\
+ >>Defines.make
+echo "# CODE GENERATOR: ${CODEGEN}"\
+ >>Defines.make
+echo ""\
+ >>Defines.make
+echo "PAPI_DIR=${pPAPI}"\
+ >>Defines.make
+echo "LIKWID_DIR=${pLIKWID}"\
+ >>Defines.make
+
+
+comp_flag=''
+libs=''
+
+while read line
+do
+    if [[ $line == ${CODEGEN}_CC=* ]] ; then
+	  if [[ ${MACHINE} == "XEON_PHI" ]] ; then
+            continue
+	  fi
+        echo $line | sed -e "s,^\(${CODEGEN}_CC\),CC,g" >>Defines.make
+    elif [[ $line == PAPI* ]] ; then
+        echo $line >> Defines.make
+    elif [[ $line == AR* ]] ; then
+        echo $line >> Defines.make
+    elif [[ $line == GCC* ]] ; then
+        echo $line >> Defines.make
+    elif [[ $line == LIBS* ]] ; then
+        echo $line >> Defines.make
+    elif [[ $line == ${MACHINE}_${CODEGEN}_CC* ]] ; then
+        echo $line | sed -e "s,^\(${MACHINE}_${CODEGEN}_CC\),CC,g" >>Defines.make
+    elif [[ $line == ${CODEGEN}_CCFLAGS* ]] ; then
+        echo $line | sed -e "s,^\(STREAMIT_CCFLAGS=\),CCFLAGS=,g" >>Defines.make
+    elif [[ $line == ${CODEGEN}_CFLAGS* ]] ; then
+        echo $line | sed -e "s,^\(LAMINAR_CFLAGS=\),CFLAGS=,g" >>Defines.make
+    elif [[ $line == ${MACHINE}_CFLAGS* ]] ; then
+        echo $line | sed -e "s,^\(${MACHINE}_CFLAGS=\),CFLAGS+=,g" >>Defines.make
+    elif [[ $line == STREAMIT_LIB_CLUSTER* ]] ; then
+        if [[ ${CODEGEN} == STREAMIT ]] ; then
+            echo $line >>Defines.make
+        fi
+    elif [[ $line == ${MACHINE}_RUN_OPT* ]] ; then
+        echo $line | sed -e "s,^\(${MACHINE}_RUN_OPT\),RUN_OPT,g" >>Defines.make
+    elif [[ $line == ${MACHINE}_RUN_OPT* ]] ; then
+        echo $line | sed -e "s,^\(${MACHINE}_RUN_OPT\),RUN_OPT,g" >>Defines.make
+    elif [[ $line == ${MACHINE}_LLC_OPT* ]] ; then
+        echo $line | sed -e "s,^\(${MACHINE}_LLC_OPT\),LLC_OPT,g" >>Defines.make
+    elif [[ $line == '' ]] ; then
+        echo -e $line >> Defines.make
+    fi
+done < Defines.make.in
+
+#-------------------------------------------------------
+#   Check availability of C compiler
+#-------------------------------------------------------
+CC=`make print-CC`
+command -v ${CC} >/dev/null 2>&1 || { 
+    echo >&2 "ERROR: ${CC} not found. Exiting..."; exit 1;
+}
+
+#-------------------------------------------------------
+#   Check availability of ANTLR
+#-------------------------------------------------------
+pANTLRJAR=`make print-ANTLR_JAR`
+if [ ! -f ${pANTLRJAR} ]; then
+    echo >&2 "ERROR: ${pANTLRJAR} is not found. Please download ANTLR v3.1 and 
+       put it as ${pANTLRJAR}."; exit 1;
+fi
+
+#-------------------------------------------------------
+#   Prepare the system accordingly
+#-------------------------------------------------------
+# clean dir
+echo "Clean current working copy..."
+make clean
+
+# compile 
+echo "Compile current working copy..."
+make 

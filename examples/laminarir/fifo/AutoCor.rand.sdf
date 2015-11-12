@@ -1,0 +1,4154 @@
+preamble {
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+static unsigned int seed;
+
+volatile double _sum = 0.0;
+}
+
+sdf AutoCor {
+  float OneSource_1 -> Cor1_2_split(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_4;
+  float AnonFilter_a0_4 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_5;
+  float AnonFilter_a0_5 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_6;
+  float AnonFilter_a0_6 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_7;
+  float AnonFilter_a0_7 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_8;
+  float AnonFilter_a0_8 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_9;
+  float AnonFilter_a0_9 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_10;
+  float AnonFilter_a0_10 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_11;
+  float AnonFilter_a0_11 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_12;
+  float AnonFilter_a0_12 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_13;
+  float AnonFilter_a0_13 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_14;
+  float AnonFilter_a0_14 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_15;
+  float AnonFilter_a0_15 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_16;
+  float AnonFilter_a0_16 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_17;
+  float AnonFilter_a0_17 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_18;
+  float AnonFilter_a0_18 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_19;
+  float AnonFilter_a0_19 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_20;
+  float AnonFilter_a0_20 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_21;
+  float AnonFilter_a0_21 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_22;
+  float AnonFilter_a0_22 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_23;
+  float AnonFilter_a0_23 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_24;
+  float AnonFilter_a0_24 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_25;
+  float AnonFilter_a0_25 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_26;
+  float AnonFilter_a0_26 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_27;
+  float AnonFilter_a0_27 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_28;
+  float AnonFilter_a0_28 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_29;
+  float AnonFilter_a0_29 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_30;
+  float AnonFilter_a0_30 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_31;
+  float AnonFilter_a0_31 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_32;
+  float AnonFilter_a0_32 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_33;
+  float AnonFilter_a0_33 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_34;
+  float AnonFilter_a0_34 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_35;
+  float AnonFilter_a0_35 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_36;
+  float AnonFilter_a0_36 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_37;
+  float AnonFilter_a0_37 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_38;
+  float AnonFilter_a0_38 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_39;
+  float AnonFilter_a0_39 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_40;
+  float AnonFilter_a0_40 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_41;
+  float AnonFilter_a0_41 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_42;
+  float AnonFilter_a0_42 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_43;
+  float AnonFilter_a0_43 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_44;
+  float AnonFilter_a0_44 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_45;
+  float AnonFilter_a0_45 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_46;
+  float AnonFilter_a0_46 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_47;
+  float AnonFilter_a0_47 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_48;
+  float AnonFilter_a0_48 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_49;
+  float AnonFilter_a0_49 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_50;
+  float AnonFilter_a0_50 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_51;
+  float AnonFilter_a0_51 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_52;
+  float AnonFilter_a0_52 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_53;
+  float AnonFilter_a0_53 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_54;
+  float AnonFilter_a0_54 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_55;
+  float AnonFilter_a0_55 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_56;
+  float AnonFilter_a0_56 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_57;
+  float AnonFilter_a0_57 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_58;
+  float AnonFilter_a0_58 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_59;
+  float AnonFilter_a0_59 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_60;
+  float AnonFilter_a0_60 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_61;
+  float AnonFilter_a0_61 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_62;
+  float AnonFilter_a0_62 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_63;
+  float AnonFilter_a0_63 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_64;
+  float AnonFilter_a0_64 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_65;
+  float AnonFilter_a0_65 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_66;
+  float AnonFilter_a0_66 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_67;
+  float AnonFilter_a0_67 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_68;
+  float AnonFilter_a0_68 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_69;
+  float AnonFilter_a0_69 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_70;
+  float AnonFilter_a0_70 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_71;
+  float AnonFilter_a0_71 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_72;
+  float AnonFilter_a0_72 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_73;
+  float AnonFilter_a0_73 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_74;
+  float AnonFilter_a0_74 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_75;
+  float AnonFilter_a0_75 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_76;
+  float AnonFilter_a0_76 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_77;
+  float AnonFilter_a0_77 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_78;
+  float AnonFilter_a0_78 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_79;
+  float AnonFilter_a0_79 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_80;
+  float AnonFilter_a0_80 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_81;
+  float AnonFilter_a0_81 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_82;
+  float AnonFilter_a0_82 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_83;
+  float AnonFilter_a0_83 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_84;
+  float AnonFilter_a0_84 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_85;
+  float AnonFilter_a0_85 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_86;
+  float AnonFilter_a0_86 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_87;
+  float AnonFilter_a0_87 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_88;
+  float AnonFilter_a0_88 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_89;
+  float AnonFilter_a0_89 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_90;
+  float AnonFilter_a0_90 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_91;
+  float AnonFilter_a0_91 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_92;
+  float AnonFilter_a0_92 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_93;
+  float AnonFilter_a0_93 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_94;
+  float AnonFilter_a0_94 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_95;
+  float AnonFilter_a0_95 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_96;
+  float AnonFilter_a0_96 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_97;
+  float AnonFilter_a0_97 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_98;
+  float AnonFilter_a0_98 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_99;
+  float AnonFilter_a0_99 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_100;
+  float AnonFilter_a0_100 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_101;
+  float AnonFilter_a0_101 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_102;
+  float AnonFilter_a0_102 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_103;
+  float AnonFilter_a0_103 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_104;
+  float AnonFilter_a0_104 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_105;
+  float AnonFilter_a0_105 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_106;
+  float AnonFilter_a0_106 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_107;
+  float AnonFilter_a0_107 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_108;
+  float AnonFilter_a0_108 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_109;
+  float AnonFilter_a0_109 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_110;
+  float AnonFilter_a0_110 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_111;
+  float AnonFilter_a0_111 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_112;
+  float AnonFilter_a0_112 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_113;
+  float AnonFilter_a0_113 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_114;
+  float AnonFilter_a0_114 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_115;
+  float AnonFilter_a0_115 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_116;
+  float AnonFilter_a0_116 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_117;
+  float AnonFilter_a0_117 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_118;
+  float AnonFilter_a0_118 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_119;
+  float AnonFilter_a0_119 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_120;
+  float AnonFilter_a0_120 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_121;
+  float AnonFilter_a0_121 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_122;
+  float AnonFilter_a0_122 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_123;
+  float AnonFilter_a0_123 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_124;
+  float AnonFilter_a0_124 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_125;
+  float AnonFilter_a0_125 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_126;
+  float AnonFilter_a0_126 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_127;
+  float AnonFilter_a0_127 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_128;
+  float AnonFilter_a0_128 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_129;
+  float AnonFilter_a0_129 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_130;
+  float AnonFilter_a0_130 -> Cor1_2_join(1);
+  float Cor1_2_split(1) -> AnonFilter_a0_131;
+  float AnonFilter_a0_131 -> Cor1_2_join(1);
+  float Cor1_2_join(128) -> FloatPrinter_3;
+
+  actor AnonFilter_a0_73
+  {
+    state:
+    {
+    int N_AnonFilter_a0_73=32;
+    int lag_AnonFilter_a0_73=69;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 69)); i++) {
+        sum += (peek(i) * peek((i + 69)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_47
+  {
+    state:
+    {
+    int N_AnonFilter_a0_47=32;
+    int lag_AnonFilter_a0_47=43;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 43)); i++) {
+        sum += (peek(i) * peek((i + 43)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_87
+  {
+    state:
+    {
+    int N_AnonFilter_a0_87=32;
+    int lag_AnonFilter_a0_87=83;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 83)); i++) {
+        sum += (peek(i) * peek((i + 83)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_74
+  {
+    state:
+    {
+    int N_AnonFilter_a0_74=32;
+    int lag_AnonFilter_a0_74=70;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 70)); i++) {
+        sum += (peek(i) * peek((i + 70)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_35
+  {
+    state:
+    {
+    int N_AnonFilter_a0_35=32;
+    int lag_AnonFilter_a0_35=31;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 31)); i++) {
+        sum += (peek(i) * peek((i + 31)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_22
+  {
+    state:
+    {
+    int N_AnonFilter_a0_22=32;
+    int lag_AnonFilter_a0_22=18;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 18)); i++) {
+        sum += (peek(i) * peek((i + 18)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_8
+  {
+    state:
+    {
+    int N_AnonFilter_a0_8=32;
+    int lag_AnonFilter_a0_8=4;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 4)); i++) {
+        sum += (peek(i) * peek((i + 4)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_9
+  {
+    state:
+    {
+    int N_AnonFilter_a0_9=32;
+    int lag_AnonFilter_a0_9=5;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 5)); i++) {
+        sum += (peek(i) * peek((i + 5)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_113
+  {
+    state:
+    {
+    int N_AnonFilter_a0_113=32;
+    int lag_AnonFilter_a0_113=109;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 109)); i++) {
+        sum += (peek(i) * peek((i + 109)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_127
+  {
+    state:
+    {
+    int N_AnonFilter_a0_127=32;
+    int lag_AnonFilter_a0_127=123;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 123)); i++) {
+        sum += (peek(i) * peek((i + 123)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_70
+  {
+    state:
+    {
+    int N_AnonFilter_a0_70=32;
+    int lag_AnonFilter_a0_70=66;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 66)); i++) {
+        sum += (peek(i) * peek((i + 66)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_108
+  {
+    state:
+    {
+    int N_AnonFilter_a0_108=32;
+    int lag_AnonFilter_a0_108=104;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 104)); i++) {
+        sum += (peek(i) * peek((i + 104)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_12
+  {
+    state:
+    {
+    int N_AnonFilter_a0_12=32;
+    int lag_AnonFilter_a0_12=8;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 8)); i++) {
+        sum += (peek(i) * peek((i + 8)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_26
+  {
+    state:
+    {
+    int N_AnonFilter_a0_26=32;
+    int lag_AnonFilter_a0_26=22;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 22)); i++) {
+        sum += (peek(i) * peek((i + 22)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_21
+  {
+    state:
+    {
+    int N_AnonFilter_a0_21=32;
+    int lag_AnonFilter_a0_21=17;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 17)); i++) {
+        sum += (peek(i) * peek((i + 17)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_99
+  {
+    state:
+    {
+    int N_AnonFilter_a0_99=32;
+    int lag_AnonFilter_a0_99=95;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 95)); i++) {
+        sum += (peek(i) * peek((i + 95)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_77
+  {
+    state:
+    {
+    int N_AnonFilter_a0_77=32;
+    int lag_AnonFilter_a0_77=73;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 73)); i++) {
+        sum += (peek(i) * peek((i + 73)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_107
+  {
+    state:
+    {
+    int N_AnonFilter_a0_107=32;
+    int lag_AnonFilter_a0_107=103;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 103)); i++) {
+        sum += (peek(i) * peek((i + 103)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_61
+  {
+    state:
+    {
+    int N_AnonFilter_a0_61=32;
+    int lag_AnonFilter_a0_61=57;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 57)); i++) {
+        sum += (peek(i) * peek((i + 57)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_17
+  {
+    state:
+    {
+    int N_AnonFilter_a0_17=32;
+    int lag_AnonFilter_a0_17=13;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 13)); i++) {
+        sum += (peek(i) * peek((i + 13)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_4
+  {
+    state:
+    {
+    int N_AnonFilter_a0_4=32;
+    int lag_AnonFilter_a0_4=0;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 0)); i++) {
+        sum += (peek(i) * peek((i + 0)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_119
+  {
+    state:
+    {
+    int N_AnonFilter_a0_119=32;
+    int lag_AnonFilter_a0_119=115;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 115)); i++) {
+        sum += (peek(i) * peek((i + 115)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_68
+  {
+    state:
+    {
+    int N_AnonFilter_a0_68=32;
+    int lag_AnonFilter_a0_68=64;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 64)); i++) {
+        sum += (peek(i) * peek((i + 64)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_49
+  {
+    state:
+    {
+    int N_AnonFilter_a0_49=32;
+    int lag_AnonFilter_a0_49=45;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 45)); i++) {
+        sum += (peek(i) * peek((i + 45)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_7
+  {
+    state:
+    {
+    int N_AnonFilter_a0_7=32;
+    int lag_AnonFilter_a0_7=3;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 3)); i++) {
+        sum += (peek(i) * peek((i + 3)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_52
+  {
+    state:
+    {
+    int N_AnonFilter_a0_52=32;
+    int lag_AnonFilter_a0_52=48;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 48)); i++) {
+        sum += (peek(i) * peek((i + 48)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_102
+  {
+    state:
+    {
+    int N_AnonFilter_a0_102=32;
+    int lag_AnonFilter_a0_102=98;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 98)); i++) {
+        sum += (peek(i) * peek((i + 98)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_130
+  {
+    state:
+    {
+    int N_AnonFilter_a0_130=32;
+    int lag_AnonFilter_a0_130=126;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 126)); i++) {
+        sum += (peek(i) * peek((i + 126)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_18
+  {
+    state:
+    {
+    int N_AnonFilter_a0_18=32;
+    int lag_AnonFilter_a0_18=14;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 14)); i++) {
+        sum += (peek(i) * peek((i + 14)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_114
+  {
+    state:
+    {
+    int N_AnonFilter_a0_114=32;
+    int lag_AnonFilter_a0_114=110;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 110)); i++) {
+        sum += (peek(i) * peek((i + 110)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_103
+  {
+    state:
+    {
+    int N_AnonFilter_a0_103=32;
+    int lag_AnonFilter_a0_103=99;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 99)); i++) {
+        sum += (peek(i) * peek((i + 99)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_48
+  {
+    state:
+    {
+    int N_AnonFilter_a0_48=32;
+    int lag_AnonFilter_a0_48=44;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 44)); i++) {
+        sum += (peek(i) * peek((i + 44)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_69
+  {
+    state:
+    {
+    int N_AnonFilter_a0_69=32;
+    int lag_AnonFilter_a0_69=65;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 65)); i++) {
+        sum += (peek(i) * peek((i + 65)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_123
+  {
+    state:
+    {
+    int N_AnonFilter_a0_123=32;
+    int lag_AnonFilter_a0_123=119;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 119)); i++) {
+        sum += (peek(i) * peek((i + 119)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_104
+  {
+    state:
+    {
+    int N_AnonFilter_a0_104=32;
+    int lag_AnonFilter_a0_104=100;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 100)); i++) {
+        sum += (peek(i) * peek((i + 100)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_72
+  {
+    state:
+    {
+    int N_AnonFilter_a0_72=32;
+    int lag_AnonFilter_a0_72=68;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 68)); i++) {
+        sum += (peek(i) * peek((i + 68)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_98
+  {
+    state:
+    {
+    int N_AnonFilter_a0_98=32;
+    int lag_AnonFilter_a0_98=94;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 94)); i++) {
+        sum += (peek(i) * peek((i + 94)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_93
+  {
+    state:
+    {
+    int N_AnonFilter_a0_93=32;
+    int lag_AnonFilter_a0_93=89;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 89)); i++) {
+        sum += (peek(i) * peek((i + 89)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_55
+  {
+    state:
+    {
+    int N_AnonFilter_a0_55=32;
+    int lag_AnonFilter_a0_55=51;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 51)); i++) {
+        sum += (peek(i) * peek((i + 51)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_42
+  {
+    state:
+    {
+    int N_AnonFilter_a0_42=32;
+    int lag_AnonFilter_a0_42=38;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 38)); i++) {
+        sum += (peek(i) * peek((i + 38)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_15
+  {
+    state:
+    {
+    int N_AnonFilter_a0_15=32;
+    int lag_AnonFilter_a0_15=11;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 11)); i++) {
+        sum += (peek(i) * peek((i + 11)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_125
+  {
+    state:
+    {
+    int N_AnonFilter_a0_125=32;
+    int lag_AnonFilter_a0_125=121;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 121)); i++) {
+        sum += (peek(i) * peek((i + 121)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_79
+  {
+    state:
+    {
+    int N_AnonFilter_a0_79=32;
+    int lag_AnonFilter_a0_79=75;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 75)); i++) {
+        sum += (peek(i) * peek((i + 75)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_58
+  {
+    state:
+    {
+    int N_AnonFilter_a0_58=32;
+    int lag_AnonFilter_a0_58=54;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 54)); i++) {
+        sum += (peek(i) * peek((i + 54)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_33
+  {
+    state:
+    {
+    int N_AnonFilter_a0_33=32;
+    int lag_AnonFilter_a0_33=29;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 29)); i++) {
+        sum += (peek(i) * peek((i + 29)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_90
+  {
+    state:
+    {
+    int N_AnonFilter_a0_90=32;
+    int lag_AnonFilter_a0_90=86;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 86)); i++) {
+        sum += (peek(i) * peek((i + 86)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_41
+  {
+    state:
+    {
+    int N_AnonFilter_a0_41=32;
+    int lag_AnonFilter_a0_41=37;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 37)); i++) {
+        sum += (peek(i) * peek((i + 37)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_75
+  {
+    state:
+    {
+    int N_AnonFilter_a0_75=32;
+    int lag_AnonFilter_a0_75=71;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 71)); i++) {
+        sum += (peek(i) * peek((i + 71)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_67
+  {
+    state:
+    {
+    int N_AnonFilter_a0_67=32;
+    int lag_AnonFilter_a0_67=63;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 63)); i++) {
+        sum += (peek(i) * peek((i + 63)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_53
+  {
+    state:
+    {
+    int N_AnonFilter_a0_53=32;
+    int lag_AnonFilter_a0_53=49;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 49)); i++) {
+        sum += (peek(i) * peek((i + 49)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_66
+  {
+    state:
+    {
+    int N_AnonFilter_a0_66=32;
+    int lag_AnonFilter_a0_66=62;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 62)); i++) {
+        sum += (peek(i) * peek((i + 62)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_30
+  {
+    state:
+    {
+    int N_AnonFilter_a0_30=32;
+    int lag_AnonFilter_a0_30=26;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 26)); i++) {
+        sum += (peek(i) * peek((i + 26)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_37
+  {
+    state:
+    {
+    int N_AnonFilter_a0_37=32;
+    int lag_AnonFilter_a0_37=33;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 33)); i++) {
+        sum += (peek(i) * peek((i + 33)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_19
+  {
+    state:
+    {
+    int N_AnonFilter_a0_19=32;
+    int lag_AnonFilter_a0_19=15;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 15)); i++) {
+        sum += (peek(i) * peek((i + 15)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_97
+  {
+    state:
+    {
+    int N_AnonFilter_a0_97=32;
+    int lag_AnonFilter_a0_97=93;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 93)); i++) {
+        sum += (peek(i) * peek((i + 93)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_131
+  {
+    state:
+    {
+    int N_AnonFilter_a0_131=32;
+    int lag_AnonFilter_a0_131=127;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 127)); i++) {
+        sum += (peek(i) * peek((i + 127)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_89
+  {
+    state:
+    {
+    int N_AnonFilter_a0_89=32;
+    int lag_AnonFilter_a0_89=85;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 85)); i++) {
+        sum += (peek(i) * peek((i + 85)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_44
+  {
+    state:
+    {
+    int N_AnonFilter_a0_44=32;
+    int lag_AnonFilter_a0_44=40;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 40)); i++) {
+        sum += (peek(i) * peek((i + 40)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_24
+  {
+    state:
+    {
+    int N_AnonFilter_a0_24=32;
+    int lag_AnonFilter_a0_24=20;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 20)); i++) {
+        sum += (peek(i) * peek((i + 20)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_110
+  {
+    state:
+    {
+    int N_AnonFilter_a0_110=32;
+    int lag_AnonFilter_a0_110=106;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 106)); i++) {
+        sum += (peek(i) * peek((i + 106)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_23
+  {
+    state:
+    {
+    int N_AnonFilter_a0_23=32;
+    int lag_AnonFilter_a0_23=19;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 19)); i++) {
+        sum += (peek(i) * peek((i + 19)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_76
+  {
+    state:
+    {
+    int N_AnonFilter_a0_76=32;
+    int lag_AnonFilter_a0_76=72;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 72)); i++) {
+        sum += (peek(i) * peek((i + 72)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_91
+  {
+    state:
+    {
+    int N_AnonFilter_a0_91=32;
+    int lag_AnonFilter_a0_91=87;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 87)); i++) {
+        sum += (peek(i) * peek((i + 87)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_54
+  {
+    state:
+    {
+    int N_AnonFilter_a0_54=32;
+    int lag_AnonFilter_a0_54=50;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 50)); i++) {
+        sum += (peek(i) * peek((i + 50)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_124
+  {
+    state:
+    {
+    int N_AnonFilter_a0_124=32;
+    int lag_AnonFilter_a0_124=120;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 120)); i++) {
+        sum += (peek(i) * peek((i + 120)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_129
+  {
+    state:
+    {
+    int N_AnonFilter_a0_129=32;
+    int lag_AnonFilter_a0_129=125;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 125)); i++) {
+        sum += (peek(i) * peek((i + 125)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_126
+  {
+    state:
+    {
+    int N_AnonFilter_a0_126=32;
+    int lag_AnonFilter_a0_126=122;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 122)); i++) {
+        sum += (peek(i) * peek((i + 122)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_16
+  {
+    state:
+    {
+    int N_AnonFilter_a0_16=32;
+    int lag_AnonFilter_a0_16=12;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 12)); i++) {
+        sum += (peek(i) * peek((i + 12)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_100
+  {
+    state:
+    {
+    int N_AnonFilter_a0_100=32;
+    int lag_AnonFilter_a0_100=96;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 96)); i++) {
+        sum += (peek(i) * peek((i + 96)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_109
+  {
+    state:
+    {
+    int N_AnonFilter_a0_109=32;
+    int lag_AnonFilter_a0_109=105;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 105)); i++) {
+        sum += (peek(i) * peek((i + 105)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_32
+  {
+    state:
+    {
+    int N_AnonFilter_a0_32=32;
+    int lag_AnonFilter_a0_32=28;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 28)); i++) {
+        sum += (peek(i) * peek((i + 28)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_105
+  {
+    state:
+    {
+    int N_AnonFilter_a0_105=32;
+    int lag_AnonFilter_a0_105=101;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 101)); i++) {
+        sum += (peek(i) * peek((i + 101)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_63
+  {
+    state:
+    {
+    int N_AnonFilter_a0_63=32;
+    int lag_AnonFilter_a0_63=59;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 59)); i++) {
+        sum += (peek(i) * peek((i + 59)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_51
+  {
+    state:
+    {
+    int N_AnonFilter_a0_51=32;
+    int lag_AnonFilter_a0_51=47;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 47)); i++) {
+        sum += (peek(i) * peek((i + 47)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_6
+  {
+    state:
+    {
+    int N_AnonFilter_a0_6=32;
+    int lag_AnonFilter_a0_6=2;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 2)); i++) {
+        sum += (peek(i) * peek((i + 2)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_20
+  {
+    state:
+    {
+    int N_AnonFilter_a0_20=32;
+    int lag_AnonFilter_a0_20=16;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 16)); i++) {
+        sum += (peek(i) * peek((i + 16)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_38
+  {
+    state:
+    {
+    int N_AnonFilter_a0_38=32;
+    int lag_AnonFilter_a0_38=34;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 34)); i++) {
+        sum += (peek(i) * peek((i + 34)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_65
+  {
+    state:
+    {
+    int N_AnonFilter_a0_65=32;
+    int lag_AnonFilter_a0_65=61;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 61)); i++) {
+        sum += (peek(i) * peek((i + 61)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_34
+  {
+    state:
+    {
+    int N_AnonFilter_a0_34=32;
+    int lag_AnonFilter_a0_34=30;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 30)); i++) {
+        sum += (peek(i) * peek((i + 30)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_81
+  {
+    state:
+    {
+    int N_AnonFilter_a0_81=32;
+    int lag_AnonFilter_a0_81=77;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 77)); i++) {
+        sum += (peek(i) * peek((i + 77)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor FloatPrinter_3
+  {
+    state:
+    {
+    float x_FloatPrinter_3 = 0.0;
+    }
+    input:
+      Cor1_2_join: x1;
+    firing:
+    {
+      _sum += peek(0);
+      x_FloatPrinter_3 = pop();
+    }
+  }
+
+  actor AnonFilter_a0_46
+  {
+    state:
+    {
+    int N_AnonFilter_a0_46=32;
+    int lag_AnonFilter_a0_46=42;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 42)); i++) {
+        sum += (peek(i) * peek((i + 42)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_116
+  {
+    state:
+    {
+    int N_AnonFilter_a0_116=32;
+    int lag_AnonFilter_a0_116=112;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 112)); i++) {
+        sum += (peek(i) * peek((i + 112)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_10
+  {
+    state:
+    {
+    int N_AnonFilter_a0_10=32;
+    int lag_AnonFilter_a0_10=6;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 6)); i++) {
+        sum += (peek(i) * peek((i + 6)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_117
+  {
+    state:
+    {
+    int N_AnonFilter_a0_117=32;
+    int lag_AnonFilter_a0_117=113;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 113)); i++) {
+        sum += (peek(i) * peek((i + 113)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_80
+  {
+    state:
+    {
+    int N_AnonFilter_a0_80=32;
+    int lag_AnonFilter_a0_80=76;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 76)); i++) {
+        sum += (peek(i) * peek((i + 76)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_27
+  {
+    state:
+    {
+    int N_AnonFilter_a0_27=32;
+    int lag_AnonFilter_a0_27=23;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 23)); i++) {
+        sum += (peek(i) * peek((i + 23)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_28
+  {
+    state:
+    {
+    int N_AnonFilter_a0_28=32;
+    int lag_AnonFilter_a0_28=24;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 24)); i++) {
+        sum += (peek(i) * peek((i + 24)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_120
+  {
+    state:
+    {
+    int N_AnonFilter_a0_120=32;
+    int lag_AnonFilter_a0_120=116;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 116)); i++) {
+        sum += (peek(i) * peek((i + 116)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_43
+  {
+    state:
+    {
+    int N_AnonFilter_a0_43=32;
+    int lag_AnonFilter_a0_43=39;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 39)); i++) {
+        sum += (peek(i) * peek((i + 39)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_36
+  {
+    state:
+    {
+    int N_AnonFilter_a0_36=32;
+    int lag_AnonFilter_a0_36=32;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 32)); i++) {
+        sum += (peek(i) * peek((i + 32)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_96
+  {
+    state:
+    {
+    int N_AnonFilter_a0_96=32;
+    int lag_AnonFilter_a0_96=92;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 92)); i++) {
+        sum += (peek(i) * peek((i + 92)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_88
+  {
+    state:
+    {
+    int N_AnonFilter_a0_88=32;
+    int lag_AnonFilter_a0_88=84;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 84)); i++) {
+        sum += (peek(i) * peek((i + 84)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_64
+  {
+    state:
+    {
+    int N_AnonFilter_a0_64=32;
+    int lag_AnonFilter_a0_64=60;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 60)); i++) {
+        sum += (peek(i) * peek((i + 60)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_86
+  {
+    state:
+    {
+    int N_AnonFilter_a0_86=32;
+    int lag_AnonFilter_a0_86=82;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 82)); i++) {
+        sum += (peek(i) * peek((i + 82)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_39
+  {
+    state:
+    {
+    int N_AnonFilter_a0_39=32;
+    int lag_AnonFilter_a0_39=35;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 35)); i++) {
+        sum += (peek(i) * peek((i + 35)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_40
+  {
+    state:
+    {
+    int N_AnonFilter_a0_40=32;
+    int lag_AnonFilter_a0_40=36;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 36)); i++) {
+        sum += (peek(i) * peek((i + 36)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_92
+  {
+    state:
+    {
+    int N_AnonFilter_a0_92=32;
+    int lag_AnonFilter_a0_92=88;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 88)); i++) {
+        sum += (peek(i) * peek((i + 88)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_11
+  {
+    state:
+    {
+    int N_AnonFilter_a0_11=32;
+    int lag_AnonFilter_a0_11=7;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 7)); i++) {
+        sum += (peek(i) * peek((i + 7)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_118
+  {
+    state:
+    {
+    int N_AnonFilter_a0_118=32;
+    int lag_AnonFilter_a0_118=114;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 114)); i++) {
+        sum += (peek(i) * peek((i + 114)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_13
+  {
+    state:
+    {
+    int N_AnonFilter_a0_13=32;
+    int lag_AnonFilter_a0_13=9;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 9)); i++) {
+        sum += (peek(i) * peek((i + 9)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_78
+  {
+    state:
+    {
+    int N_AnonFilter_a0_78=32;
+    int lag_AnonFilter_a0_78=74;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 74)); i++) {
+        sum += (peek(i) * peek((i + 74)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_29
+  {
+    state:
+    {
+    int N_AnonFilter_a0_29=32;
+    int lag_AnonFilter_a0_29=25;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 25)); i++) {
+        sum += (peek(i) * peek((i + 25)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_101
+  {
+    state:
+    {
+    int N_AnonFilter_a0_101=32;
+    int lag_AnonFilter_a0_101=97;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 97)); i++) {
+        sum += (peek(i) * peek((i + 97)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_121
+  {
+    state:
+    {
+    int N_AnonFilter_a0_121=32;
+    int lag_AnonFilter_a0_121=117;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 117)); i++) {
+        sum += (peek(i) * peek((i + 117)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_85
+  {
+    state:
+    {
+    int N_AnonFilter_a0_85=32;
+    int lag_AnonFilter_a0_85=81;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 81)); i++) {
+        sum += (peek(i) * peek((i + 81)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_95
+  {
+    state:
+    {
+    int N_AnonFilter_a0_95=32;
+    int lag_AnonFilter_a0_95=91;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 91)); i++) {
+        sum += (peek(i) * peek((i + 91)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_82
+  {
+    state:
+    {
+    int N_AnonFilter_a0_82=32;
+    int lag_AnonFilter_a0_82=78;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 78)); i++) {
+        sum += (peek(i) * peek((i + 78)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_50
+  {
+    state:
+    {
+    int N_AnonFilter_a0_50=32;
+    int lag_AnonFilter_a0_50=46;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 46)); i++) {
+        sum += (peek(i) * peek((i + 46)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_62
+  {
+    state:
+    {
+    int N_AnonFilter_a0_62=32;
+    int lag_AnonFilter_a0_62=58;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 58)); i++) {
+        sum += (peek(i) * peek((i + 58)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor OneSource_1
+  {
+    state:
+    {
+    float n_OneSource_1 = 0.0;
+    }
+    init:
+    {
+      printf("Enter seed: ");
+      scanf("%d", &seed);
+      srand(seed);
+    }
+    firing:
+    {
+      push(rand_r(&seed));
+    }
+    output:
+      Cor1_2_split: y1;
+  }
+
+  actor AnonFilter_a0_57
+  {
+    state:
+    {
+    int N_AnonFilter_a0_57=32;
+    int lag_AnonFilter_a0_57=53;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 53)); i++) {
+        sum += (peek(i) * peek((i + 53)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_83
+  {
+    state:
+    {
+    int N_AnonFilter_a0_83=32;
+    int lag_AnonFilter_a0_83=79;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 79)); i++) {
+        sum += (peek(i) * peek((i + 79)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_115
+  {
+    state:
+    {
+    int N_AnonFilter_a0_115=32;
+    int lag_AnonFilter_a0_115=111;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 111)); i++) {
+        sum += (peek(i) * peek((i + 111)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_25
+  {
+    state:
+    {
+    int N_AnonFilter_a0_25=32;
+    int lag_AnonFilter_a0_25=21;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 21)); i++) {
+        sum += (peek(i) * peek((i + 21)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_60
+  {
+    state:
+    {
+    int N_AnonFilter_a0_60=32;
+    int lag_AnonFilter_a0_60=56;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 56)); i++) {
+        sum += (peek(i) * peek((i + 56)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_5
+  {
+    state:
+    {
+    int N_AnonFilter_a0_5=32;
+    int lag_AnonFilter_a0_5=1;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 1)); i++) {
+        sum += (peek(i) * peek((i + 1)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_128
+  {
+    state:
+    {
+    int N_AnonFilter_a0_128=32;
+    int lag_AnonFilter_a0_128=124;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 124)); i++) {
+        sum += (peek(i) * peek((i + 124)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_122
+  {
+    state:
+    {
+    int N_AnonFilter_a0_122=32;
+    int lag_AnonFilter_a0_122=118;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 118)); i++) {
+        sum += (peek(i) * peek((i + 118)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_111
+  {
+    state:
+    {
+    int N_AnonFilter_a0_111=32;
+    int lag_AnonFilter_a0_111=107;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 107)); i++) {
+        sum += (peek(i) * peek((i + 107)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_84
+  {
+    state:
+    {
+    int N_AnonFilter_a0_84=32;
+    int lag_AnonFilter_a0_84=80;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 80)); i++) {
+        sum += (peek(i) * peek((i + 80)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_56
+  {
+    state:
+    {
+    int N_AnonFilter_a0_56=32;
+    int lag_AnonFilter_a0_56=52;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 52)); i++) {
+        sum += (peek(i) * peek((i + 52)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_94
+  {
+    state:
+    {
+    int N_AnonFilter_a0_94=32;
+    int lag_AnonFilter_a0_94=90;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 90)); i++) {
+        sum += (peek(i) * peek((i + 90)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_31
+  {
+    state:
+    {
+    int N_AnonFilter_a0_31=32;
+    int lag_AnonFilter_a0_31=27;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 27)); i++) {
+        sum += (peek(i) * peek((i + 27)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_14
+  {
+    state:
+    {
+    int N_AnonFilter_a0_14=32;
+    int lag_AnonFilter_a0_14=10;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 10)); i++) {
+        sum += (peek(i) * peek((i + 10)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_106
+  {
+    state:
+    {
+    int N_AnonFilter_a0_106=32;
+    int lag_AnonFilter_a0_106=102;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 102)); i++) {
+        sum += (peek(i) * peek((i + 102)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_71
+  {
+    state:
+    {
+    int N_AnonFilter_a0_71=32;
+    int lag_AnonFilter_a0_71=67;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 67)); i++) {
+        sum += (peek(i) * peek((i + 67)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_112
+  {
+    state:
+    {
+    int N_AnonFilter_a0_112=32;
+    int lag_AnonFilter_a0_112=108;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 108)); i++) {
+        sum += (peek(i) * peek((i + 108)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_59
+  {
+    state:
+    {
+    int N_AnonFilter_a0_59=32;
+    int lag_AnonFilter_a0_59=55;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 55)); i++) {
+        sum += (peek(i) * peek((i + 55)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+  actor AnonFilter_a0_45
+  {
+    state:
+    {
+    int N_AnonFilter_a0_45=32;
+    int lag_AnonFilter_a0_45=41;
+    }
+    input:
+      Cor1_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      float sum = 0;
+      {
+      int i;
+      for (i=0; (i < (32 - 41)); i++) {
+        sum += (peek(i) * peek((i + 41)));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 32); i++) {
+        pop();
+      }
+      };
+      push(sum);
+    }
+    output:
+      Cor1_2_join: y1;
+  }
+
+}
+
+postamble {
+int main(){
+  AutoCor();
+  printf("sum: %f\n", _sum);
+  return 0;
+}
+}

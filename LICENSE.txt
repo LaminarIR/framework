@@ -1,0 +1,20 @@
+LaminarIR is covered by three compatible permissive open source licenses:
+
+(1) The MIT license (http://opensource.org/licenses/MIT, retrieved 2015), which
+    is stated in file LICENSE.LaminarIR.
+
+    This license applies to all files except parts of the code in directory
+    ``streamit'' and its descendents.
+
+(2) A prior version of the MIT license, stated as the preamble in files in
+    directory ``streamit'' and its descendents. This part has been derived from
+    the StreamIt github repository at https://github.com/bthies/streamit.
+
+    With all modified files, a corresponding notice has been added.
+    Newly added files contain a preamble that refers to License (1) above.
+
+(3) The BSD 3-clause license stated in file LICENSE.PAPI.
+
+    This license applies to portions of code in directory papi_wrapper, which
+    have been derived from the examples distributed with the PAPI Performance
+    Application Programming Interface (PAPI, http://icl.cs.utk.edu/papi).

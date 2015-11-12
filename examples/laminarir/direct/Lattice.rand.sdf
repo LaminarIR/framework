@@ -1,0 +1,584 @@
+preamble {
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+static unsigned int seed;
+
+volatile double sum = 0.0;
+}
+
+sdf Lattice {
+  float Counter_1 -> ZeroStage_2_split(1);
+  float ZeroStage_2_split(1) -> streamit_library_Identity_12;
+  float streamit_library_Identity_12 -> ZeroStage_2_join(1);
+  float ZeroStage_2_split(1) -> streamit_library_Identity_13;
+  float streamit_library_Identity_13 -> ZeroStage_2_join(1);
+  float ZeroStage_2_join(2) -> LatDel_15_split(1);
+  float LatDel_15_split(1) -> streamit_library_Identity_17;
+  float streamit_library_Identity_17 -> LatDel_15_join(1);
+  float LatDel_15_split(1) -> DelayOne_18;
+  float DelayOne_18 -> LatDel_15_join(1);
+  float LatDel_15_join(2) -> LatFilt_16;
+  float LatFilt_16 -> LatDel_21_split(1);
+  float LatDel_21_split(1) -> streamit_library_Identity_23;
+  float streamit_library_Identity_23 -> LatDel_21_join(1);
+  float LatDel_21_split(1) -> DelayOne_24;
+  float DelayOne_24 -> LatDel_21_join(1);
+  float LatDel_21_join(2) -> LatFilt_22;
+  float LatFilt_22 -> LatDel_27_split(1);
+  float LatDel_27_split(1) -> streamit_library_Identity_29;
+  float streamit_library_Identity_29 -> LatDel_27_join(1);
+  float LatDel_27_split(1) -> DelayOne_30;
+  float DelayOne_30 -> LatDel_27_join(1);
+  float LatDel_27_join(2) -> LatFilt_28;
+  float LatFilt_28 -> LatDel_33_split(1);
+  float LatDel_33_split(1) -> streamit_library_Identity_35;
+  float streamit_library_Identity_35 -> LatDel_33_join(1);
+  float LatDel_33_split(1) -> DelayOne_36;
+  float DelayOne_36 -> LatDel_33_join(1);
+  float LatDel_33_join(2) -> LatFilt_34;
+  float LatFilt_34 -> LatDel_39_split(1);
+  float LatDel_39_split(1) -> streamit_library_Identity_41;
+  float streamit_library_Identity_41 -> LatDel_39_join(1);
+  float LatDel_39_split(1) -> DelayOne_42;
+  float DelayOne_42 -> LatDel_39_join(1);
+  float LatDel_39_join(2) -> LatFilt_40;
+  float LatFilt_40 -> LatDel_45_split(1);
+  float LatDel_45_split(1) -> streamit_library_Identity_47;
+  float streamit_library_Identity_47 -> LatDel_45_join(1);
+  float LatDel_45_split(1) -> DelayOne_48;
+  float DelayOne_48 -> LatDel_45_join(1);
+  float LatDel_45_join(2) -> LatFilt_46;
+  float LatFilt_46 -> LatDel_51_split(1);
+  float LatDel_51_split(1) -> streamit_library_Identity_53;
+  float streamit_library_Identity_53 -> LatDel_51_join(1);
+  float LatDel_51_split(1) -> DelayOne_54;
+  float DelayOne_54 -> LatDel_51_join(1);
+  float LatDel_51_join(2) -> LatFilt_52;
+  float LatFilt_52 -> LatDel_57_split(1);
+  float LatDel_57_split(1) -> streamit_library_Identity_59;
+  float streamit_library_Identity_59 -> LatDel_57_join(1);
+  float LatDel_57_split(1) -> DelayOne_60;
+  float DelayOne_60 -> LatDel_57_join(1);
+  float LatDel_57_join(2) -> LatFilt_58;
+  float LatFilt_58 -> LastStage_11;
+
+  actor streamit_library_Identity_53
+  {
+    input:
+      LatDel_51_split: x1;
+    firing:
+    {
+      @y1=@x1;
+    }
+    output:
+      LatDel_51_join: y1;
+  }
+
+  actor LatFilt_58
+  {
+    state:
+    {
+    float k_par_LatFilt_58=9.0;
+    }
+    input:
+      LatDel_57_join: x1,x2;
+    firing:
+    {
+      float e_i = 0;
+      float e_bar_i = 0;
+      e_i = (@x1 - (k_par_LatFilt_58 * @x2));
+      e_bar_i = (@x2 - (k_par_LatFilt_58 * @x1));
+      @y1=e_i;
+      @y2=e_bar_i;
+      @x1;
+      @x2;
+    }
+    output:
+      LastStage_11: y1,y2;
+  }
+
+  actor LatFilt_34
+  {
+    state:
+    {
+    float k_par_LatFilt_34=5.0;
+    }
+    input:
+      LatDel_33_join: x1,x2;
+    firing:
+    {
+      float e_i = 0;
+      float e_bar_i = 0;
+      e_i = (@x1 - (k_par_LatFilt_34 * @x2));
+      e_bar_i = (@x2 - (k_par_LatFilt_34 * @x1));
+      @y1=e_i;
+      @y2=e_bar_i;
+      @x1;
+      @x2;
+    }
+    output:
+      LatDel_39_split: y1,y2;
+  }
+
+  actor streamit_library_Identity_13
+  {
+    input:
+      ZeroStage_2_split: x1;
+    firing:
+    {
+      @y1=@x1;
+    }
+    output:
+      ZeroStage_2_join: y1;
+  }
+
+  actor streamit_library_Identity_12
+  {
+    input:
+      ZeroStage_2_split: x1;
+    firing:
+    {
+      @y1=@x1;
+    }
+    output:
+      ZeroStage_2_join: y1;
+  }
+
+  actor DelayOne_60
+  {
+    state:
+    {
+    float last_DelayOne_60 = 0.0;
+    }
+    init:
+    {
+      last_DelayOne_60 = 0.0f;
+    }
+    input:
+      LatDel_57_split: x1;
+    firing:
+    {
+      @y1=last_DelayOne_60;
+      last_DelayOne_60 = @x1;
+    }
+    output:
+      LatDel_57_join: y1;
+  }
+
+  actor DelayOne_24
+  {
+    state:
+    {
+    float last_DelayOne_24 = 0.0;
+    }
+    init:
+    {
+      last_DelayOne_24 = 0.0f;
+    }
+    input:
+      LatDel_21_split: x1;
+    firing:
+    {
+      @y1=last_DelayOne_24;
+      last_DelayOne_24 = @x1;
+    }
+    output:
+      LatDel_21_join: y1;
+  }
+
+  actor DelayOne_48
+  {
+    state:
+    {
+    float last_DelayOne_48 = 0.0;
+    }
+    init:
+    {
+      last_DelayOne_48 = 0.0f;
+    }
+    input:
+      LatDel_45_split: x1;
+    firing:
+    {
+      @y1=last_DelayOne_48;
+      last_DelayOne_48 = @x1;
+    }
+    output:
+      LatDel_45_join: y1;
+  }
+
+  actor streamit_library_Identity_29
+  {
+    input:
+      LatDel_27_split: x1;
+    firing:
+    {
+      @y1=@x1;
+    }
+    output:
+      LatDel_27_join: y1;
+  }
+
+  actor DelayOne_54
+  {
+    state:
+    {
+    float last_DelayOne_54 = 0.0;
+    }
+    init:
+    {
+      last_DelayOne_54 = 0.0f;
+    }
+    input:
+      LatDel_51_split: x1;
+    firing:
+    {
+      @y1=last_DelayOne_54;
+      last_DelayOne_54 = @x1;
+    }
+    output:
+      LatDel_51_join: y1;
+  }
+
+  actor LatFilt_16
+  {
+    state:
+    {
+    float k_par_LatFilt_16=2.0;
+    }
+    input:
+      LatDel_15_join: x1,x2;
+    firing:
+    {
+      float e_i = 0;
+      float e_bar_i = 0;
+      e_i = (@x1 - (k_par_LatFilt_16 * @x2));
+      e_bar_i = (@x2 - (k_par_LatFilt_16 * @x1));
+      @y1=e_i;
+      @y2=e_bar_i;
+      @x1;
+      @x2;
+    }
+    output:
+      LatDel_21_split: y1,y2;
+  }
+
+  actor streamit_library_Identity_41
+  {
+    input:
+      LatDel_39_split: x1;
+    firing:
+    {
+      @y1=@x1;
+    }
+    output:
+      LatDel_39_join: y1;
+  }
+
+  actor streamit_library_Identity_35
+  {
+    input:
+      LatDel_33_split: x1;
+    firing:
+    {
+      @y1=@x1;
+    }
+    output:
+      LatDel_33_join: y1;
+  }
+
+  actor LastStage_11
+  {
+    state:
+    {
+    float x_LastStage_11 = 0.0;
+    }
+    input:
+      LatFilt_58: x1,x2;
+    firing:
+    {
+      x_LastStage_11 = @x1;
+      x_LastStage_11 = @x2;
+      sum += @x1;
+      sum += @x2;
+    }
+  }
+
+  actor streamit_library_Identity_17
+  {
+    input:
+      LatDel_15_split: x1;
+    firing:
+    {
+      @y1=@x1;
+    }
+    output:
+      LatDel_15_join: y1;
+  }
+
+  actor DelayOne_30
+  {
+    state:
+    {
+    float last_DelayOne_30 = 0.0;
+    }
+    init:
+    {
+      last_DelayOne_30 = 0.0f;
+    }
+    input:
+      LatDel_27_split: x1;
+    firing:
+    {
+      @y1=last_DelayOne_30;
+      last_DelayOne_30 = @x1;
+    }
+    output:
+      LatDel_27_join: y1;
+  }
+
+  actor DelayOne_36
+  {
+    state:
+    {
+    float last_DelayOne_36 = 0.0;
+    }
+    init:
+    {
+      last_DelayOne_36 = 0.0f;
+    }
+    input:
+      LatDel_33_split: x1;
+    firing:
+    {
+      @y1=last_DelayOne_36;
+      last_DelayOne_36 = @x1;
+    }
+    output:
+      LatDel_33_join: y1;
+  }
+
+  actor LatFilt_22
+  {
+    state:
+    {
+    float k_par_LatFilt_22=3.0;
+    }
+    input:
+      LatDel_21_join: x1,x2;
+    firing:
+    {
+      float e_i = 0;
+      float e_bar_i = 0;
+      e_i = (@x1 - (k_par_LatFilt_22 * @x2));
+      e_bar_i = (@x2 - (k_par_LatFilt_22 * @x1));
+      @y1=e_i;
+      @y2=e_bar_i;
+      @x1;
+      @x2;
+    }
+    output:
+      LatDel_27_split: y1,y2;
+  }
+
+  actor streamit_library_Identity_47
+  {
+    input:
+      LatDel_45_split: x1;
+    firing:
+    {
+      @y1=@x1;
+    }
+    output:
+      LatDel_45_join: y1;
+  }
+
+  actor DelayOne_42
+  {
+    state:
+    {
+    float last_DelayOne_42 = 0.0;
+    }
+    init:
+    {
+      last_DelayOne_42 = 0.0f;
+    }
+    input:
+      LatDel_39_split: x1;
+    firing:
+    {
+      @y1=last_DelayOne_42;
+      last_DelayOne_42 = @x1;
+    }
+    output:
+      LatDel_39_join: y1;
+  }
+
+  actor LatFilt_28
+  {
+    state:
+    {
+    float k_par_LatFilt_28=4.0;
+    }
+    input:
+      LatDel_27_join: x1,x2;
+    firing:
+    {
+      float e_i = 0;
+      float e_bar_i = 0;
+      e_i = (@x1 - (k_par_LatFilt_28 * @x2));
+      e_bar_i = (@x2 - (k_par_LatFilt_28 * @x1));
+      @y1=e_i;
+      @y2=e_bar_i;
+      @x1;
+      @x2;
+    }
+    output:
+      LatDel_33_split: y1,y2;
+  }
+
+  actor streamit_library_Identity_23
+  {
+    input:
+      LatDel_21_split: x1;
+    firing:
+    {
+      @y1=@x1;
+    }
+    output:
+      LatDel_21_join: y1;
+  }
+
+  actor LatFilt_52
+  {
+    state:
+    {
+    float k_par_LatFilt_52=8.0;
+    }
+    input:
+      LatDel_51_join: x1,x2;
+    firing:
+    {
+      float e_i = 0;
+      float e_bar_i = 0;
+      e_i = (@x1 - (k_par_LatFilt_52 * @x2));
+      e_bar_i = (@x2 - (k_par_LatFilt_52 * @x1));
+      @y1=e_i;
+      @y2=e_bar_i;
+      @x1;
+      @x2;
+    }
+    output:
+      LatDel_57_split: y1,y2;
+  }
+
+  actor streamit_library_Identity_59
+  {
+    input:
+      LatDel_57_split: x1;
+    firing:
+    {
+      @y1=@x1;
+    }
+    output:
+      LatDel_57_join: y1;
+  }
+
+  actor LatFilt_40
+  {
+    state:
+    {
+    float k_par_LatFilt_40=6.0;
+    }
+    input:
+      LatDel_39_join: x1,x2;
+    firing:
+    {
+      float e_i = 0;
+      float e_bar_i = 0;
+      e_i = (@x1 - (k_par_LatFilt_40 * @x2));
+      e_bar_i = (@x2 - (k_par_LatFilt_40 * @x1));
+      @y1=e_i;
+      @y2=e_bar_i;
+      @x1;
+      @x2;
+    }
+    output:
+      LatDel_45_split: y1,y2;
+  }
+
+  actor DelayOne_18
+  {
+    state:
+    {
+    float last_DelayOne_18 = 0.0;
+    }
+    init:
+    {
+      last_DelayOne_18 = 0.0f;
+    }
+    input:
+      LatDel_15_split: x1;
+    firing:
+    {
+      @y1=last_DelayOne_18;
+      last_DelayOne_18 = @x1;
+    }
+    output:
+      LatDel_15_join: y1;
+  }
+
+  actor LatFilt_46
+  {
+    state:
+    {
+    float k_par_LatFilt_46=7.0;
+    }
+    input:
+      LatDel_45_join: x1,x2;
+    firing:
+    {
+      float e_i = 0;
+      float e_bar_i = 0;
+      e_i = (@x1 - (k_par_LatFilt_46 * @x2));
+      e_bar_i = (@x2 - (k_par_LatFilt_46 * @x1));
+      @y1=e_i;
+      @y2=e_bar_i;
+      @x1;
+      @x2;
+    }
+    output:
+      LatDel_51_split: y1,y2;
+  }
+
+  actor Counter_1
+  {
+    state:
+    {
+    float i_Counter_1 = 0.0;
+    }
+    init:
+    {
+      printf("Enter seed: ");
+      scanf("%d", &seed);
+      srand(seed);
+    }
+    firing:
+    {
+      @y1 = rand_r(&seed);
+    }
+    output:
+      ZeroStage_2_split: y1;
+  }
+
+}
+
+postamble {
+int main(){
+  Lattice();
+  printf("sum: %f\n", sum);
+  return 0;
+}
+}

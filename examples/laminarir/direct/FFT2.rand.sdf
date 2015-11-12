@@ -1,0 +1,1973 @@
+preamble {
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+static unsigned int seed;
+
+volatile double sum = 0.0;
+}
+
+sdf FFT2 {
+  float FFTTestSource_1 -> FFTKernel2_2_split(64);
+  float FFTKernel2_2_split(32) -> FFTReorderSimple_11;
+  float FFTReorderSimple_11 -> FFTReorderSimple_12;
+  float FFTReorderSimple_12 -> FFTReorderSimple_13;
+  float FFTReorderSimple_13 -> CombineDFT_7;
+  float CombineDFT_7 -> CombineDFT_8;
+  float CombineDFT_8 -> CombineDFT_9;
+  float CombineDFT_9 -> CombineDFT_10;
+  float CombineDFT_10 -> FFTKernel2_2_join(32);
+  float FFTKernel2_2_split(32) -> FFTReorderSimple_25;
+  float FFTReorderSimple_25 -> FFTReorderSimple_26;
+  float FFTReorderSimple_26 -> FFTReorderSimple_27;
+  float FFTReorderSimple_27 -> CombineDFT_21;
+  float CombineDFT_21 -> CombineDFT_22;
+  float CombineDFT_22 -> CombineDFT_23;
+  float CombineDFT_23 -> CombineDFT_24;
+  float CombineDFT_24 -> FFTKernel2_2_join(32);
+  float FFTKernel2_2_join(64) -> FloatPrinter_3;
+
+  actor CombineDFT_21
+  {
+    state:
+    {
+    int n_CombineDFT_21=2;
+    float w_CombineDFT_21[2]  = {0.0};
+    }
+    init:
+    {
+      float wn_r = ((float)(cos(((2 * 3.141592654f) / 2))));
+      float wn_i = ((float)(sin(((-2 * 3.141592654f) / 2))));
+      float real = 1;
+      float imag = 0;
+      float next_real = 0.0, next_imag = 0.0;
+      {
+      int i;
+      for (i=0; (i < 2); i += 2) {
+        w_CombineDFT_21[i] = 1;
+        w_CombineDFT_21[(i + 1)] = 0;
+        next_real = ((1 * wn_r) - (0 * wn_i));
+        next_imag = ((1 * wn_i) + (0 * wn_r));
+        real = next_real;
+        imag = next_imag;
+      }
+      };
+    }
+    input:
+      FFTReorderSimple_27: x1,x2,x3,x4;
+    firing:
+    {
+      int i = 0;
+      float results[(2 * 2)]  = {0.0};
+      
+      {
+        int i_plus_1 = (0 + 1);
+        float y0_r = @x1;
+        float y0_i = @x2;
+        float y1_r = @x3;
+        float y1_i = @x4;
+        float weight_real = w_CombineDFT_21[0];
+        float weight_imag = w_CombineDFT_21[1];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[0] = (y0_r + y1w_r);
+        results[(0 + 1)] = (y0_i + y1w_i);
+        results[(2 + 0)] = (y0_r - y1w_r);
+        results[((2 + 0) + 1)] = (y0_i - y1w_i);
+      }
+;
+      
+      {
+        @x1;
+        @y1=results[0];
+      }
+      {
+        @x2;
+        @y2=results[1];
+      }
+      {
+        @x3;
+        @y3=results[2];
+      }
+      {
+        @x4;
+        @y4=results[3];
+      }
+;
+    }
+    output:
+      CombineDFT_22: y1,y2,y3,y4;
+  }
+
+  actor FFTReorderSimple_13
+  {
+    state:
+    {
+    int n_FFTReorderSimple_13=4;
+    int totalData_FFTReorderSimple_13 = 0;
+    }
+    init:
+    {
+      totalData_FFTReorderSimple_13 = (2 * 4);
+    }
+    input:
+      FFTReorderSimple_12: x1,x2,x3,x4,x5,x6,x7,x8;
+    firing:
+    {
+      int i = 0;
+      
+      {
+        @y1=@x1;
+        @y2=@x2;
+      }
+      {
+        @y3=@x5;
+        @y4=@x6;
+      }
+;
+      
+      {
+        @y5=@x3;
+        @y6=@x4;
+      }
+      {
+        @y7=@x7;
+        @y8=@x8;
+      }
+;
+      
+      {
+        @x1;
+        @x2;
+      }
+      {
+        @x3;
+        @x4;
+      }
+      {
+        @x5;
+        @x6;
+      }
+      {
+        @x7;
+        @x8;
+      }
+;
+    }
+    output:
+      CombineDFT_7: y1,y2,y3,y4,y5,y6,y7,y8;
+  }
+
+  actor CombineDFT_23
+  {
+    state:
+    {
+    int n_CombineDFT_23=8;
+    float w_CombineDFT_23[8]  = {0.0};
+    }
+    init:
+    {
+      float wn_r = ((float)(cos(((2 * 3.141592654f) / 8))));
+      float wn_i = ((float)(sin(((-2 * 3.141592654f) / 8))));
+      float real = 1;
+      float imag = 0;
+      float next_real = 0.0, next_imag = 0.0;
+      {
+      int i;
+      for (i=0; (i < 8); i += 2) {
+        w_CombineDFT_23[i] = 1;
+        w_CombineDFT_23[(i + 1)] = 0;
+        next_real = ((1 * wn_r) - (0 * wn_i));
+        next_imag = ((1 * wn_i) + (0 * wn_r));
+        real = next_real;
+        imag = next_imag;
+      }
+      };
+    }
+    input:
+      CombineDFT_22: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int i = 0;
+      float results[(2 * 8)]  = {0.0};
+      
+      {
+        int i_plus_1 = (0 + 1);
+        float y0_r = @x1;
+        float y0_i = @x2;
+        float y1_r = @x9;
+        float y1_i = @x10;
+        float weight_real = w_CombineDFT_23[0];
+        float weight_imag = w_CombineDFT_23[1];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[0] = (y0_r + y1w_r);
+        results[(0 + 1)] = (y0_i + y1w_i);
+        results[(8 + 0)] = (y0_r - y1w_r);
+        results[((8 + 0) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (2 + 1);
+        float y0_r = @x3;
+        float y0_i = @x4;
+        float y1_r = @x11;
+        float y1_i = @x12;
+        float weight_real = w_CombineDFT_23[2];
+        float weight_imag = w_CombineDFT_23[3];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[2] = (y0_r + y1w_r);
+        results[(2 + 1)] = (y0_i + y1w_i);
+        results[(8 + 2)] = (y0_r - y1w_r);
+        results[((8 + 2) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (4 + 1);
+        float y0_r = @x5;
+        float y0_i = @x6;
+        float y1_r = @x13;
+        float y1_i = @x14;
+        float weight_real = w_CombineDFT_23[4];
+        float weight_imag = w_CombineDFT_23[5];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[4] = (y0_r + y1w_r);
+        results[(4 + 1)] = (y0_i + y1w_i);
+        results[(8 + 4)] = (y0_r - y1w_r);
+        results[((8 + 4) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (6 + 1);
+        float y0_r = @x7;
+        float y0_i = @x8;
+        float y1_r = @x15;
+        float y1_i = @x16;
+        float weight_real = w_CombineDFT_23[6];
+        float weight_imag = w_CombineDFT_23[7];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[6] = (y0_r + y1w_r);
+        results[(6 + 1)] = (y0_i + y1w_i);
+        results[(8 + 6)] = (y0_r - y1w_r);
+        results[((8 + 6) + 1)] = (y0_i - y1w_i);
+      }
+;
+      
+      {
+        @x1;
+        @y1=results[0];
+      }
+      {
+        @x2;
+        @y2=results[1];
+      }
+      {
+        @x3;
+        @y3=results[2];
+      }
+      {
+        @x4;
+        @y4=results[3];
+      }
+      {
+        @x5;
+        @y5=results[4];
+      }
+      {
+        @x6;
+        @y6=results[5];
+      }
+      {
+        @x7;
+        @y7=results[6];
+      }
+      {
+        @x8;
+        @y8=results[7];
+      }
+      {
+        @x9;
+        @y9=results[8];
+      }
+      {
+        @x10;
+        @y10=results[9];
+      }
+      {
+        @x11;
+        @y11=results[10];
+      }
+      {
+        @x12;
+        @y12=results[11];
+      }
+      {
+        @x13;
+        @y13=results[12];
+      }
+      {
+        @x14;
+        @y14=results[13];
+      }
+      {
+        @x15;
+        @y15=results[14];
+      }
+      {
+        @x16;
+        @y16=results[15];
+      }
+;
+    }
+    output:
+      CombineDFT_24: y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16;
+  }
+
+  actor FFTReorderSimple_25
+  {
+    state:
+    {
+    int n_FFTReorderSimple_25=16;
+    int totalData_FFTReorderSimple_25 = 0;
+    }
+    init:
+    {
+      totalData_FFTReorderSimple_25 = (2 * 16);
+    }
+    input:
+      FFTKernel2_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      int i = 0;
+      
+      {
+        @y1=@x1;
+        @y2=@x2;
+      }
+      {
+        @y3=@x5;
+        @y4=@x6;
+      }
+      {
+        @y5=@x9;
+        @y6=@x10;
+      }
+      {
+        @y7=@x13;
+        @y8=@x14;
+      }
+      {
+        @y9=@x17;
+        @y10=@x18;
+      }
+      {
+        @y11=@x21;
+        @y12=@x22;
+      }
+      {
+        @y13=@x25;
+        @y14=@x26;
+      }
+      {
+        @y15=@x29;
+        @y16=@x30;
+      }
+;
+      
+      {
+        @y17=@x3;
+        @y18=@x4;
+      }
+      {
+        @y19=@x7;
+        @y20=@x8;
+      }
+      {
+        @y21=@x11;
+        @y22=@x12;
+      }
+      {
+        @y23=@x15;
+        @y24=@x16;
+      }
+      {
+        @y25=@x19;
+        @y26=@x20;
+      }
+      {
+        @y27=@x23;
+        @y28=@x24;
+      }
+      {
+        @y29=@x27;
+        @y30=@x28;
+      }
+      {
+        @y31=@x31;
+        @y32=@x32;
+      }
+;
+      
+      {
+        @x1;
+        @x2;
+      }
+      {
+        @x3;
+        @x4;
+      }
+      {
+        @x5;
+        @x6;
+      }
+      {
+        @x7;
+        @x8;
+      }
+      {
+        @x9;
+        @x10;
+      }
+      {
+        @x11;
+        @x12;
+      }
+      {
+        @x13;
+        @x14;
+      }
+      {
+        @x15;
+        @x16;
+      }
+      {
+        @x17;
+        @x18;
+      }
+      {
+        @x19;
+        @x20;
+      }
+      {
+        @x21;
+        @x22;
+      }
+      {
+        @x23;
+        @x24;
+      }
+      {
+        @x25;
+        @x26;
+      }
+      {
+        @x27;
+        @x28;
+      }
+      {
+        @x29;
+        @x30;
+      }
+      {
+        @x31;
+        @x32;
+      }
+;
+    }
+    output:
+      FFTReorderSimple_26: y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16,y17,y18,y19,y20,y21,y22,y23,y24,y25,y26,y27,y28,y29,y30,y31,y32;
+  }
+
+  actor FFTReorderSimple_27
+  {
+    state:
+    {
+    int n_FFTReorderSimple_27=4;
+    int totalData_FFTReorderSimple_27 = 0;
+    }
+    init:
+    {
+      totalData_FFTReorderSimple_27 = (2 * 4);
+    }
+    input:
+      FFTReorderSimple_26: x1,x2,x3,x4,x5,x6,x7,x8;
+    firing:
+    {
+      int i = 0;
+      
+      {
+        @y1=@x1;
+        @y2=@x2;
+      }
+      {
+        @y3=@x5;
+        @y4=@x6;
+      }
+;
+      
+      {
+        @y5=@x3;
+        @y6=@x4;
+      }
+      {
+        @y7=@x7;
+        @y8=@x8;
+      }
+;
+      
+      {
+        @x1;
+        @x2;
+      }
+      {
+        @x3;
+        @x4;
+      }
+      {
+        @x5;
+        @x6;
+      }
+      {
+        @x7;
+        @x8;
+      }
+;
+    }
+    output:
+      CombineDFT_21: y1,y2,y3,y4,y5,y6,y7,y8;
+  }
+
+  actor CombineDFT_9
+  {
+    state:
+    {
+    int n_CombineDFT_9=8;
+    float w_CombineDFT_9[8]  = {0.0};
+    }
+    init:
+    {
+      float wn_r = ((float)(cos(((2 * 3.141592654f) / 8))));
+      float wn_i = ((float)(sin(((-2 * 3.141592654f) / 8))));
+      float real = 1;
+      float imag = 0;
+      float next_real = 0.0, next_imag = 0.0;
+      {
+      int i;
+      for (i=0; (i < 8); i += 2) {
+        w_CombineDFT_9[i] = 1;
+        w_CombineDFT_9[(i + 1)] = 0;
+        next_real = ((1 * wn_r) - (0 * wn_i));
+        next_imag = ((1 * wn_i) + (0 * wn_r));
+        real = next_real;
+        imag = next_imag;
+      }
+      };
+    }
+    input:
+      CombineDFT_8: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int i = 0;
+      float results[(2 * 8)]  = {0.0};
+      
+      {
+        int i_plus_1 = (0 + 1);
+        float y0_r = @x1;
+        float y0_i = @x2;
+        float y1_r = @x9;
+        float y1_i = @x10;
+        float weight_real = w_CombineDFT_9[0];
+        float weight_imag = w_CombineDFT_9[1];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[0] = (y0_r + y1w_r);
+        results[(0 + 1)] = (y0_i + y1w_i);
+        results[(8 + 0)] = (y0_r - y1w_r);
+        results[((8 + 0) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (2 + 1);
+        float y0_r = @x3;
+        float y0_i = @x4;
+        float y1_r = @x11;
+        float y1_i = @x12;
+        float weight_real = w_CombineDFT_9[2];
+        float weight_imag = w_CombineDFT_9[3];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[2] = (y0_r + y1w_r);
+        results[(2 + 1)] = (y0_i + y1w_i);
+        results[(8 + 2)] = (y0_r - y1w_r);
+        results[((8 + 2) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (4 + 1);
+        float y0_r = @x5;
+        float y0_i = @x6;
+        float y1_r = @x13;
+        float y1_i = @x14;
+        float weight_real = w_CombineDFT_9[4];
+        float weight_imag = w_CombineDFT_9[5];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[4] = (y0_r + y1w_r);
+        results[(4 + 1)] = (y0_i + y1w_i);
+        results[(8 + 4)] = (y0_r - y1w_r);
+        results[((8 + 4) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (6 + 1);
+        float y0_r = @x7;
+        float y0_i = @x8;
+        float y1_r = @x15;
+        float y1_i = @x16;
+        float weight_real = w_CombineDFT_9[6];
+        float weight_imag = w_CombineDFT_9[7];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[6] = (y0_r + y1w_r);
+        results[(6 + 1)] = (y0_i + y1w_i);
+        results[(8 + 6)] = (y0_r - y1w_r);
+        results[((8 + 6) + 1)] = (y0_i - y1w_i);
+      }
+;
+      
+      {
+        @x1;
+        @y1=results[0];
+      }
+      {
+        @x2;
+        @y2=results[1];
+      }
+      {
+        @x3;
+        @y3=results[2];
+      }
+      {
+        @x4;
+        @y4=results[3];
+      }
+      {
+        @x5;
+        @y5=results[4];
+      }
+      {
+        @x6;
+        @y6=results[5];
+      }
+      {
+        @x7;
+        @y7=results[6];
+      }
+      {
+        @x8;
+        @y8=results[7];
+      }
+      {
+        @x9;
+        @y9=results[8];
+      }
+      {
+        @x10;
+        @y10=results[9];
+      }
+      {
+        @x11;
+        @y11=results[10];
+      }
+      {
+        @x12;
+        @y12=results[11];
+      }
+      {
+        @x13;
+        @y13=results[12];
+      }
+      {
+        @x14;
+        @y14=results[13];
+      }
+      {
+        @x15;
+        @y15=results[14];
+      }
+      {
+        @x16;
+        @y16=results[15];
+      }
+;
+    }
+    output:
+      CombineDFT_10: y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16;
+  }
+
+  actor FFTReorderSimple_11
+  {
+    state:
+    {
+    int n_FFTReorderSimple_11=16;
+    int totalData_FFTReorderSimple_11 = 0;
+    }
+    init:
+    {
+      totalData_FFTReorderSimple_11 = (2 * 16);
+    }
+    input:
+      FFTKernel2_2_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      int i = 0;
+      
+      {
+        @y1=@x1;
+        @y2=@x2;
+      }
+      {
+        @y3=@x5;
+        @y4=@x6;
+      }
+      {
+        @y5=@x9;
+        @y6=@x10;
+      }
+      {
+        @y7=@x13;
+        @y8=@x14;
+      }
+      {
+        @y9=@x17;
+        @y10=@x18;
+      }
+      {
+        @y11=@x21;
+        @y12=@x22;
+      }
+      {
+        @y13=@x25;
+        @y14=@x26;
+      }
+      {
+        @y15=@x29;
+        @y16=@x30;
+      }
+;
+      
+      {
+        @y17=@x3;
+        @y18=@x4;
+      }
+      {
+        @y19=@x7;
+        @y20=@x8;
+      }
+      {
+        @y21=@x11;
+        @y22=@x12;
+      }
+      {
+        @y23=@x15;
+        @y24=@x16;
+      }
+      {
+        @y25=@x19;
+        @y26=@x20;
+      }
+      {
+        @y27=@x23;
+        @y28=@x24;
+      }
+      {
+        @y29=@x27;
+        @y30=@x28;
+      }
+      {
+        @y31=@x31;
+        @y32=@x32;
+      }
+;
+      
+      {
+        @x1;
+        @x2;
+      }
+      {
+        @x3;
+        @x4;
+      }
+      {
+        @x5;
+        @x6;
+      }
+      {
+        @x7;
+        @x8;
+      }
+      {
+        @x9;
+        @x10;
+      }
+      {
+        @x11;
+        @x12;
+      }
+      {
+        @x13;
+        @x14;
+      }
+      {
+        @x15;
+        @x16;
+      }
+      {
+        @x17;
+        @x18;
+      }
+      {
+        @x19;
+        @x20;
+      }
+      {
+        @x21;
+        @x22;
+      }
+      {
+        @x23;
+        @x24;
+      }
+      {
+        @x25;
+        @x26;
+      }
+      {
+        @x27;
+        @x28;
+      }
+      {
+        @x29;
+        @x30;
+      }
+      {
+        @x31;
+        @x32;
+      }
+;
+    }
+    output:
+      FFTReorderSimple_12: y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16,y17,y18,y19,y20,y21,y22,y23,y24,y25,y26,y27,y28,y29,y30,y31,y32;
+  }
+
+  actor FFTReorderSimple_12
+  {
+    state:
+    {
+    int n_FFTReorderSimple_12=8;
+    int totalData_FFTReorderSimple_12 = 0;
+    }
+    init:
+    {
+      totalData_FFTReorderSimple_12 = (2 * 8);
+    }
+    input:
+      FFTReorderSimple_11: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int i = 0;
+      
+      {
+        @y1=@x1;
+        @y2=@x2;
+      }
+      {
+        @y3=@x5;
+        @y4=@x6;
+      }
+      {
+        @y5=@x9;
+        @y6=@x10;
+      }
+      {
+        @y7=@x13;
+        @y8=@x14;
+      }
+;
+      
+      {
+        @y9=@x3;
+        @y10=@x4;
+      }
+      {
+        @y11=@x7;
+        @y12=@x8;
+      }
+      {
+        @y13=@x11;
+        @y14=@x12;
+      }
+      {
+        @y15=@x15;
+        @y16=@x16;
+      }
+;
+      
+      {
+        @x1;
+        @x2;
+      }
+      {
+        @x3;
+        @x4;
+      }
+      {
+        @x5;
+        @x6;
+      }
+      {
+        @x7;
+        @x8;
+      }
+      {
+        @x9;
+        @x10;
+      }
+      {
+        @x11;
+        @x12;
+      }
+      {
+        @x13;
+        @x14;
+      }
+      {
+        @x15;
+        @x16;
+      }
+;
+    }
+    output:
+      FFTReorderSimple_13: y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16;
+  }
+
+  actor CombineDFT_7
+  {
+    state:
+    {
+    int n_CombineDFT_7=2;
+    float w_CombineDFT_7[2]  = {0.0};
+    }
+    init:
+    {
+      float wn_r = ((float)(cos(((2 * 3.141592654f) / 2))));
+      float wn_i = ((float)(sin(((-2 * 3.141592654f) / 2))));
+      float real = 1;
+      float imag = 0;
+      float next_real = 0.0, next_imag = 0.0;
+      {
+      int i;
+      for (i=0; (i < 2); i += 2) {
+        w_CombineDFT_7[i] = 1;
+        w_CombineDFT_7[(i + 1)] = 0;
+        next_real = ((1 * wn_r) - (0 * wn_i));
+        next_imag = ((1 * wn_i) + (0 * wn_r));
+        real = next_real;
+        imag = next_imag;
+      }
+      };
+    }
+    input:
+      FFTReorderSimple_13: x1,x2,x3,x4;
+    firing:
+    {
+      int i = 0;
+      float results[(2 * 2)]  = {0.0};
+      
+      {
+        int i_plus_1 = (0 + 1);
+        float y0_r = @x1;
+        float y0_i = @x2;
+        float y1_r = @x3;
+        float y1_i = @x4;
+        float weight_real = w_CombineDFT_7[0];
+        float weight_imag = w_CombineDFT_7[1];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[0] = (y0_r + y1w_r);
+        results[(0 + 1)] = (y0_i + y1w_i);
+        results[(2 + 0)] = (y0_r - y1w_r);
+        results[((2 + 0) + 1)] = (y0_i - y1w_i);
+      }
+;
+      
+      {
+        @x1;
+        @y1=results[0];
+      }
+      {
+        @x2;
+        @y2=results[1];
+      }
+      {
+        @x3;
+        @y3=results[2];
+      }
+      {
+        @x4;
+        @y4=results[3];
+      }
+;
+    }
+    output:
+      CombineDFT_8: y1,y2,y3,y4;
+  }
+
+  actor CombineDFT_22
+  {
+    state:
+    {
+    int n_CombineDFT_22=4;
+    float w_CombineDFT_22[4]  = {0.0};
+    }
+    init:
+    {
+      float wn_r = ((float)(cos(((2 * 3.141592654f) / 4))));
+      float wn_i = ((float)(sin(((-2 * 3.141592654f) / 4))));
+      float real = 1;
+      float imag = 0;
+      float next_real = 0.0, next_imag = 0.0;
+      {
+      int i;
+      for (i=0; (i < 4); i += 2) {
+        w_CombineDFT_22[i] = 1;
+        w_CombineDFT_22[(i + 1)] = 0;
+        next_real = ((1 * wn_r) - (0 * wn_i));
+        next_imag = ((1 * wn_i) + (0 * wn_r));
+        real = next_real;
+        imag = next_imag;
+      }
+      };
+    }
+    input:
+      CombineDFT_21: x1,x2,x3,x4,x5,x6,x7,x8;
+    firing:
+    {
+      int i = 0;
+      float results[(2 * 4)]  = {0.0};
+      
+      {
+        int i_plus_1 = (0 + 1);
+        float y0_r = @x1;
+        float y0_i = @x2;
+        float y1_r = @x5;
+        float y1_i = @x6;
+        float weight_real = w_CombineDFT_22[0];
+        float weight_imag = w_CombineDFT_22[1];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[0] = (y0_r + y1w_r);
+        results[(0 + 1)] = (y0_i + y1w_i);
+        results[(4 + 0)] = (y0_r - y1w_r);
+        results[((4 + 0) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (2 + 1);
+        float y0_r = @x3;
+        float y0_i = @x4;
+        float y1_r = @x7;
+        float y1_i = @x8;
+        float weight_real = w_CombineDFT_22[2];
+        float weight_imag = w_CombineDFT_22[3];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[2] = (y0_r + y1w_r);
+        results[(2 + 1)] = (y0_i + y1w_i);
+        results[(4 + 2)] = (y0_r - y1w_r);
+        results[((4 + 2) + 1)] = (y0_i - y1w_i);
+      }
+;
+      
+      {
+        @x1;
+        @y1=results[0];
+      }
+      {
+        @x2;
+        @y2=results[1];
+      }
+      {
+        @x3;
+        @y3=results[2];
+      }
+      {
+        @x4;
+        @y4=results[3];
+      }
+      {
+        @x5;
+        @y5=results[4];
+      }
+      {
+        @x6;
+        @y6=results[5];
+      }
+      {
+        @x7;
+        @y7=results[6];
+      }
+      {
+        @x8;
+        @y8=results[7];
+      }
+;
+    }
+    output:
+      CombineDFT_23: y1,y2,y3,y4,y5,y6,y7,y8;
+  }
+
+  actor CombineDFT_24
+  {
+    state:
+    {
+    int n_CombineDFT_24=16;
+    float w_CombineDFT_24[16]  = {0.0};
+    }
+    init:
+    {
+      float wn_r = ((float)(cos(((2 * 3.141592654f) / 16))));
+      float wn_i = ((float)(sin(((-2 * 3.141592654f) / 16))));
+      float real = 1;
+      float imag = 0;
+      float next_real = 0.0, next_imag = 0.0;
+      {
+      int i;
+      for (i=0; (i < 16); i += 2) {
+        w_CombineDFT_24[i] = 1;
+        w_CombineDFT_24[(i + 1)] = 0;
+        next_real = ((1 * wn_r) - (0 * wn_i));
+        next_imag = ((1 * wn_i) + (0 * wn_r));
+        real = next_real;
+        imag = next_imag;
+      }
+      };
+    }
+    input:
+      CombineDFT_23: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      int i = 0;
+      float results[(2 * 16)]  = {0.0};
+      
+      {
+        int i_plus_1 = (0 + 1);
+        float y0_r = @x1;
+        float y0_i = @x2;
+        float y1_r = @x17;
+        float y1_i = @x18;
+        float weight_real = w_CombineDFT_24[0];
+        float weight_imag = w_CombineDFT_24[1];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[0] = (y0_r + y1w_r);
+        results[(0 + 1)] = (y0_i + y1w_i);
+        results[(16 + 0)] = (y0_r - y1w_r);
+        results[((16 + 0) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (2 + 1);
+        float y0_r = @x3;
+        float y0_i = @x4;
+        float y1_r = @x19;
+        float y1_i = @x20;
+        float weight_real = w_CombineDFT_24[2];
+        float weight_imag = w_CombineDFT_24[3];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[2] = (y0_r + y1w_r);
+        results[(2 + 1)] = (y0_i + y1w_i);
+        results[(16 + 2)] = (y0_r - y1w_r);
+        results[((16 + 2) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (4 + 1);
+        float y0_r = @x5;
+        float y0_i = @x6;
+        float y1_r = @x21;
+        float y1_i = @x22;
+        float weight_real = w_CombineDFT_24[4];
+        float weight_imag = w_CombineDFT_24[5];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[4] = (y0_r + y1w_r);
+        results[(4 + 1)] = (y0_i + y1w_i);
+        results[(16 + 4)] = (y0_r - y1w_r);
+        results[((16 + 4) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (6 + 1);
+        float y0_r = @x7;
+        float y0_i = @x8;
+        float y1_r = @x23;
+        float y1_i = @x24;
+        float weight_real = w_CombineDFT_24[6];
+        float weight_imag = w_CombineDFT_24[7];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[6] = (y0_r + y1w_r);
+        results[(6 + 1)] = (y0_i + y1w_i);
+        results[(16 + 6)] = (y0_r - y1w_r);
+        results[((16 + 6) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (8 + 1);
+        float y0_r = @x9;
+        float y0_i = @x10;
+        float y1_r = @x25;
+        float y1_i = @x26;
+        float weight_real = w_CombineDFT_24[8];
+        float weight_imag = w_CombineDFT_24[9];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[8] = (y0_r + y1w_r);
+        results[(8 + 1)] = (y0_i + y1w_i);
+        results[(16 + 8)] = (y0_r - y1w_r);
+        results[((16 + 8) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (10 + 1);
+        float y0_r = @x11;
+        float y0_i = @x12;
+        float y1_r = @x27;
+        float y1_i = @x28;
+        float weight_real = w_CombineDFT_24[10];
+        float weight_imag = w_CombineDFT_24[11];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[10] = (y0_r + y1w_r);
+        results[(10 + 1)] = (y0_i + y1w_i);
+        results[(16 + 10)] = (y0_r - y1w_r);
+        results[((16 + 10) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (12 + 1);
+        float y0_r = @x13;
+        float y0_i = @x14;
+        float y1_r = @x29;
+        float y1_i = @x30;
+        float weight_real = w_CombineDFT_24[12];
+        float weight_imag = w_CombineDFT_24[13];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[12] = (y0_r + y1w_r);
+        results[(12 + 1)] = (y0_i + y1w_i);
+        results[(16 + 12)] = (y0_r - y1w_r);
+        results[((16 + 12) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (14 + 1);
+        float y0_r = @x15;
+        float y0_i = @x16;
+        float y1_r = @x31;
+        float y1_i = @x32;
+        float weight_real = w_CombineDFT_24[14];
+        float weight_imag = w_CombineDFT_24[15];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[14] = (y0_r + y1w_r);
+        results[(14 + 1)] = (y0_i + y1w_i);
+        results[(16 + 14)] = (y0_r - y1w_r);
+        results[((16 + 14) + 1)] = (y0_i - y1w_i);
+      }
+;
+      
+      {
+        @x1;
+        @y1=results[0];
+      }
+      {
+        @x2;
+        @y2=results[1];
+      }
+      {
+        @x3;
+        @y3=results[2];
+      }
+      {
+        @x4;
+        @y4=results[3];
+      }
+      {
+        @x5;
+        @y5=results[4];
+      }
+      {
+        @x6;
+        @y6=results[5];
+      }
+      {
+        @x7;
+        @y7=results[6];
+      }
+      {
+        @x8;
+        @y8=results[7];
+      }
+      {
+        @x9;
+        @y9=results[8];
+      }
+      {
+        @x10;
+        @y10=results[9];
+      }
+      {
+        @x11;
+        @y11=results[10];
+      }
+      {
+        @x12;
+        @y12=results[11];
+      }
+      {
+        @x13;
+        @y13=results[12];
+      }
+      {
+        @x14;
+        @y14=results[13];
+      }
+      {
+        @x15;
+        @y15=results[14];
+      }
+      {
+        @x16;
+        @y16=results[15];
+      }
+      {
+        @x17;
+        @y17=results[16];
+      }
+      {
+        @x18;
+        @y18=results[17];
+      }
+      {
+        @x19;
+        @y19=results[18];
+      }
+      {
+        @x20;
+        @y20=results[19];
+      }
+      {
+        @x21;
+        @y21=results[20];
+      }
+      {
+        @x22;
+        @y22=results[21];
+      }
+      {
+        @x23;
+        @y23=results[22];
+      }
+      {
+        @x24;
+        @y24=results[23];
+      }
+      {
+        @x25;
+        @y25=results[24];
+      }
+      {
+        @x26;
+        @y26=results[25];
+      }
+      {
+        @x27;
+        @y27=results[26];
+      }
+      {
+        @x28;
+        @y28=results[27];
+      }
+      {
+        @x29;
+        @y29=results[28];
+      }
+      {
+        @x30;
+        @y30=results[29];
+      }
+      {
+        @x31;
+        @y31=results[30];
+      }
+      {
+        @x32;
+        @y32=results[31];
+      }
+;
+    }
+    output:
+      FFTKernel2_2_join: y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16,y17,y18,y19,y20,y21,y22,y23,y24,y25,y26,y27,y28,y29,y30,y31,y32;
+  }
+
+  actor FFTTestSource_1
+  {
+    state:
+    {
+    int N_FFTTestSource_1=16;
+    }
+    init:
+    {
+      printf("Enter seed: ");
+      scanf("%d", &seed);
+      srand(seed);
+    }
+    firing:
+    {
+      @y1 = rand_r(&seed);
+      @y2 = rand_r(&seed);
+      @y3 = rand_r(&seed);
+      @y4 = rand_r(&seed);
+      @y5 = rand_r(&seed);
+      @y6 = rand_r(&seed);
+      @y7 = rand_r(&seed);
+      @y8 = rand_r(&seed);
+      @y9 = rand_r(&seed);
+      @y10 = rand_r(&seed);
+      @y11 = rand_r(&seed);
+      @y12 = rand_r(&seed);
+      @y13 = rand_r(&seed);
+      @y14 = rand_r(&seed);
+      @y15 = rand_r(&seed);
+      @y16 = rand_r(&seed);
+      @y17 = rand_r(&seed);
+      @y18 = rand_r(&seed);
+      @y19 = rand_r(&seed);
+      @y20 = rand_r(&seed);
+      @y21 = rand_r(&seed);
+      @y22 = rand_r(&seed);
+      @y23 = rand_r(&seed);
+      @y24 = rand_r(&seed);
+      @y25 = rand_r(&seed);
+      @y26 = rand_r(&seed);
+      @y27 = rand_r(&seed);
+      @y28 = rand_r(&seed);
+      @y29 = rand_r(&seed);
+      @y30 = rand_r(&seed);
+      @y31 = rand_r(&seed);
+      @y32 = rand_r(&seed);
+    }
+    output:
+      FFTKernel2_2_split: y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16,y17,y18,y19,y20,y21,y22,y23,y24,y25,y26,y27,y28,y29,y30,y31,y32;
+  }
+
+  actor FloatPrinter_3
+  {
+    state:
+    {
+    float x_FloatPrinter_3 = 0.0;
+    }
+    input:
+      FFTKernel2_2_join: x1;
+    firing:
+    {
+      x_FloatPrinter_3 = @x1;
+      sum += @x1;
+    }
+  }
+
+  actor CombineDFT_8
+  {
+    state:
+    {
+    int n_CombineDFT_8=4;
+    float w_CombineDFT_8[4]  = {0.0};
+    }
+    init:
+    {
+      float wn_r = ((float)(cos(((2 * 3.141592654f) / 4))));
+      float wn_i = ((float)(sin(((-2 * 3.141592654f) / 4))));
+      float real = 1;
+      float imag = 0;
+      float next_real = 0.0, next_imag = 0.0;
+      {
+      int i;
+      for (i=0; (i < 4); i += 2) {
+        w_CombineDFT_8[i] = 1;
+        w_CombineDFT_8[(i + 1)] = 0;
+        next_real = ((1 * wn_r) - (0 * wn_i));
+        next_imag = ((1 * wn_i) + (0 * wn_r));
+        real = next_real;
+        imag = next_imag;
+      }
+      };
+    }
+    input:
+      CombineDFT_7: x1,x2,x3,x4,x5,x6,x7,x8;
+    firing:
+    {
+      int i = 0;
+      float results[(2 * 4)]  = {0.0};
+      
+      {
+        int i_plus_1 = (0 + 1);
+        float y0_r = @x1;
+        float y0_i = @x2;
+        float y1_r = @x5;
+        float y1_i = @x6;
+        float weight_real = w_CombineDFT_8[0];
+        float weight_imag = w_CombineDFT_8[1];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[0] = (y0_r + y1w_r);
+        results[(0 + 1)] = (y0_i + y1w_i);
+        results[(4 + 0)] = (y0_r - y1w_r);
+        results[((4 + 0) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (2 + 1);
+        float y0_r = @x3;
+        float y0_i = @x4;
+        float y1_r = @x7;
+        float y1_i = @x8;
+        float weight_real = w_CombineDFT_8[2];
+        float weight_imag = w_CombineDFT_8[3];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[2] = (y0_r + y1w_r);
+        results[(2 + 1)] = (y0_i + y1w_i);
+        results[(4 + 2)] = (y0_r - y1w_r);
+        results[((4 + 2) + 1)] = (y0_i - y1w_i);
+      }
+;
+      
+      {
+        @x1;
+        @y1=results[0];
+      }
+      {
+        @x2;
+        @y2=results[1];
+      }
+      {
+        @x3;
+        @y3=results[2];
+      }
+      {
+        @x4;
+        @y4=results[3];
+      }
+      {
+        @x5;
+        @y5=results[4];
+      }
+      {
+        @x6;
+        @y6=results[5];
+      }
+      {
+        @x7;
+        @y7=results[6];
+      }
+      {
+        @x8;
+        @y8=results[7];
+      }
+;
+    }
+    output:
+      CombineDFT_9: y1,y2,y3,y4,y5,y6,y7,y8;
+  }
+
+  actor FFTReorderSimple_26
+  {
+    state:
+    {
+    int n_FFTReorderSimple_26=8;
+    int totalData_FFTReorderSimple_26 = 0;
+    }
+    init:
+    {
+      totalData_FFTReorderSimple_26 = (2 * 8);
+    }
+    input:
+      FFTReorderSimple_25: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int i = 0;
+      
+      {
+        @y1=@x1;
+        @y2=@x2;
+      }
+      {
+        @y3=@x5;
+        @y4=@x6;
+      }
+      {
+        @y5=@x9;
+        @y6=@x10;
+      }
+      {
+        @y7=@x13;
+        @y8=@x14;
+      }
+;
+      
+      {
+        @y9=@x3;
+        @y10=@x4;
+      }
+      {
+        @y11=@x7;
+        @y12=@x8;
+      }
+      {
+        @y13=@x11;
+        @y14=@x12;
+      }
+      {
+        @y15=@x15;
+        @y16=@x16;
+      }
+;
+      
+      {
+        @x1;
+        @x2;
+      }
+      {
+        @x3;
+        @x4;
+      }
+      {
+        @x5;
+        @x6;
+      }
+      {
+        @x7;
+        @x8;
+      }
+      {
+        @x9;
+        @x10;
+      }
+      {
+        @x11;
+        @x12;
+      }
+      {
+        @x13;
+        @x14;
+      }
+      {
+        @x15;
+        @x16;
+      }
+;
+    }
+    output:
+      FFTReorderSimple_27: y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16;
+  }
+
+  actor CombineDFT_10
+  {
+    state:
+    {
+    int n_CombineDFT_10=16;
+    float w_CombineDFT_10[16]  = {0.0};
+    }
+    init:
+    {
+      float wn_r = ((float)(cos(((2 * 3.141592654f) / 16))));
+      float wn_i = ((float)(sin(((-2 * 3.141592654f) / 16))));
+      float real = 1;
+      float imag = 0;
+      float next_real = 0.0, next_imag = 0.0;
+      {
+      int i;
+      for (i=0; (i < 16); i += 2) {
+        w_CombineDFT_10[i] = 1;
+        w_CombineDFT_10[(i + 1)] = 0;
+        next_real = ((1 * wn_r) - (0 * wn_i));
+        next_imag = ((1 * wn_i) + (0 * wn_r));
+        real = next_real;
+        imag = next_imag;
+      }
+      };
+    }
+    input:
+      CombineDFT_9: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      int i = 0;
+      float results[(2 * 16)]  = {0.0};
+      
+      {
+        int i_plus_1 = (0 + 1);
+        float y0_r = @x1;
+        float y0_i = @x2;
+        float y1_r = @x17;
+        float y1_i = @x18;
+        float weight_real = w_CombineDFT_10[0];
+        float weight_imag = w_CombineDFT_10[1];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[0] = (y0_r + y1w_r);
+        results[(0 + 1)] = (y0_i + y1w_i);
+        results[(16 + 0)] = (y0_r - y1w_r);
+        results[((16 + 0) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (2 + 1);
+        float y0_r = @x3;
+        float y0_i = @x4;
+        float y1_r = @x19;
+        float y1_i = @x20;
+        float weight_real = w_CombineDFT_10[2];
+        float weight_imag = w_CombineDFT_10[3];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[2] = (y0_r + y1w_r);
+        results[(2 + 1)] = (y0_i + y1w_i);
+        results[(16 + 2)] = (y0_r - y1w_r);
+        results[((16 + 2) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (4 + 1);
+        float y0_r = @x5;
+        float y0_i = @x6;
+        float y1_r = @x21;
+        float y1_i = @x22;
+        float weight_real = w_CombineDFT_10[4];
+        float weight_imag = w_CombineDFT_10[5];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[4] = (y0_r + y1w_r);
+        results[(4 + 1)] = (y0_i + y1w_i);
+        results[(16 + 4)] = (y0_r - y1w_r);
+        results[((16 + 4) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (6 + 1);
+        float y0_r = @x7;
+        float y0_i = @x8;
+        float y1_r = @x23;
+        float y1_i = @x24;
+        float weight_real = w_CombineDFT_10[6];
+        float weight_imag = w_CombineDFT_10[7];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[6] = (y0_r + y1w_r);
+        results[(6 + 1)] = (y0_i + y1w_i);
+        results[(16 + 6)] = (y0_r - y1w_r);
+        results[((16 + 6) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (8 + 1);
+        float y0_r = @x9;
+        float y0_i = @x10;
+        float y1_r = @x25;
+        float y1_i = @x26;
+        float weight_real = w_CombineDFT_10[8];
+        float weight_imag = w_CombineDFT_10[9];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[8] = (y0_r + y1w_r);
+        results[(8 + 1)] = (y0_i + y1w_i);
+        results[(16 + 8)] = (y0_r - y1w_r);
+        results[((16 + 8) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (10 + 1);
+        float y0_r = @x11;
+        float y0_i = @x12;
+        float y1_r = @x27;
+        float y1_i = @x28;
+        float weight_real = w_CombineDFT_10[10];
+        float weight_imag = w_CombineDFT_10[11];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[10] = (y0_r + y1w_r);
+        results[(10 + 1)] = (y0_i + y1w_i);
+        results[(16 + 10)] = (y0_r - y1w_r);
+        results[((16 + 10) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (12 + 1);
+        float y0_r = @x13;
+        float y0_i = @x14;
+        float y1_r = @x29;
+        float y1_i = @x30;
+        float weight_real = w_CombineDFT_10[12];
+        float weight_imag = w_CombineDFT_10[13];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[12] = (y0_r + y1w_r);
+        results[(12 + 1)] = (y0_i + y1w_i);
+        results[(16 + 12)] = (y0_r - y1w_r);
+        results[((16 + 12) + 1)] = (y0_i - y1w_i);
+      }
+      {
+        int i_plus_1 = (14 + 1);
+        float y0_r = @x15;
+        float y0_i = @x16;
+        float y1_r = @x31;
+        float y1_i = @x32;
+        float weight_real = w_CombineDFT_10[14];
+        float weight_imag = w_CombineDFT_10[15];
+        float y1w_r = ((y1_r * weight_real) - (y1_i * weight_imag));
+        float y1w_i = ((y1_r * weight_imag) + (y1_i * weight_real));
+        results[14] = (y0_r + y1w_r);
+        results[(14 + 1)] = (y0_i + y1w_i);
+        results[(16 + 14)] = (y0_r - y1w_r);
+        results[((16 + 14) + 1)] = (y0_i - y1w_i);
+      }
+;
+      
+      {
+        @x1;
+        @y1=results[0];
+      }
+      {
+        @x2;
+        @y2=results[1];
+      }
+      {
+        @x3;
+        @y3=results[2];
+      }
+      {
+        @x4;
+        @y4=results[3];
+      }
+      {
+        @x5;
+        @y5=results[4];
+      }
+      {
+        @x6;
+        @y6=results[5];
+      }
+      {
+        @x7;
+        @y7=results[6];
+      }
+      {
+        @x8;
+        @y8=results[7];
+      }
+      {
+        @x9;
+        @y9=results[8];
+      }
+      {
+        @x10;
+        @y10=results[9];
+      }
+      {
+        @x11;
+        @y11=results[10];
+      }
+      {
+        @x12;
+        @y12=results[11];
+      }
+      {
+        @x13;
+        @y13=results[12];
+      }
+      {
+        @x14;
+        @y14=results[13];
+      }
+      {
+        @x15;
+        @y15=results[14];
+      }
+      {
+        @x16;
+        @y16=results[15];
+      }
+      {
+        @x17;
+        @y17=results[16];
+      }
+      {
+        @x18;
+        @y18=results[17];
+      }
+      {
+        @x19;
+        @y19=results[18];
+      }
+      {
+        @x20;
+        @y20=results[19];
+      }
+      {
+        @x21;
+        @y21=results[20];
+      }
+      {
+        @x22;
+        @y22=results[21];
+      }
+      {
+        @x23;
+        @y23=results[22];
+      }
+      {
+        @x24;
+        @y24=results[23];
+      }
+      {
+        @x25;
+        @y25=results[24];
+      }
+      {
+        @x26;
+        @y26=results[25];
+      }
+      {
+        @x27;
+        @y27=results[26];
+      }
+      {
+        @x28;
+        @y28=results[27];
+      }
+      {
+        @x29;
+        @y29=results[28];
+      }
+      {
+        @x30;
+        @y30=results[29];
+      }
+      {
+        @x31;
+        @y31=results[30];
+      }
+      {
+        @x32;
+        @y32=results[31];
+      }
+;
+    }
+    output:
+      FFTKernel2_2_join: y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16,y17,y18,y19,y20,y21,y22,y23,y24,y25,y26,y27,y28,y29,y30,y31,y32;
+  }
+
+}
+
+postamble {
+int main(){
+  FFT2();
+  printf("sum: %f\n", sum);
+  return 0;
+}
+}

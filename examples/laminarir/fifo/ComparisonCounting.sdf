@@ -1,0 +1,682 @@
+preamble {
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+volatile long long sum = 0;
+}
+
+sdf ComparisonCounting {
+  int IntSource_1 -> CountSortSplit_2_split(1);
+  int CountSortSplit_2_split(1) -> CountSplit_5_split(1);
+  int CountSplit_5_split(1) -> Counter_7;
+  int Counter_7 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_8;
+  int Counter_8 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_9;
+  int Counter_9 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_10;
+  int Counter_10 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_11;
+  int Counter_11 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_12;
+  int Counter_12 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_13;
+  int Counter_13 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_14;
+  int Counter_14 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_15;
+  int Counter_15 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_16;
+  int Counter_16 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_17;
+  int Counter_17 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_18;
+  int Counter_18 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_19;
+  int Counter_19 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_20;
+  int Counter_20 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_21;
+  int Counter_21 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_22;
+  int Counter_22 -> CountSplit_5_join(1);
+  int CountSplit_5_join(16) -> CountSortSplit_2_join(16);
+  int CountSortSplit_2_split(1) -> streamit_library_Identity_6;
+  int streamit_library_Identity_6 -> CountSortSplit_2_join(16);
+  int CountSortSplit_2_join(32) -> RearrangeIndices_3;
+  int RearrangeIndices_3 -> IntPrinter_4;
+
+  actor IntSource_1
+  {
+    state:
+    {
+    int SIZE_IntSource_1=16;
+    int data_IntSource_1[16]  = {0};
+    int index_IntSource_1 = 0;
+    }
+    init:
+    {
+      data_IntSource_1[0] = 503;
+      data_IntSource_1[1] = 87;
+      data_IntSource_1[2] = 512;
+      data_IntSource_1[3] = 61;
+      data_IntSource_1[4] = 908;
+      data_IntSource_1[5] = 170;
+      data_IntSource_1[6] = 897;
+      data_IntSource_1[7] = 275;
+      data_IntSource_1[8] = 653;
+      data_IntSource_1[9] = 426;
+      data_IntSource_1[10] = 154;
+      data_IntSource_1[11] = 509;
+      data_IntSource_1[12] = 612;
+      data_IntSource_1[13] = 677;
+      data_IntSource_1[14] = 765;
+      data_IntSource_1[15] = 703;
+    }
+    firing:
+    {
+      push(data_IntSource_1[index_IntSource_1++]);
+      if ((index_IntSource_1 == 16)) {
+        index_IntSource_1 = 0;
+      }
+    }
+    output:
+      CountSortSplit_2_split: y1;
+  }
+
+  actor Counter_19
+  {
+    state:
+    {
+    int index_Counter_19=12;
+    int SIZE_Counter_19=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = peek(12);
+      int count = 0;
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        if ((peek(i) < mine)) {
+          count = (count + 1);
+        }
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        pop();
+      }
+      };
+      push(count);
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_20
+  {
+    state:
+    {
+    int index_Counter_20=13;
+    int SIZE_Counter_20=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = peek(13);
+      int count = 0;
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        if ((peek(i) < mine)) {
+          count = (count + 1);
+        }
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        pop();
+      }
+      };
+      push(count);
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_11
+  {
+    state:
+    {
+    int index_Counter_11=4;
+    int SIZE_Counter_11=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = peek(4);
+      int count = 0;
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        if ((peek(i) < mine)) {
+          count = (count + 1);
+        }
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        pop();
+      }
+      };
+      push(count);
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_15
+  {
+    state:
+    {
+    int index_Counter_15=8;
+    int SIZE_Counter_15=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = peek(8);
+      int count = 0;
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        if ((peek(i) < mine)) {
+          count = (count + 1);
+        }
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        pop();
+      }
+      };
+      push(count);
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_10
+  {
+    state:
+    {
+    int index_Counter_10=3;
+    int SIZE_Counter_10=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = peek(3);
+      int count = 0;
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        if ((peek(i) < mine)) {
+          count = (count + 1);
+        }
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        pop();
+      }
+      };
+      push(count);
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_9
+  {
+    state:
+    {
+    int index_Counter_9=2;
+    int SIZE_Counter_9=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = peek(2);
+      int count = 0;
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        if ((peek(i) < mine)) {
+          count = (count + 1);
+        }
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        pop();
+      }
+      };
+      push(count);
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_14
+  {
+    state:
+    {
+    int index_Counter_14=7;
+    int SIZE_Counter_14=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = peek(7);
+      int count = 0;
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        if ((peek(i) < mine)) {
+          count = (count + 1);
+        }
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        pop();
+      }
+      };
+      push(count);
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_21
+  {
+    state:
+    {
+    int index_Counter_21=14;
+    int SIZE_Counter_21=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = peek(14);
+      int count = 0;
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        if ((peek(i) < mine)) {
+          count = (count + 1);
+        }
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        pop();
+      }
+      };
+      push(count);
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_18
+  {
+    state:
+    {
+    int index_Counter_18=11;
+    int SIZE_Counter_18=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = peek(11);
+      int count = 0;
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        if ((peek(i) < mine)) {
+          count = (count + 1);
+        }
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        pop();
+      }
+      };
+      push(count);
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor streamit_library_Identity_6
+  {
+    input:
+      CountSortSplit_2_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      CountSortSplit_2_join: y1;
+  }
+
+  actor RearrangeIndices_3
+  {
+    state:
+    {
+    int SIZE_RearrangeIndices_3=16;
+    }
+    input:
+      CountSortSplit_2_join: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      int outputArray[(2 * 16)]  = {0};
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        outputArray[peek(i)] = peek((i + 16));
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        push(outputArray[i]);
+        pop();
+        pop();
+      }
+      };
+    }
+    output:
+      IntPrinter_4: y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16;
+  }
+
+  actor Counter_17
+  {
+    state:
+    {
+    int index_Counter_17=10;
+    int SIZE_Counter_17=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = peek(10);
+      int count = 0;
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        if ((peek(i) < mine)) {
+          count = (count + 1);
+        }
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        pop();
+      }
+      };
+      push(count);
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_13
+  {
+    state:
+    {
+    int index_Counter_13=6;
+    int SIZE_Counter_13=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = peek(6);
+      int count = 0;
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        if ((peek(i) < mine)) {
+          count = (count + 1);
+        }
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        pop();
+      }
+      };
+      push(count);
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_8
+  {
+    state:
+    {
+    int index_Counter_8=1;
+    int SIZE_Counter_8=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = peek(1);
+      int count = 0;
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        if ((peek(i) < mine)) {
+          count = (count + 1);
+        }
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        pop();
+      }
+      };
+      push(count);
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_12
+  {
+    state:
+    {
+    int index_Counter_12=5;
+    int SIZE_Counter_12=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = peek(5);
+      int count = 0;
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        if ((peek(i) < mine)) {
+          count = (count + 1);
+        }
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        pop();
+      }
+      };
+      push(count);
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor IntPrinter_4
+  {
+    state:
+    {
+    int x_IntPrinter_4 = 0;
+    }
+    input:
+      RearrangeIndices_3: x1;
+    firing:
+    {
+      sum += peek(0);
+      x_IntPrinter_4 = pop();
+      ;
+    }
+  }
+
+  actor Counter_22
+  {
+    state:
+    {
+    int index_Counter_22=15;
+    int SIZE_Counter_22=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = peek(15);
+      int count = 0;
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        if ((peek(i) < mine)) {
+          count = (count + 1);
+        }
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        pop();
+      }
+      };
+      push(count);
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_7
+  {
+    state:
+    {
+    int index_Counter_7=0;
+    int SIZE_Counter_7=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = peek(0);
+      int count = 0;
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        if ((peek(i) < mine)) {
+          count = (count + 1);
+        }
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        pop();
+      }
+      };
+      push(count);
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_16
+  {
+    state:
+    {
+    int index_Counter_16=9;
+    int SIZE_Counter_16=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = peek(9);
+      int count = 0;
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        if ((peek(i) < mine)) {
+          count = (count + 1);
+        }
+      }
+      };
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        pop();
+      }
+      };
+      push(count);
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+}
+
+postamble {
+int main(){
+  ComparisonCounting();
+  printf("sum: %lld\n", sum);
+  return 0;
+}
+}

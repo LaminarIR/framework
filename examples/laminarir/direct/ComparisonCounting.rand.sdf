@@ -1,0 +1,2674 @@
+preamble {
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+static unsigned int seed;
+
+volatile long long sum = 0;
+}
+
+sdf ComparisonCounting {
+  int IntSource_1 -> CountSortSplit_2_split(1);
+  int CountSortSplit_2_split(1) -> CountSplit_5_split(1);
+  int CountSplit_5_split(1) -> Counter_7;
+  int Counter_7 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_8;
+  int Counter_8 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_9;
+  int Counter_9 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_10;
+  int Counter_10 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_11;
+  int Counter_11 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_12;
+  int Counter_12 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_13;
+  int Counter_13 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_14;
+  int Counter_14 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_15;
+  int Counter_15 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_16;
+  int Counter_16 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_17;
+  int Counter_17 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_18;
+  int Counter_18 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_19;
+  int Counter_19 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_20;
+  int Counter_20 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_21;
+  int Counter_21 -> CountSplit_5_join(1);
+  int CountSplit_5_split(1) -> Counter_22;
+  int Counter_22 -> CountSplit_5_join(1);
+  int CountSplit_5_join(16) -> CountSortSplit_2_join(16);
+  int CountSortSplit_2_split(1) -> streamit_library_Identity_6;
+  int streamit_library_Identity_6 -> CountSortSplit_2_join(16);
+  int CountSortSplit_2_join(32) -> RearrangeIndices_3;
+  int RearrangeIndices_3 -> IntPrinter_4;
+
+  actor IntSource_1
+  {
+    state:
+    {
+    int SIZE_IntSource_1=16;
+    int data_IntSource_1[16]  = {0};
+    int index_IntSource_1 = 0;
+    }
+    init:
+    {
+      printf("Enter seed: ");
+      scanf("%d", &seed);
+      srand(seed);
+    }
+    firing:
+    {
+      @y1 = rand_r(&seed);
+    }
+    output:
+      CountSortSplit_2_split: y1;
+  }
+
+  actor Counter_19
+  {
+    state:
+    {
+    int index_Counter_19=12;
+    int SIZE_Counter_19=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = @x13;
+      int count = 0;
+      
+      {
+        if ((@x1 < mine)) {
+          count = (0 + 1);
+        }
+      }
+      {
+        if ((@x2 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x3 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x4 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x5 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x6 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x7 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x8 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x9 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x10 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x11 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x12 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x13 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x14 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x15 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x16 < mine)) {
+          count = (count + 1);
+        }
+      }
+;
+      
+      {
+        @x1;
+      }
+      {
+        @x2;
+      }
+      {
+        @x3;
+      }
+      {
+        @x4;
+      }
+      {
+        @x5;
+      }
+      {
+        @x6;
+      }
+      {
+        @x7;
+      }
+      {
+        @x8;
+      }
+      {
+        @x9;
+      }
+      {
+        @x10;
+      }
+      {
+        @x11;
+      }
+      {
+        @x12;
+      }
+      {
+        @x13;
+      }
+      {
+        @x14;
+      }
+      {
+        @x15;
+      }
+      {
+        @x16;
+      }
+;
+      @y1=count;
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_20
+  {
+    state:
+    {
+    int index_Counter_20=13;
+    int SIZE_Counter_20=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = @x14;
+      int count = 0;
+      
+      {
+        if ((@x1 < mine)) {
+          count = (0 + 1);
+        }
+      }
+      {
+        if ((@x2 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x3 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x4 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x5 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x6 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x7 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x8 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x9 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x10 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x11 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x12 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x13 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x14 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x15 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x16 < mine)) {
+          count = (count + 1);
+        }
+      }
+;
+      
+      {
+        @x1;
+      }
+      {
+        @x2;
+      }
+      {
+        @x3;
+      }
+      {
+        @x4;
+      }
+      {
+        @x5;
+      }
+      {
+        @x6;
+      }
+      {
+        @x7;
+      }
+      {
+        @x8;
+      }
+      {
+        @x9;
+      }
+      {
+        @x10;
+      }
+      {
+        @x11;
+      }
+      {
+        @x12;
+      }
+      {
+        @x13;
+      }
+      {
+        @x14;
+      }
+      {
+        @x15;
+      }
+      {
+        @x16;
+      }
+;
+      @y1=count;
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_11
+  {
+    state:
+    {
+    int index_Counter_11=4;
+    int SIZE_Counter_11=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = @x5;
+      int count = 0;
+      
+      {
+        if ((@x1 < mine)) {
+          count = (0 + 1);
+        }
+      }
+      {
+        if ((@x2 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x3 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x4 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x5 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x6 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x7 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x8 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x9 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x10 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x11 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x12 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x13 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x14 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x15 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x16 < mine)) {
+          count = (count + 1);
+        }
+      }
+;
+      
+      {
+        @x1;
+      }
+      {
+        @x2;
+      }
+      {
+        @x3;
+      }
+      {
+        @x4;
+      }
+      {
+        @x5;
+      }
+      {
+        @x6;
+      }
+      {
+        @x7;
+      }
+      {
+        @x8;
+      }
+      {
+        @x9;
+      }
+      {
+        @x10;
+      }
+      {
+        @x11;
+      }
+      {
+        @x12;
+      }
+      {
+        @x13;
+      }
+      {
+        @x14;
+      }
+      {
+        @x15;
+      }
+      {
+        @x16;
+      }
+;
+      @y1=count;
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_15
+  {
+    state:
+    {
+    int index_Counter_15=8;
+    int SIZE_Counter_15=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = @x9;
+      int count = 0;
+      
+      {
+        if ((@x1 < mine)) {
+          count = (0 + 1);
+        }
+      }
+      {
+        if ((@x2 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x3 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x4 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x5 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x6 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x7 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x8 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x9 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x10 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x11 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x12 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x13 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x14 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x15 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x16 < mine)) {
+          count = (count + 1);
+        }
+      }
+;
+      
+      {
+        @x1;
+      }
+      {
+        @x2;
+      }
+      {
+        @x3;
+      }
+      {
+        @x4;
+      }
+      {
+        @x5;
+      }
+      {
+        @x6;
+      }
+      {
+        @x7;
+      }
+      {
+        @x8;
+      }
+      {
+        @x9;
+      }
+      {
+        @x10;
+      }
+      {
+        @x11;
+      }
+      {
+        @x12;
+      }
+      {
+        @x13;
+      }
+      {
+        @x14;
+      }
+      {
+        @x15;
+      }
+      {
+        @x16;
+      }
+;
+      @y1=count;
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_10
+  {
+    state:
+    {
+    int index_Counter_10=3;
+    int SIZE_Counter_10=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = @x4;
+      int count = 0;
+      
+      {
+        if ((@x1 < mine)) {
+          count = (0 + 1);
+        }
+      }
+      {
+        if ((@x2 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x3 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x4 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x5 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x6 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x7 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x8 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x9 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x10 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x11 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x12 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x13 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x14 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x15 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x16 < mine)) {
+          count = (count + 1);
+        }
+      }
+;
+      
+      {
+        @x1;
+      }
+      {
+        @x2;
+      }
+      {
+        @x3;
+      }
+      {
+        @x4;
+      }
+      {
+        @x5;
+      }
+      {
+        @x6;
+      }
+      {
+        @x7;
+      }
+      {
+        @x8;
+      }
+      {
+        @x9;
+      }
+      {
+        @x10;
+      }
+      {
+        @x11;
+      }
+      {
+        @x12;
+      }
+      {
+        @x13;
+      }
+      {
+        @x14;
+      }
+      {
+        @x15;
+      }
+      {
+        @x16;
+      }
+;
+      @y1=count;
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_9
+  {
+    state:
+    {
+    int index_Counter_9=2;
+    int SIZE_Counter_9=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = @x3;
+      int count = 0;
+      
+      {
+        if ((@x1 < mine)) {
+          count = (0 + 1);
+        }
+      }
+      {
+        if ((@x2 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x3 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x4 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x5 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x6 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x7 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x8 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x9 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x10 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x11 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x12 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x13 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x14 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x15 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x16 < mine)) {
+          count = (count + 1);
+        }
+      }
+;
+      
+      {
+        @x1;
+      }
+      {
+        @x2;
+      }
+      {
+        @x3;
+      }
+      {
+        @x4;
+      }
+      {
+        @x5;
+      }
+      {
+        @x6;
+      }
+      {
+        @x7;
+      }
+      {
+        @x8;
+      }
+      {
+        @x9;
+      }
+      {
+        @x10;
+      }
+      {
+        @x11;
+      }
+      {
+        @x12;
+      }
+      {
+        @x13;
+      }
+      {
+        @x14;
+      }
+      {
+        @x15;
+      }
+      {
+        @x16;
+      }
+;
+      @y1=count;
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_14
+  {
+    state:
+    {
+    int index_Counter_14=7;
+    int SIZE_Counter_14=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = @x8;
+      int count = 0;
+      
+      {
+        if ((@x1 < mine)) {
+          count = (0 + 1);
+        }
+      }
+      {
+        if ((@x2 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x3 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x4 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x5 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x6 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x7 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x8 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x9 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x10 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x11 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x12 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x13 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x14 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x15 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x16 < mine)) {
+          count = (count + 1);
+        }
+      }
+;
+      
+      {
+        @x1;
+      }
+      {
+        @x2;
+      }
+      {
+        @x3;
+      }
+      {
+        @x4;
+      }
+      {
+        @x5;
+      }
+      {
+        @x6;
+      }
+      {
+        @x7;
+      }
+      {
+        @x8;
+      }
+      {
+        @x9;
+      }
+      {
+        @x10;
+      }
+      {
+        @x11;
+      }
+      {
+        @x12;
+      }
+      {
+        @x13;
+      }
+      {
+        @x14;
+      }
+      {
+        @x15;
+      }
+      {
+        @x16;
+      }
+;
+      @y1=count;
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_21
+  {
+    state:
+    {
+    int index_Counter_21=14;
+    int SIZE_Counter_21=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = @x15;
+      int count = 0;
+      
+      {
+        if ((@x1 < mine)) {
+          count = (0 + 1);
+        }
+      }
+      {
+        if ((@x2 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x3 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x4 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x5 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x6 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x7 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x8 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x9 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x10 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x11 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x12 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x13 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x14 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x15 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x16 < mine)) {
+          count = (count + 1);
+        }
+      }
+;
+      
+      {
+        @x1;
+      }
+      {
+        @x2;
+      }
+      {
+        @x3;
+      }
+      {
+        @x4;
+      }
+      {
+        @x5;
+      }
+      {
+        @x6;
+      }
+      {
+        @x7;
+      }
+      {
+        @x8;
+      }
+      {
+        @x9;
+      }
+      {
+        @x10;
+      }
+      {
+        @x11;
+      }
+      {
+        @x12;
+      }
+      {
+        @x13;
+      }
+      {
+        @x14;
+      }
+      {
+        @x15;
+      }
+      {
+        @x16;
+      }
+;
+      @y1=count;
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_18
+  {
+    state:
+    {
+    int index_Counter_18=11;
+    int SIZE_Counter_18=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = @x12;
+      int count = 0;
+      
+      {
+        if ((@x1 < mine)) {
+          count = (0 + 1);
+        }
+      }
+      {
+        if ((@x2 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x3 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x4 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x5 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x6 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x7 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x8 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x9 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x10 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x11 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x12 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x13 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x14 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x15 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x16 < mine)) {
+          count = (count + 1);
+        }
+      }
+;
+      
+      {
+        @x1;
+      }
+      {
+        @x2;
+      }
+      {
+        @x3;
+      }
+      {
+        @x4;
+      }
+      {
+        @x5;
+      }
+      {
+        @x6;
+      }
+      {
+        @x7;
+      }
+      {
+        @x8;
+      }
+      {
+        @x9;
+      }
+      {
+        @x10;
+      }
+      {
+        @x11;
+      }
+      {
+        @x12;
+      }
+      {
+        @x13;
+      }
+      {
+        @x14;
+      }
+      {
+        @x15;
+      }
+      {
+        @x16;
+      }
+;
+      @y1=count;
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor streamit_library_Identity_6
+  {
+    input:
+      CountSortSplit_2_split: x1;
+    firing:
+    {
+      @y1=@x1;
+    }
+    output:
+      CountSortSplit_2_join: y1;
+  }
+
+  actor RearrangeIndices_3
+  {
+    state:
+    {
+    int SIZE_RearrangeIndices_3=16;
+    }
+    input:
+      CountSortSplit_2_join: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32;
+    firing:
+    {
+      int outputArray[(2 * 16)]  = {0};
+      
+      {
+        outputArray[@x1] = @x17;
+      }
+      {
+        outputArray[@x2] = @x18;
+      }
+      {
+        outputArray[@x3] = @x19;
+      }
+      {
+        outputArray[@x4] = @x20;
+      }
+      {
+        outputArray[@x5] = @x21;
+      }
+      {
+        outputArray[@x6] = @x22;
+      }
+      {
+        outputArray[@x7] = @x23;
+      }
+      {
+        outputArray[@x8] = @x24;
+      }
+      {
+        outputArray[@x9] = @x25;
+      }
+      {
+        outputArray[@x10] = @x26;
+      }
+      {
+        outputArray[@x11] = @x27;
+      }
+      {
+        outputArray[@x12] = @x28;
+      }
+      {
+        outputArray[@x13] = @x29;
+      }
+      {
+        outputArray[@x14] = @x30;
+      }
+      {
+        outputArray[@x15] = @x31;
+      }
+      {
+        outputArray[@x16] = @x32;
+      }
+;
+      
+      {
+        @y1=outputArray[0];
+        @x1;
+        @x2;
+      }
+      {
+        @y2=outputArray[1];
+        @x3;
+        @x4;
+      }
+      {
+        @y3=outputArray[2];
+        @x5;
+        @x6;
+      }
+      {
+        @y4=outputArray[3];
+        @x7;
+        @x8;
+      }
+      {
+        @y5=outputArray[4];
+        @x9;
+        @x10;
+      }
+      {
+        @y6=outputArray[5];
+        @x11;
+        @x12;
+      }
+      {
+        @y7=outputArray[6];
+        @x13;
+        @x14;
+      }
+      {
+        @y8=outputArray[7];
+        @x15;
+        @x16;
+      }
+      {
+        @y9=outputArray[8];
+        @x17;
+        @x18;
+      }
+      {
+        @y10=outputArray[9];
+        @x19;
+        @x20;
+      }
+      {
+        @y11=outputArray[10];
+        @x21;
+        @x22;
+      }
+      {
+        @y12=outputArray[11];
+        @x23;
+        @x24;
+      }
+      {
+        @y13=outputArray[12];
+        @x25;
+        @x26;
+      }
+      {
+        @y14=outputArray[13];
+        @x27;
+        @x28;
+      }
+      {
+        @y15=outputArray[14];
+        @x29;
+        @x30;
+      }
+      {
+        @y16=outputArray[15];
+        @x31;
+        @x32;
+      }
+;
+    }
+    output:
+      IntPrinter_4: y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16;
+  }
+
+  actor Counter_17
+  {
+    state:
+    {
+    int index_Counter_17=10;
+    int SIZE_Counter_17=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = @x11;
+      int count = 0;
+      
+      {
+        if ((@x1 < mine)) {
+          count = (0 + 1);
+        }
+      }
+      {
+        if ((@x2 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x3 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x4 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x5 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x6 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x7 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x8 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x9 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x10 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x11 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x12 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x13 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x14 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x15 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x16 < mine)) {
+          count = (count + 1);
+        }
+      }
+;
+      
+      {
+        @x1;
+      }
+      {
+        @x2;
+      }
+      {
+        @x3;
+      }
+      {
+        @x4;
+      }
+      {
+        @x5;
+      }
+      {
+        @x6;
+      }
+      {
+        @x7;
+      }
+      {
+        @x8;
+      }
+      {
+        @x9;
+      }
+      {
+        @x10;
+      }
+      {
+        @x11;
+      }
+      {
+        @x12;
+      }
+      {
+        @x13;
+      }
+      {
+        @x14;
+      }
+      {
+        @x15;
+      }
+      {
+        @x16;
+      }
+;
+      @y1=count;
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_13
+  {
+    state:
+    {
+    int index_Counter_13=6;
+    int SIZE_Counter_13=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = @x7;
+      int count = 0;
+      
+      {
+        if ((@x1 < mine)) {
+          count = (0 + 1);
+        }
+      }
+      {
+        if ((@x2 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x3 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x4 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x5 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x6 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x7 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x8 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x9 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x10 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x11 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x12 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x13 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x14 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x15 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x16 < mine)) {
+          count = (count + 1);
+        }
+      }
+;
+      
+      {
+        @x1;
+      }
+      {
+        @x2;
+      }
+      {
+        @x3;
+      }
+      {
+        @x4;
+      }
+      {
+        @x5;
+      }
+      {
+        @x6;
+      }
+      {
+        @x7;
+      }
+      {
+        @x8;
+      }
+      {
+        @x9;
+      }
+      {
+        @x10;
+      }
+      {
+        @x11;
+      }
+      {
+        @x12;
+      }
+      {
+        @x13;
+      }
+      {
+        @x14;
+      }
+      {
+        @x15;
+      }
+      {
+        @x16;
+      }
+;
+      @y1=count;
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_8
+  {
+    state:
+    {
+    int index_Counter_8=1;
+    int SIZE_Counter_8=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = @x2;
+      int count = 0;
+      
+      {
+        if ((@x1 < mine)) {
+          count = (0 + 1);
+        }
+      }
+      {
+        if ((@x2 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x3 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x4 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x5 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x6 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x7 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x8 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x9 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x10 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x11 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x12 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x13 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x14 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x15 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x16 < mine)) {
+          count = (count + 1);
+        }
+      }
+;
+      
+      {
+        @x1;
+      }
+      {
+        @x2;
+      }
+      {
+        @x3;
+      }
+      {
+        @x4;
+      }
+      {
+        @x5;
+      }
+      {
+        @x6;
+      }
+      {
+        @x7;
+      }
+      {
+        @x8;
+      }
+      {
+        @x9;
+      }
+      {
+        @x10;
+      }
+      {
+        @x11;
+      }
+      {
+        @x12;
+      }
+      {
+        @x13;
+      }
+      {
+        @x14;
+      }
+      {
+        @x15;
+      }
+      {
+        @x16;
+      }
+;
+      @y1=count;
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_12
+  {
+    state:
+    {
+    int index_Counter_12=5;
+    int SIZE_Counter_12=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = @x6;
+      int count = 0;
+      
+      {
+        if ((@x1 < mine)) {
+          count = (0 + 1);
+        }
+      }
+      {
+        if ((@x2 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x3 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x4 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x5 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x6 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x7 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x8 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x9 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x10 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x11 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x12 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x13 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x14 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x15 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x16 < mine)) {
+          count = (count + 1);
+        }
+      }
+;
+      
+      {
+        @x1;
+      }
+      {
+        @x2;
+      }
+      {
+        @x3;
+      }
+      {
+        @x4;
+      }
+      {
+        @x5;
+      }
+      {
+        @x6;
+      }
+      {
+        @x7;
+      }
+      {
+        @x8;
+      }
+      {
+        @x9;
+      }
+      {
+        @x10;
+      }
+      {
+        @x11;
+      }
+      {
+        @x12;
+      }
+      {
+        @x13;
+      }
+      {
+        @x14;
+      }
+      {
+        @x15;
+      }
+      {
+        @x16;
+      }
+;
+      @y1=count;
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor IntPrinter_4
+  {
+    state:
+    {
+    int x_IntPrinter_4 = 0;
+    }
+    input:
+      RearrangeIndices_3: x1;
+    firing:
+    {
+      x_IntPrinter_4 = @x1;
+      ;
+      sum += @x1;
+    }
+  }
+
+  actor Counter_22
+  {
+    state:
+    {
+    int index_Counter_22=15;
+    int SIZE_Counter_22=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = @x16;
+      int count = 0;
+      
+      {
+        if ((@x1 < mine)) {
+          count = (0 + 1);
+        }
+      }
+      {
+        if ((@x2 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x3 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x4 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x5 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x6 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x7 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x8 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x9 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x10 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x11 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x12 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x13 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x14 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x15 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x16 < mine)) {
+          count = (count + 1);
+        }
+      }
+;
+      
+      {
+        @x1;
+      }
+      {
+        @x2;
+      }
+      {
+        @x3;
+      }
+      {
+        @x4;
+      }
+      {
+        @x5;
+      }
+      {
+        @x6;
+      }
+      {
+        @x7;
+      }
+      {
+        @x8;
+      }
+      {
+        @x9;
+      }
+      {
+        @x10;
+      }
+      {
+        @x11;
+      }
+      {
+        @x12;
+      }
+      {
+        @x13;
+      }
+      {
+        @x14;
+      }
+      {
+        @x15;
+      }
+      {
+        @x16;
+      }
+;
+      @y1=count;
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_7
+  {
+    state:
+    {
+    int index_Counter_7=0;
+    int SIZE_Counter_7=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = @x1;
+      int count = 0;
+      
+      {
+        if ((@x1 < mine)) {
+          count = (0 + 1);
+        }
+      }
+      {
+        if ((@x2 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x3 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x4 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x5 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x6 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x7 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x8 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x9 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x10 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x11 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x12 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x13 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x14 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x15 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x16 < mine)) {
+          count = (count + 1);
+        }
+      }
+;
+      
+      {
+        @x1;
+      }
+      {
+        @x2;
+      }
+      {
+        @x3;
+      }
+      {
+        @x4;
+      }
+      {
+        @x5;
+      }
+      {
+        @x6;
+      }
+      {
+        @x7;
+      }
+      {
+        @x8;
+      }
+      {
+        @x9;
+      }
+      {
+        @x10;
+      }
+      {
+        @x11;
+      }
+      {
+        @x12;
+      }
+      {
+        @x13;
+      }
+      {
+        @x14;
+      }
+      {
+        @x15;
+      }
+      {
+        @x16;
+      }
+;
+      @y1=count;
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+  actor Counter_16
+  {
+    state:
+    {
+    int index_Counter_16=9;
+    int SIZE_Counter_16=16;
+    }
+    input:
+      CountSplit_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int mine = @x10;
+      int count = 0;
+      
+      {
+        if ((@x1 < mine)) {
+          count = (0 + 1);
+        }
+      }
+      {
+        if ((@x2 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x3 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x4 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x5 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x6 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x7 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x8 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x9 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x10 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x11 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x12 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x13 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x14 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x15 < mine)) {
+          count = (count + 1);
+        }
+      }
+      {
+        if ((@x16 < mine)) {
+          count = (count + 1);
+        }
+      }
+;
+      
+      {
+        @x1;
+      }
+      {
+        @x2;
+      }
+      {
+        @x3;
+      }
+      {
+        @x4;
+      }
+      {
+        @x5;
+      }
+      {
+        @x6;
+      }
+      {
+        @x7;
+      }
+      {
+        @x8;
+      }
+      {
+        @x9;
+      }
+      {
+        @x10;
+      }
+      {
+        @x11;
+      }
+      {
+        @x12;
+      }
+      {
+        @x13;
+      }
+      {
+        @x14;
+      }
+      {
+        @x15;
+      }
+      {
+        @x16;
+      }
+;
+      @y1=count;
+    }
+    output:
+      CountSplit_5_join: y1;
+  }
+
+}
+
+postamble {
+int main(){
+  ComparisonCounting();
+  printf("sum: %lld\n", sum);
+  return 0;
+}
+}

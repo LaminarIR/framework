@@ -1,0 +1,48 @@
+This papi wrapper provides customized groups of hardware performance counters 
+by the aid of PAPI(Performance API). Few makefile variables are required to 
+use this wrapper as below, and Makefile finds them from ../Defines.make 
+in default. Please update Makefile accordingly when needed.
+
+PAPI_DIR=#path to the installed PAPI 
+PAPI_INC=$(PAPI_DIR)/include
+PAPI_LIB=$(PAPI_DIR)/lib
+
+Following is the list of groups supported:
+
+MEASURE_TIME		
+ & Measure execution time in micro seconds. Requires no hw ctr.
+MEASURE_CPI			
+ & Measure CPI. Requires two hw ctrs for nums of cycles and inst each.
+MEASURE_MEMACC      
+ & Measure number of loads and stores. Requires two hw ctrs.
+MEASURE_LLCMISS		
+ & Measure number of loads (and stores) misses of LLC cache. Requires a hw ctr.
+MEASURE_ICACHEMISS
+ & Measure number of L1 instruction cache misses. Requires a hw ctr.
+MEASURE_DCACHEMISS
+ & Measure numbers of L1 data cache misses and accesses. Requires two hw ctrs.
+MEASURE_ENERGY
+ & Measure all available RAPL events. The max num of RAPL ctrs is 64.
+
+Note that there is a limited number of hw counters that can be counted 
+at a run for each of processors architectures and names of hw performance 
+counters are different as well. 
+Following is the list of supported processor architectures by the papi wrapper.
+
+__AMD_ABU_DHABI__
+__INTEL_HASWELL__
+__INTEL_SANDYBRIDGE__
+__INTEL_IVYBRIDGE__
+__ARMv7__
+
+
+EXAMPLE OF USAGE
+================
+
+Pass,
+
+-D__INTEL_IVYBRIDGE__ -DMEASURE_TIME -DMEASURE_CPI
+
+as compile options when compiling papi wrapper if you want to measure
+execution times and CPI on Intel Ivybridge processors. papi wrapper will complain
+when the supported number of hw counters is not sufficient for the measurement.

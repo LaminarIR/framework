@@ -1,0 +1,755 @@
+preamble {
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+volatile double sum = 0.0;
+}
+
+sdf MatrixMult {
+  float FloatSource_1 -> RearrangeDuplicateBoth_4_split(200);
+  float RearrangeDuplicateBoth_4_split(100) -> DuplicateRowsInternal_8_split(1);
+  float DuplicateRowsInternal_8_split(1) -> streamit_library_Identity_9;
+  float streamit_library_Identity_9 -> DuplicateRowsInternal_8_join(10);
+  float DuplicateRowsInternal_8_split(1) -> streamit_library_Identity_10;
+  float streamit_library_Identity_10 -> DuplicateRowsInternal_8_join(10);
+  float DuplicateRowsInternal_8_split(1) -> streamit_library_Identity_11;
+  float streamit_library_Identity_11 -> DuplicateRowsInternal_8_join(10);
+  float DuplicateRowsInternal_8_split(1) -> streamit_library_Identity_12;
+  float streamit_library_Identity_12 -> DuplicateRowsInternal_8_join(10);
+  float DuplicateRowsInternal_8_split(1) -> streamit_library_Identity_13;
+  float streamit_library_Identity_13 -> DuplicateRowsInternal_8_join(10);
+  float DuplicateRowsInternal_8_split(1) -> streamit_library_Identity_14;
+  float streamit_library_Identity_14 -> DuplicateRowsInternal_8_join(10);
+  float DuplicateRowsInternal_8_split(1) -> streamit_library_Identity_15;
+  float streamit_library_Identity_15 -> DuplicateRowsInternal_8_join(10);
+  float DuplicateRowsInternal_8_split(1) -> streamit_library_Identity_16;
+  float streamit_library_Identity_16 -> DuplicateRowsInternal_8_join(10);
+  float DuplicateRowsInternal_8_split(1) -> streamit_library_Identity_17;
+  float streamit_library_Identity_17 -> DuplicateRowsInternal_8_join(10);
+  float DuplicateRowsInternal_8_split(1) -> streamit_library_Identity_18;
+  float streamit_library_Identity_18 -> DuplicateRowsInternal_8_join(10);
+  float DuplicateRowsInternal_8_join(100) -> RearrangeDuplicateBoth_4_join(1);
+  float RearrangeDuplicateBoth_4_split(100) -> Transpose_19_split(10);
+  float Transpose_19_split(1) -> streamit_library_Identity_21;
+  float streamit_library_Identity_21 -> Transpose_19_join(10);
+  float Transpose_19_split(1) -> streamit_library_Identity_22;
+  float streamit_library_Identity_22 -> Transpose_19_join(10);
+  float Transpose_19_split(1) -> streamit_library_Identity_23;
+  float streamit_library_Identity_23 -> Transpose_19_join(10);
+  float Transpose_19_split(1) -> streamit_library_Identity_24;
+  float streamit_library_Identity_24 -> Transpose_19_join(10);
+  float Transpose_19_split(1) -> streamit_library_Identity_25;
+  float streamit_library_Identity_25 -> Transpose_19_join(10);
+  float Transpose_19_split(1) -> streamit_library_Identity_26;
+  float streamit_library_Identity_26 -> Transpose_19_join(10);
+  float Transpose_19_split(1) -> streamit_library_Identity_27;
+  float streamit_library_Identity_27 -> Transpose_19_join(10);
+  float Transpose_19_split(1) -> streamit_library_Identity_28;
+  float streamit_library_Identity_28 -> Transpose_19_join(10);
+  float Transpose_19_split(1) -> streamit_library_Identity_29;
+  float streamit_library_Identity_29 -> Transpose_19_join(10);
+  float Transpose_19_split(1) -> streamit_library_Identity_30;
+  float streamit_library_Identity_30 -> Transpose_19_join(10);
+  float Transpose_19_join(100) -> DuplicateRowsInternal_31_split(1);
+  float DuplicateRowsInternal_31_split(1) -> streamit_library_Identity_32;
+  float streamit_library_Identity_32 -> DuplicateRowsInternal_31_join(100);
+  float DuplicateRowsInternal_31_split(1) -> streamit_library_Identity_33;
+  float streamit_library_Identity_33 -> DuplicateRowsInternal_31_join(100);
+  float DuplicateRowsInternal_31_split(1) -> streamit_library_Identity_34;
+  float streamit_library_Identity_34 -> DuplicateRowsInternal_31_join(100);
+  float DuplicateRowsInternal_31_split(1) -> streamit_library_Identity_35;
+  float streamit_library_Identity_35 -> DuplicateRowsInternal_31_join(100);
+  float DuplicateRowsInternal_31_split(1) -> streamit_library_Identity_36;
+  float streamit_library_Identity_36 -> DuplicateRowsInternal_31_join(100);
+  float DuplicateRowsInternal_31_split(1) -> streamit_library_Identity_37;
+  float streamit_library_Identity_37 -> DuplicateRowsInternal_31_join(100);
+  float DuplicateRowsInternal_31_split(1) -> streamit_library_Identity_38;
+  float streamit_library_Identity_38 -> DuplicateRowsInternal_31_join(100);
+  float DuplicateRowsInternal_31_split(1) -> streamit_library_Identity_39;
+  float streamit_library_Identity_39 -> DuplicateRowsInternal_31_join(100);
+  float DuplicateRowsInternal_31_split(1) -> streamit_library_Identity_40;
+  float streamit_library_Identity_40 -> DuplicateRowsInternal_31_join(100);
+  float DuplicateRowsInternal_31_split(1) -> streamit_library_Identity_41;
+  float streamit_library_Identity_41 -> DuplicateRowsInternal_31_join(100);
+  float DuplicateRowsInternal_31_join(1000) -> RearrangeDuplicateBoth_4_join(1);
+  float RearrangeDuplicateBoth_4_join(2) -> MultiplyAccumulateParallel_5_split(200);
+  float MultiplyAccumulateParallel_5_split(20) -> MultiplyAccumulate_43;
+  float MultiplyAccumulate_43 -> MultiplyAccumulateParallel_5_join(1);
+  float MultiplyAccumulateParallel_5_split(20) -> MultiplyAccumulate_44;
+  float MultiplyAccumulate_44 -> MultiplyAccumulateParallel_5_join(1);
+  float MultiplyAccumulateParallel_5_split(20) -> MultiplyAccumulate_45;
+  float MultiplyAccumulate_45 -> MultiplyAccumulateParallel_5_join(1);
+  float MultiplyAccumulateParallel_5_split(20) -> MultiplyAccumulate_46;
+  float MultiplyAccumulate_46 -> MultiplyAccumulateParallel_5_join(1);
+  float MultiplyAccumulateParallel_5_split(20) -> MultiplyAccumulate_47;
+  float MultiplyAccumulate_47 -> MultiplyAccumulateParallel_5_join(1);
+  float MultiplyAccumulateParallel_5_split(20) -> MultiplyAccumulate_48;
+  float MultiplyAccumulate_48 -> MultiplyAccumulateParallel_5_join(1);
+  float MultiplyAccumulateParallel_5_split(20) -> MultiplyAccumulate_49;
+  float MultiplyAccumulate_49 -> MultiplyAccumulateParallel_5_join(1);
+  float MultiplyAccumulateParallel_5_split(20) -> MultiplyAccumulate_50;
+  float MultiplyAccumulate_50 -> MultiplyAccumulateParallel_5_join(1);
+  float MultiplyAccumulateParallel_5_split(20) -> MultiplyAccumulate_51;
+  float MultiplyAccumulate_51 -> MultiplyAccumulateParallel_5_join(1);
+  float MultiplyAccumulateParallel_5_split(20) -> MultiplyAccumulate_52;
+  float MultiplyAccumulate_52 -> MultiplyAccumulateParallel_5_join(1);
+  float MultiplyAccumulateParallel_5_join(10) -> FloatPrinter_3;
+
+  actor streamit_library_Identity_21
+  {
+    input:
+      Transpose_19_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      Transpose_19_join: y1;
+  }
+
+  actor streamit_library_Identity_16
+  {
+    input:
+      DuplicateRowsInternal_8_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_8_join: y1;
+  }
+
+  actor MultiplyAccumulate_44
+  {
+    state:
+    {
+    int rowLength_MultiplyAccumulate_44=10;
+    }
+    input:
+      MultiplyAccumulateParallel_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20;
+    firing:
+    {
+      float result = 0;
+      {
+      int x;
+      for (x=0; (x < 10); x++) {
+        result += (peek(0) * peek(1));
+        pop();
+        pop();
+      }
+      };
+      push(result);
+    }
+    output:
+      MultiplyAccumulateParallel_5_join: y1;
+  }
+
+  actor streamit_library_Identity_9
+  {
+    input:
+      DuplicateRowsInternal_8_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_8_join: y1;
+  }
+
+  actor streamit_library_Identity_32
+  {
+    input:
+      DuplicateRowsInternal_31_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_31_join: y1;
+  }
+
+  actor streamit_library_Identity_22
+  {
+    input:
+      Transpose_19_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      Transpose_19_join: y1;
+  }
+
+  actor streamit_library_Identity_13
+  {
+    input:
+      DuplicateRowsInternal_8_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_8_join: y1;
+  }
+
+  actor streamit_library_Identity_27
+  {
+    input:
+      Transpose_19_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      Transpose_19_join: y1;
+  }
+
+  actor streamit_library_Identity_12
+  {
+    input:
+      DuplicateRowsInternal_8_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_8_join: y1;
+  }
+
+  actor streamit_library_Identity_36
+  {
+    input:
+      DuplicateRowsInternal_31_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_31_join: y1;
+  }
+
+  actor FloatSource_1
+  {
+    state:
+    {
+    float maxNum_FloatSource_1=10.0;
+    float num_FloatSource_1 = 0.0;
+    }
+    init:
+    {
+      num_FloatSource_1 = 0;
+    }
+    firing:
+    {
+      push(num_FloatSource_1);
+      num_FloatSource_1++;
+      if ((num_FloatSource_1 == maxNum_FloatSource_1)) {
+        num_FloatSource_1 = 0;
+      }
+    }
+    output:
+      RearrangeDuplicateBoth_4_split: y1;
+  }
+
+  actor streamit_library_Identity_29
+  {
+    input:
+      Transpose_19_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      Transpose_19_join: y1;
+  }
+
+  actor MultiplyAccumulate_45
+  {
+    state:
+    {
+    int rowLength_MultiplyAccumulate_45=10;
+    }
+    input:
+      MultiplyAccumulateParallel_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20;
+    firing:
+    {
+      float result = 0;
+      {
+      int x;
+      for (x=0; (x < 10); x++) {
+        result += (peek(0) * peek(1));
+        pop();
+        pop();
+      }
+      };
+      push(result);
+    }
+    output:
+      MultiplyAccumulateParallel_5_join: y1;
+  }
+
+  actor streamit_library_Identity_24
+  {
+    input:
+      Transpose_19_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      Transpose_19_join: y1;
+  }
+
+  actor streamit_library_Identity_33
+  {
+    input:
+      DuplicateRowsInternal_31_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_31_join: y1;
+  }
+
+  actor MultiplyAccumulate_51
+  {
+    state:
+    {
+    int rowLength_MultiplyAccumulate_51=10;
+    }
+    input:
+      MultiplyAccumulateParallel_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20;
+    firing:
+    {
+      float result = 0;
+      {
+      int x;
+      for (x=0; (x < 10); x++) {
+        result += (peek(0) * peek(1));
+        pop();
+        pop();
+      }
+      };
+      push(result);
+    }
+    output:
+      MultiplyAccumulateParallel_5_join: y1;
+  }
+
+  actor streamit_library_Identity_39
+  {
+    input:
+      DuplicateRowsInternal_31_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_31_join: y1;
+  }
+
+  actor streamit_library_Identity_15
+  {
+    input:
+      DuplicateRowsInternal_8_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_8_join: y1;
+  }
+
+  actor streamit_library_Identity_28
+  {
+    input:
+      Transpose_19_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      Transpose_19_join: y1;
+  }
+
+  actor FloatPrinter_3
+  {
+    state:
+    {
+    float x_FloatPrinter_3 = 0.0;
+    }
+    input:
+      MultiplyAccumulateParallel_5_join: x1;
+    firing:
+    {
+      sum += peek(0);
+      x_FloatPrinter_3 = pop();
+    }
+  }
+
+  actor MultiplyAccumulate_48
+  {
+    state:
+    {
+    int rowLength_MultiplyAccumulate_48=10;
+    }
+    input:
+      MultiplyAccumulateParallel_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20;
+    firing:
+    {
+      float result = 0;
+      {
+      int x;
+      for (x=0; (x < 10); x++) {
+        result += (peek(0) * peek(1));
+        pop();
+        pop();
+      }
+      };
+      push(result);
+    }
+    output:
+      MultiplyAccumulateParallel_5_join: y1;
+  }
+
+  actor streamit_library_Identity_34
+  {
+    input:
+      DuplicateRowsInternal_31_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_31_join: y1;
+  }
+
+  actor streamit_library_Identity_38
+  {
+    input:
+      DuplicateRowsInternal_31_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_31_join: y1;
+  }
+
+  actor streamit_library_Identity_30
+  {
+    input:
+      Transpose_19_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      Transpose_19_join: y1;
+  }
+
+  actor MultiplyAccumulate_46
+  {
+    state:
+    {
+    int rowLength_MultiplyAccumulate_46=10;
+    }
+    input:
+      MultiplyAccumulateParallel_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20;
+    firing:
+    {
+      float result = 0;
+      {
+      int x;
+      for (x=0; (x < 10); x++) {
+        result += (peek(0) * peek(1));
+        pop();
+        pop();
+      }
+      };
+      push(result);
+    }
+    output:
+      MultiplyAccumulateParallel_5_join: y1;
+  }
+
+  actor streamit_library_Identity_41
+  {
+    input:
+      DuplicateRowsInternal_31_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_31_join: y1;
+  }
+
+  actor streamit_library_Identity_37
+  {
+    input:
+      DuplicateRowsInternal_31_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_31_join: y1;
+  }
+
+  actor streamit_library_Identity_25
+  {
+    input:
+      Transpose_19_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      Transpose_19_join: y1;
+  }
+
+  actor MultiplyAccumulate_47
+  {
+    state:
+    {
+    int rowLength_MultiplyAccumulate_47=10;
+    }
+    input:
+      MultiplyAccumulateParallel_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20;
+    firing:
+    {
+      float result = 0;
+      {
+      int x;
+      for (x=0; (x < 10); x++) {
+        result += (peek(0) * peek(1));
+        pop();
+        pop();
+      }
+      };
+      push(result);
+    }
+    output:
+      MultiplyAccumulateParallel_5_join: y1;
+  }
+
+  actor streamit_library_Identity_40
+  {
+    input:
+      DuplicateRowsInternal_31_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_31_join: y1;
+  }
+
+  actor streamit_library_Identity_35
+  {
+    input:
+      DuplicateRowsInternal_31_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_31_join: y1;
+  }
+
+  actor streamit_library_Identity_17
+  {
+    input:
+      DuplicateRowsInternal_8_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_8_join: y1;
+  }
+
+  actor streamit_library_Identity_26
+  {
+    input:
+      Transpose_19_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      Transpose_19_join: y1;
+  }
+
+  actor streamit_library_Identity_11
+  {
+    input:
+      DuplicateRowsInternal_8_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_8_join: y1;
+  }
+
+  actor streamit_library_Identity_18
+  {
+    input:
+      DuplicateRowsInternal_8_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_8_join: y1;
+  }
+
+  actor streamit_library_Identity_14
+  {
+    input:
+      DuplicateRowsInternal_8_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_8_join: y1;
+  }
+
+  actor MultiplyAccumulate_49
+  {
+    state:
+    {
+    int rowLength_MultiplyAccumulate_49=10;
+    }
+    input:
+      MultiplyAccumulateParallel_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20;
+    firing:
+    {
+      float result = 0;
+      {
+      int x;
+      for (x=0; (x < 10); x++) {
+        result += (peek(0) * peek(1));
+        pop();
+        pop();
+      }
+      };
+      push(result);
+    }
+    output:
+      MultiplyAccumulateParallel_5_join: y1;
+  }
+
+  actor streamit_library_Identity_23
+  {
+    input:
+      Transpose_19_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      Transpose_19_join: y1;
+  }
+
+  actor MultiplyAccumulate_52
+  {
+    state:
+    {
+    int rowLength_MultiplyAccumulate_52=10;
+    }
+    input:
+      MultiplyAccumulateParallel_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20;
+    firing:
+    {
+      float result = 0;
+      {
+      int x;
+      for (x=0; (x < 10); x++) {
+        result += (peek(0) * peek(1));
+        pop();
+        pop();
+      }
+      };
+      push(result);
+    }
+    output:
+      MultiplyAccumulateParallel_5_join: y1;
+  }
+
+  actor streamit_library_Identity_10
+  {
+    input:
+      DuplicateRowsInternal_8_split: x1;
+    firing:
+    {
+      push(pop());
+    }
+    output:
+      DuplicateRowsInternal_8_join: y1;
+  }
+
+  actor MultiplyAccumulate_43
+  {
+    state:
+    {
+    int rowLength_MultiplyAccumulate_43=10;
+    }
+    input:
+      MultiplyAccumulateParallel_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20;
+    firing:
+    {
+      float result = 0;
+      {
+      int x;
+      for (x=0; (x < 10); x++) {
+        result += (peek(0) * peek(1));
+        pop();
+        pop();
+      }
+      };
+      push(result);
+    }
+    output:
+      MultiplyAccumulateParallel_5_join: y1;
+  }
+
+  actor MultiplyAccumulate_50
+  {
+    state:
+    {
+    int rowLength_MultiplyAccumulate_50=10;
+    }
+    input:
+      MultiplyAccumulateParallel_5_split: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20;
+    firing:
+    {
+      float result = 0;
+      {
+      int x;
+      for (x=0; (x < 10); x++) {
+        result += (peek(0) * peek(1));
+        pop();
+        pop();
+      }
+      };
+      push(result);
+    }
+    output:
+      MultiplyAccumulateParallel_5_join: y1;
+  }
+
+}
+
+postamble {
+int main(){
+  MatrixMult();
+  printf("sum: %f\n", sum);
+  return 0;
+}
+}

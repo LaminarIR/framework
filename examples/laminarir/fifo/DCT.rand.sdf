@@ -1,0 +1,141 @@
+preamble {
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+static unsigned int seed;
+
+volatile long long sum = 0;
+}
+
+sdf DCT {
+  int Source_1 -> iDCT_2D_reference_coarse_4;
+  int iDCT_2D_reference_coarse_4 -> FloatPrinter_3;
+
+  actor iDCT_2D_reference_coarse_4
+  {
+    state:
+    {
+    int size_iDCT_2D_reference_coarse_4=8;
+    float coeff_iDCT_2D_reference_coarse_4[8][8]  = {0.0};
+    }
+    init:
+    {
+      {
+      int freq;
+      for (freq=0; (freq < 8); freq++) {
+        float scale = ((freq == 0) ? sqrt(0.125f) : 0.5f);
+        {
+        int time;
+        for (time=0; (time < 8); time++) {
+          coeff_iDCT_2D_reference_coarse_4[freq][time] = (scale * cos((((3.141592653589793f / ((float)(8))) * freq) * (time + 0.5f))));
+        }
+        };
+      }
+      };
+    }
+    input:
+      Source_1: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32,x33,x34,x35,x36,x37,x38,x39,x40,x41,x42,x43,x44,x45,x46,x47,x48,x49,x50,x51,x52,x53,x54,x55,x56,x57,x58,x59,x60,x61,x62,x63,x64;
+    firing:
+    {
+      float block_x[8][8]  = {0.0};
+      int i = 0, j = 0, k = 0;
+      for (i = 0; (i < 8); i++) {
+        for (j = 0; (j < 8); j++) {
+          block_x[i][j] = 0;
+          for (k = 0; (k < 8); k++) {
+            block_x[i][j] += (coeff_iDCT_2D_reference_coarse_4[k][j] * peek(((8 * i) + k)));
+          };
+        };
+      };
+      for (i = 0; (i < 8); i++) {
+        for (j = 0; (j < 8); j++) {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][i] * block_x[k][j]);
+          };
+          block_y = floor((block_y + 0.5f));
+          push(((int)(block_y)));
+        };
+      };
+      for (i = 0; (i < (8 * 8)); i++) {
+        pop();
+      };
+    }
+    output:
+      FloatPrinter_3: y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16,y17,y18,y19,y20,y21,y22,y23,y24,y25,y26,y27,y28,y29,y30,y31,y32,y33,y34,y35,y36,y37,y38,y39,y40,y41,y42,y43,y44,y45,y46,y47,y48,y49,y50,y51,y52,y53,y54,y55,y56,y57,y58,y59,y60,y61,y62,y63,y64;
+  }
+
+  actor Source_1
+  {
+    init:
+    {
+      printf("Enter seed: ");
+      scanf("%d", &seed);
+      srand(seed);
+    }
+    firing:
+    {
+      push(rand_r(&seed));
+      push(rand_r(&seed));
+      push(rand_r(&seed));
+      push(rand_r(&seed));
+      push(rand_r(&seed));
+      push(rand_r(&seed));
+      push(rand_r(&seed));
+      push(rand_r(&seed));
+      push(rand_r(&seed));
+      push(rand_r(&seed));
+      push(rand_r(&seed));
+      push(rand_r(&seed));
+      push(rand_r(&seed));
+      push(rand_r(&seed));
+      push(rand_r(&seed));
+      push(rand_r(&seed));
+    }
+    output:
+      iDCT_2D_reference_coarse_4: y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16;
+  }
+
+  actor FloatPrinter_3
+  {
+    input:
+      iDCT_2D_reference_coarse_4: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      sum += peek(0);
+      sum += peek(1);
+      sum += peek(2);
+      sum += peek(3);
+      sum += peek(4);
+      sum += peek(5);
+      sum += peek(6);
+      sum += peek(7);
+      sum += peek(8);
+      sum += peek(9);
+      sum += peek(10);
+      sum += peek(11);
+      sum += peek(12);
+      sum += peek(13);
+      sum += peek(14);
+      sum += peek(15);
+      int x = 0;
+      {
+      int i;
+      for (i=0; (i < 16); i++) {
+        x = pop();
+        ;
+      }
+      };
+    }
+  }
+
+}
+
+postamble {
+int main(){
+  DCT();
+  printf("sum: %lld\n", sum);
+  return 0;
+}
+}

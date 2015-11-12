@@ -1,0 +1,2809 @@
+preamble {
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+static unsigned int seed;
+
+volatile long long sum = 0;
+}
+
+sdf DCT {
+  int Source_1 -> iDCT_2D_reference_coarse_4;
+  int iDCT_2D_reference_coarse_4 -> FloatPrinter_3;
+
+  actor iDCT_2D_reference_coarse_4
+  {
+    state:
+    {
+    int size_iDCT_2D_reference_coarse_4=8;
+    float coeff_iDCT_2D_reference_coarse_4[8][8]  = {0.0};
+    }
+    init:
+    {
+      {
+      int freq;
+      for (freq=0; (freq < 8); freq++) {
+        float scale = ((freq == 0) ? sqrt(0.125f) : 0.5f);
+        {
+        int time;
+        for (time=0; (time < 8); time++) {
+          coeff_iDCT_2D_reference_coarse_4[freq][time] = (scale * cos((((3.141592653589793f / ((float)(8))) * freq) * (time + 0.5f))));
+        }
+        };
+      }
+      };
+    }
+    input:
+      Source_1: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29,x30,x31,x32,x33,x34,x35,x36,x37,x38,x39,x40,x41,x42,x43,x44,x45,x46,x47,x48,x49,x50,x51,x52,x53,x54,x55,x56,x57,x58,x59,x60,x61,x62,x63,x64;
+    firing:
+    {
+      float block_x[8][8]  = {0.0};
+      int i = 0, j = 0, k = 0;
+      
+      {
+        
+        {
+          block_x[0][0] = 0;
+          
+          {
+            block_x[0][0] += (coeff_iDCT_2D_reference_coarse_4[0][0] * @x1);
+          }
+          {
+            block_x[0][0] += (coeff_iDCT_2D_reference_coarse_4[1][0] * @x2);
+          }
+          {
+            block_x[0][0] += (coeff_iDCT_2D_reference_coarse_4[2][0] * @x3);
+          }
+          {
+            block_x[0][0] += (coeff_iDCT_2D_reference_coarse_4[3][0] * @x4);
+          }
+          {
+            block_x[0][0] += (coeff_iDCT_2D_reference_coarse_4[4][0] * @x5);
+          }
+          {
+            block_x[0][0] += (coeff_iDCT_2D_reference_coarse_4[5][0] * @x6);
+          }
+          {
+            block_x[0][0] += (coeff_iDCT_2D_reference_coarse_4[6][0] * @x7);
+          }
+          {
+            block_x[0][0] += (coeff_iDCT_2D_reference_coarse_4[7][0] * @x8);
+          }
+;
+        }
+        {
+          block_x[0][1] = 0;
+          
+          {
+            block_x[0][1] += (coeff_iDCT_2D_reference_coarse_4[0][1] * @x1);
+          }
+          {
+            block_x[0][1] += (coeff_iDCT_2D_reference_coarse_4[1][1] * @x2);
+          }
+          {
+            block_x[0][1] += (coeff_iDCT_2D_reference_coarse_4[2][1] * @x3);
+          }
+          {
+            block_x[0][1] += (coeff_iDCT_2D_reference_coarse_4[3][1] * @x4);
+          }
+          {
+            block_x[0][1] += (coeff_iDCT_2D_reference_coarse_4[4][1] * @x5);
+          }
+          {
+            block_x[0][1] += (coeff_iDCT_2D_reference_coarse_4[5][1] * @x6);
+          }
+          {
+            block_x[0][1] += (coeff_iDCT_2D_reference_coarse_4[6][1] * @x7);
+          }
+          {
+            block_x[0][1] += (coeff_iDCT_2D_reference_coarse_4[7][1] * @x8);
+          }
+;
+        }
+        {
+          block_x[0][2] = 0;
+          
+          {
+            block_x[0][2] += (coeff_iDCT_2D_reference_coarse_4[0][2] * @x1);
+          }
+          {
+            block_x[0][2] += (coeff_iDCT_2D_reference_coarse_4[1][2] * @x2);
+          }
+          {
+            block_x[0][2] += (coeff_iDCT_2D_reference_coarse_4[2][2] * @x3);
+          }
+          {
+            block_x[0][2] += (coeff_iDCT_2D_reference_coarse_4[3][2] * @x4);
+          }
+          {
+            block_x[0][2] += (coeff_iDCT_2D_reference_coarse_4[4][2] * @x5);
+          }
+          {
+            block_x[0][2] += (coeff_iDCT_2D_reference_coarse_4[5][2] * @x6);
+          }
+          {
+            block_x[0][2] += (coeff_iDCT_2D_reference_coarse_4[6][2] * @x7);
+          }
+          {
+            block_x[0][2] += (coeff_iDCT_2D_reference_coarse_4[7][2] * @x8);
+          }
+;
+        }
+        {
+          block_x[0][3] = 0;
+          
+          {
+            block_x[0][3] += (coeff_iDCT_2D_reference_coarse_4[0][3] * @x1);
+          }
+          {
+            block_x[0][3] += (coeff_iDCT_2D_reference_coarse_4[1][3] * @x2);
+          }
+          {
+            block_x[0][3] += (coeff_iDCT_2D_reference_coarse_4[2][3] * @x3);
+          }
+          {
+            block_x[0][3] += (coeff_iDCT_2D_reference_coarse_4[3][3] * @x4);
+          }
+          {
+            block_x[0][3] += (coeff_iDCT_2D_reference_coarse_4[4][3] * @x5);
+          }
+          {
+            block_x[0][3] += (coeff_iDCT_2D_reference_coarse_4[5][3] * @x6);
+          }
+          {
+            block_x[0][3] += (coeff_iDCT_2D_reference_coarse_4[6][3] * @x7);
+          }
+          {
+            block_x[0][3] += (coeff_iDCT_2D_reference_coarse_4[7][3] * @x8);
+          }
+;
+        }
+        {
+          block_x[0][4] = 0;
+          
+          {
+            block_x[0][4] += (coeff_iDCT_2D_reference_coarse_4[0][4] * @x1);
+          }
+          {
+            block_x[0][4] += (coeff_iDCT_2D_reference_coarse_4[1][4] * @x2);
+          }
+          {
+            block_x[0][4] += (coeff_iDCT_2D_reference_coarse_4[2][4] * @x3);
+          }
+          {
+            block_x[0][4] += (coeff_iDCT_2D_reference_coarse_4[3][4] * @x4);
+          }
+          {
+            block_x[0][4] += (coeff_iDCT_2D_reference_coarse_4[4][4] * @x5);
+          }
+          {
+            block_x[0][4] += (coeff_iDCT_2D_reference_coarse_4[5][4] * @x6);
+          }
+          {
+            block_x[0][4] += (coeff_iDCT_2D_reference_coarse_4[6][4] * @x7);
+          }
+          {
+            block_x[0][4] += (coeff_iDCT_2D_reference_coarse_4[7][4] * @x8);
+          }
+;
+        }
+        {
+          block_x[0][5] = 0;
+          
+          {
+            block_x[0][5] += (coeff_iDCT_2D_reference_coarse_4[0][5] * @x1);
+          }
+          {
+            block_x[0][5] += (coeff_iDCT_2D_reference_coarse_4[1][5] * @x2);
+          }
+          {
+            block_x[0][5] += (coeff_iDCT_2D_reference_coarse_4[2][5] * @x3);
+          }
+          {
+            block_x[0][5] += (coeff_iDCT_2D_reference_coarse_4[3][5] * @x4);
+          }
+          {
+            block_x[0][5] += (coeff_iDCT_2D_reference_coarse_4[4][5] * @x5);
+          }
+          {
+            block_x[0][5] += (coeff_iDCT_2D_reference_coarse_4[5][5] * @x6);
+          }
+          {
+            block_x[0][5] += (coeff_iDCT_2D_reference_coarse_4[6][5] * @x7);
+          }
+          {
+            block_x[0][5] += (coeff_iDCT_2D_reference_coarse_4[7][5] * @x8);
+          }
+;
+        }
+        {
+          block_x[0][6] = 0;
+          
+          {
+            block_x[0][6] += (coeff_iDCT_2D_reference_coarse_4[0][6] * @x1);
+          }
+          {
+            block_x[0][6] += (coeff_iDCT_2D_reference_coarse_4[1][6] * @x2);
+          }
+          {
+            block_x[0][6] += (coeff_iDCT_2D_reference_coarse_4[2][6] * @x3);
+          }
+          {
+            block_x[0][6] += (coeff_iDCT_2D_reference_coarse_4[3][6] * @x4);
+          }
+          {
+            block_x[0][6] += (coeff_iDCT_2D_reference_coarse_4[4][6] * @x5);
+          }
+          {
+            block_x[0][6] += (coeff_iDCT_2D_reference_coarse_4[5][6] * @x6);
+          }
+          {
+            block_x[0][6] += (coeff_iDCT_2D_reference_coarse_4[6][6] * @x7);
+          }
+          {
+            block_x[0][6] += (coeff_iDCT_2D_reference_coarse_4[7][6] * @x8);
+          }
+;
+        }
+        {
+          block_x[0][7] = 0;
+          
+          {
+            block_x[0][7] += (coeff_iDCT_2D_reference_coarse_4[0][7] * @x1);
+          }
+          {
+            block_x[0][7] += (coeff_iDCT_2D_reference_coarse_4[1][7] * @x2);
+          }
+          {
+            block_x[0][7] += (coeff_iDCT_2D_reference_coarse_4[2][7] * @x3);
+          }
+          {
+            block_x[0][7] += (coeff_iDCT_2D_reference_coarse_4[3][7] * @x4);
+          }
+          {
+            block_x[0][7] += (coeff_iDCT_2D_reference_coarse_4[4][7] * @x5);
+          }
+          {
+            block_x[0][7] += (coeff_iDCT_2D_reference_coarse_4[5][7] * @x6);
+          }
+          {
+            block_x[0][7] += (coeff_iDCT_2D_reference_coarse_4[6][7] * @x7);
+          }
+          {
+            block_x[0][7] += (coeff_iDCT_2D_reference_coarse_4[7][7] * @x8);
+          }
+;
+        }
+;
+      }
+      {
+        
+        {
+          block_x[1][0] = 0;
+          
+          {
+            block_x[1][0] += (coeff_iDCT_2D_reference_coarse_4[0][0] * @x9);
+          }
+          {
+            block_x[1][0] += (coeff_iDCT_2D_reference_coarse_4[1][0] * @x10);
+          }
+          {
+            block_x[1][0] += (coeff_iDCT_2D_reference_coarse_4[2][0] * @x11);
+          }
+          {
+            block_x[1][0] += (coeff_iDCT_2D_reference_coarse_4[3][0] * @x12);
+          }
+          {
+            block_x[1][0] += (coeff_iDCT_2D_reference_coarse_4[4][0] * @x13);
+          }
+          {
+            block_x[1][0] += (coeff_iDCT_2D_reference_coarse_4[5][0] * @x14);
+          }
+          {
+            block_x[1][0] += (coeff_iDCT_2D_reference_coarse_4[6][0] * @x15);
+          }
+          {
+            block_x[1][0] += (coeff_iDCT_2D_reference_coarse_4[7][0] * @x16);
+          }
+;
+        }
+        {
+          block_x[1][1] = 0;
+          
+          {
+            block_x[1][1] += (coeff_iDCT_2D_reference_coarse_4[0][1] * @x9);
+          }
+          {
+            block_x[1][1] += (coeff_iDCT_2D_reference_coarse_4[1][1] * @x10);
+          }
+          {
+            block_x[1][1] += (coeff_iDCT_2D_reference_coarse_4[2][1] * @x11);
+          }
+          {
+            block_x[1][1] += (coeff_iDCT_2D_reference_coarse_4[3][1] * @x12);
+          }
+          {
+            block_x[1][1] += (coeff_iDCT_2D_reference_coarse_4[4][1] * @x13);
+          }
+          {
+            block_x[1][1] += (coeff_iDCT_2D_reference_coarse_4[5][1] * @x14);
+          }
+          {
+            block_x[1][1] += (coeff_iDCT_2D_reference_coarse_4[6][1] * @x15);
+          }
+          {
+            block_x[1][1] += (coeff_iDCT_2D_reference_coarse_4[7][1] * @x16);
+          }
+;
+        }
+        {
+          block_x[1][2] = 0;
+          
+          {
+            block_x[1][2] += (coeff_iDCT_2D_reference_coarse_4[0][2] * @x9);
+          }
+          {
+            block_x[1][2] += (coeff_iDCT_2D_reference_coarse_4[1][2] * @x10);
+          }
+          {
+            block_x[1][2] += (coeff_iDCT_2D_reference_coarse_4[2][2] * @x11);
+          }
+          {
+            block_x[1][2] += (coeff_iDCT_2D_reference_coarse_4[3][2] * @x12);
+          }
+          {
+            block_x[1][2] += (coeff_iDCT_2D_reference_coarse_4[4][2] * @x13);
+          }
+          {
+            block_x[1][2] += (coeff_iDCT_2D_reference_coarse_4[5][2] * @x14);
+          }
+          {
+            block_x[1][2] += (coeff_iDCT_2D_reference_coarse_4[6][2] * @x15);
+          }
+          {
+            block_x[1][2] += (coeff_iDCT_2D_reference_coarse_4[7][2] * @x16);
+          }
+;
+        }
+        {
+          block_x[1][3] = 0;
+          
+          {
+            block_x[1][3] += (coeff_iDCT_2D_reference_coarse_4[0][3] * @x9);
+          }
+          {
+            block_x[1][3] += (coeff_iDCT_2D_reference_coarse_4[1][3] * @x10);
+          }
+          {
+            block_x[1][3] += (coeff_iDCT_2D_reference_coarse_4[2][3] * @x11);
+          }
+          {
+            block_x[1][3] += (coeff_iDCT_2D_reference_coarse_4[3][3] * @x12);
+          }
+          {
+            block_x[1][3] += (coeff_iDCT_2D_reference_coarse_4[4][3] * @x13);
+          }
+          {
+            block_x[1][3] += (coeff_iDCT_2D_reference_coarse_4[5][3] * @x14);
+          }
+          {
+            block_x[1][3] += (coeff_iDCT_2D_reference_coarse_4[6][3] * @x15);
+          }
+          {
+            block_x[1][3] += (coeff_iDCT_2D_reference_coarse_4[7][3] * @x16);
+          }
+;
+        }
+        {
+          block_x[1][4] = 0;
+          
+          {
+            block_x[1][4] += (coeff_iDCT_2D_reference_coarse_4[0][4] * @x9);
+          }
+          {
+            block_x[1][4] += (coeff_iDCT_2D_reference_coarse_4[1][4] * @x10);
+          }
+          {
+            block_x[1][4] += (coeff_iDCT_2D_reference_coarse_4[2][4] * @x11);
+          }
+          {
+            block_x[1][4] += (coeff_iDCT_2D_reference_coarse_4[3][4] * @x12);
+          }
+          {
+            block_x[1][4] += (coeff_iDCT_2D_reference_coarse_4[4][4] * @x13);
+          }
+          {
+            block_x[1][4] += (coeff_iDCT_2D_reference_coarse_4[5][4] * @x14);
+          }
+          {
+            block_x[1][4] += (coeff_iDCT_2D_reference_coarse_4[6][4] * @x15);
+          }
+          {
+            block_x[1][4] += (coeff_iDCT_2D_reference_coarse_4[7][4] * @x16);
+          }
+;
+        }
+        {
+          block_x[1][5] = 0;
+          
+          {
+            block_x[1][5] += (coeff_iDCT_2D_reference_coarse_4[0][5] * @x9);
+          }
+          {
+            block_x[1][5] += (coeff_iDCT_2D_reference_coarse_4[1][5] * @x10);
+          }
+          {
+            block_x[1][5] += (coeff_iDCT_2D_reference_coarse_4[2][5] * @x11);
+          }
+          {
+            block_x[1][5] += (coeff_iDCT_2D_reference_coarse_4[3][5] * @x12);
+          }
+          {
+            block_x[1][5] += (coeff_iDCT_2D_reference_coarse_4[4][5] * @x13);
+          }
+          {
+            block_x[1][5] += (coeff_iDCT_2D_reference_coarse_4[5][5] * @x14);
+          }
+          {
+            block_x[1][5] += (coeff_iDCT_2D_reference_coarse_4[6][5] * @x15);
+          }
+          {
+            block_x[1][5] += (coeff_iDCT_2D_reference_coarse_4[7][5] * @x16);
+          }
+;
+        }
+        {
+          block_x[1][6] = 0;
+          
+          {
+            block_x[1][6] += (coeff_iDCT_2D_reference_coarse_4[0][6] * @x9);
+          }
+          {
+            block_x[1][6] += (coeff_iDCT_2D_reference_coarse_4[1][6] * @x10);
+          }
+          {
+            block_x[1][6] += (coeff_iDCT_2D_reference_coarse_4[2][6] * @x11);
+          }
+          {
+            block_x[1][6] += (coeff_iDCT_2D_reference_coarse_4[3][6] * @x12);
+          }
+          {
+            block_x[1][6] += (coeff_iDCT_2D_reference_coarse_4[4][6] * @x13);
+          }
+          {
+            block_x[1][6] += (coeff_iDCT_2D_reference_coarse_4[5][6] * @x14);
+          }
+          {
+            block_x[1][6] += (coeff_iDCT_2D_reference_coarse_4[6][6] * @x15);
+          }
+          {
+            block_x[1][6] += (coeff_iDCT_2D_reference_coarse_4[7][6] * @x16);
+          }
+;
+        }
+        {
+          block_x[1][7] = 0;
+          
+          {
+            block_x[1][7] += (coeff_iDCT_2D_reference_coarse_4[0][7] * @x9);
+          }
+          {
+            block_x[1][7] += (coeff_iDCT_2D_reference_coarse_4[1][7] * @x10);
+          }
+          {
+            block_x[1][7] += (coeff_iDCT_2D_reference_coarse_4[2][7] * @x11);
+          }
+          {
+            block_x[1][7] += (coeff_iDCT_2D_reference_coarse_4[3][7] * @x12);
+          }
+          {
+            block_x[1][7] += (coeff_iDCT_2D_reference_coarse_4[4][7] * @x13);
+          }
+          {
+            block_x[1][7] += (coeff_iDCT_2D_reference_coarse_4[5][7] * @x14);
+          }
+          {
+            block_x[1][7] += (coeff_iDCT_2D_reference_coarse_4[6][7] * @x15);
+          }
+          {
+            block_x[1][7] += (coeff_iDCT_2D_reference_coarse_4[7][7] * @x16);
+          }
+;
+        }
+;
+      }
+      {
+        
+        {
+          block_x[2][0] = 0;
+          
+          {
+            block_x[2][0] += (coeff_iDCT_2D_reference_coarse_4[0][0] * @x17);
+          }
+          {
+            block_x[2][0] += (coeff_iDCT_2D_reference_coarse_4[1][0] * @x18);
+          }
+          {
+            block_x[2][0] += (coeff_iDCT_2D_reference_coarse_4[2][0] * @x19);
+          }
+          {
+            block_x[2][0] += (coeff_iDCT_2D_reference_coarse_4[3][0] * @x20);
+          }
+          {
+            block_x[2][0] += (coeff_iDCT_2D_reference_coarse_4[4][0] * @x21);
+          }
+          {
+            block_x[2][0] += (coeff_iDCT_2D_reference_coarse_4[5][0] * @x22);
+          }
+          {
+            block_x[2][0] += (coeff_iDCT_2D_reference_coarse_4[6][0] * @x23);
+          }
+          {
+            block_x[2][0] += (coeff_iDCT_2D_reference_coarse_4[7][0] * @x24);
+          }
+;
+        }
+        {
+          block_x[2][1] = 0;
+          
+          {
+            block_x[2][1] += (coeff_iDCT_2D_reference_coarse_4[0][1] * @x17);
+          }
+          {
+            block_x[2][1] += (coeff_iDCT_2D_reference_coarse_4[1][1] * @x18);
+          }
+          {
+            block_x[2][1] += (coeff_iDCT_2D_reference_coarse_4[2][1] * @x19);
+          }
+          {
+            block_x[2][1] += (coeff_iDCT_2D_reference_coarse_4[3][1] * @x20);
+          }
+          {
+            block_x[2][1] += (coeff_iDCT_2D_reference_coarse_4[4][1] * @x21);
+          }
+          {
+            block_x[2][1] += (coeff_iDCT_2D_reference_coarse_4[5][1] * @x22);
+          }
+          {
+            block_x[2][1] += (coeff_iDCT_2D_reference_coarse_4[6][1] * @x23);
+          }
+          {
+            block_x[2][1] += (coeff_iDCT_2D_reference_coarse_4[7][1] * @x24);
+          }
+;
+        }
+        {
+          block_x[2][2] = 0;
+          
+          {
+            block_x[2][2] += (coeff_iDCT_2D_reference_coarse_4[0][2] * @x17);
+          }
+          {
+            block_x[2][2] += (coeff_iDCT_2D_reference_coarse_4[1][2] * @x18);
+          }
+          {
+            block_x[2][2] += (coeff_iDCT_2D_reference_coarse_4[2][2] * @x19);
+          }
+          {
+            block_x[2][2] += (coeff_iDCT_2D_reference_coarse_4[3][2] * @x20);
+          }
+          {
+            block_x[2][2] += (coeff_iDCT_2D_reference_coarse_4[4][2] * @x21);
+          }
+          {
+            block_x[2][2] += (coeff_iDCT_2D_reference_coarse_4[5][2] * @x22);
+          }
+          {
+            block_x[2][2] += (coeff_iDCT_2D_reference_coarse_4[6][2] * @x23);
+          }
+          {
+            block_x[2][2] += (coeff_iDCT_2D_reference_coarse_4[7][2] * @x24);
+          }
+;
+        }
+        {
+          block_x[2][3] = 0;
+          
+          {
+            block_x[2][3] += (coeff_iDCT_2D_reference_coarse_4[0][3] * @x17);
+          }
+          {
+            block_x[2][3] += (coeff_iDCT_2D_reference_coarse_4[1][3] * @x18);
+          }
+          {
+            block_x[2][3] += (coeff_iDCT_2D_reference_coarse_4[2][3] * @x19);
+          }
+          {
+            block_x[2][3] += (coeff_iDCT_2D_reference_coarse_4[3][3] * @x20);
+          }
+          {
+            block_x[2][3] += (coeff_iDCT_2D_reference_coarse_4[4][3] * @x21);
+          }
+          {
+            block_x[2][3] += (coeff_iDCT_2D_reference_coarse_4[5][3] * @x22);
+          }
+          {
+            block_x[2][3] += (coeff_iDCT_2D_reference_coarse_4[6][3] * @x23);
+          }
+          {
+            block_x[2][3] += (coeff_iDCT_2D_reference_coarse_4[7][3] * @x24);
+          }
+;
+        }
+        {
+          block_x[2][4] = 0;
+          
+          {
+            block_x[2][4] += (coeff_iDCT_2D_reference_coarse_4[0][4] * @x17);
+          }
+          {
+            block_x[2][4] += (coeff_iDCT_2D_reference_coarse_4[1][4] * @x18);
+          }
+          {
+            block_x[2][4] += (coeff_iDCT_2D_reference_coarse_4[2][4] * @x19);
+          }
+          {
+            block_x[2][4] += (coeff_iDCT_2D_reference_coarse_4[3][4] * @x20);
+          }
+          {
+            block_x[2][4] += (coeff_iDCT_2D_reference_coarse_4[4][4] * @x21);
+          }
+          {
+            block_x[2][4] += (coeff_iDCT_2D_reference_coarse_4[5][4] * @x22);
+          }
+          {
+            block_x[2][4] += (coeff_iDCT_2D_reference_coarse_4[6][4] * @x23);
+          }
+          {
+            block_x[2][4] += (coeff_iDCT_2D_reference_coarse_4[7][4] * @x24);
+          }
+;
+        }
+        {
+          block_x[2][5] = 0;
+          
+          {
+            block_x[2][5] += (coeff_iDCT_2D_reference_coarse_4[0][5] * @x17);
+          }
+          {
+            block_x[2][5] += (coeff_iDCT_2D_reference_coarse_4[1][5] * @x18);
+          }
+          {
+            block_x[2][5] += (coeff_iDCT_2D_reference_coarse_4[2][5] * @x19);
+          }
+          {
+            block_x[2][5] += (coeff_iDCT_2D_reference_coarse_4[3][5] * @x20);
+          }
+          {
+            block_x[2][5] += (coeff_iDCT_2D_reference_coarse_4[4][5] * @x21);
+          }
+          {
+            block_x[2][5] += (coeff_iDCT_2D_reference_coarse_4[5][5] * @x22);
+          }
+          {
+            block_x[2][5] += (coeff_iDCT_2D_reference_coarse_4[6][5] * @x23);
+          }
+          {
+            block_x[2][5] += (coeff_iDCT_2D_reference_coarse_4[7][5] * @x24);
+          }
+;
+        }
+        {
+          block_x[2][6] = 0;
+          
+          {
+            block_x[2][6] += (coeff_iDCT_2D_reference_coarse_4[0][6] * @x17);
+          }
+          {
+            block_x[2][6] += (coeff_iDCT_2D_reference_coarse_4[1][6] * @x18);
+          }
+          {
+            block_x[2][6] += (coeff_iDCT_2D_reference_coarse_4[2][6] * @x19);
+          }
+          {
+            block_x[2][6] += (coeff_iDCT_2D_reference_coarse_4[3][6] * @x20);
+          }
+          {
+            block_x[2][6] += (coeff_iDCT_2D_reference_coarse_4[4][6] * @x21);
+          }
+          {
+            block_x[2][6] += (coeff_iDCT_2D_reference_coarse_4[5][6] * @x22);
+          }
+          {
+            block_x[2][6] += (coeff_iDCT_2D_reference_coarse_4[6][6] * @x23);
+          }
+          {
+            block_x[2][6] += (coeff_iDCT_2D_reference_coarse_4[7][6] * @x24);
+          }
+;
+        }
+        {
+          block_x[2][7] = 0;
+          
+          {
+            block_x[2][7] += (coeff_iDCT_2D_reference_coarse_4[0][7] * @x17);
+          }
+          {
+            block_x[2][7] += (coeff_iDCT_2D_reference_coarse_4[1][7] * @x18);
+          }
+          {
+            block_x[2][7] += (coeff_iDCT_2D_reference_coarse_4[2][7] * @x19);
+          }
+          {
+            block_x[2][7] += (coeff_iDCT_2D_reference_coarse_4[3][7] * @x20);
+          }
+          {
+            block_x[2][7] += (coeff_iDCT_2D_reference_coarse_4[4][7] * @x21);
+          }
+          {
+            block_x[2][7] += (coeff_iDCT_2D_reference_coarse_4[5][7] * @x22);
+          }
+          {
+            block_x[2][7] += (coeff_iDCT_2D_reference_coarse_4[6][7] * @x23);
+          }
+          {
+            block_x[2][7] += (coeff_iDCT_2D_reference_coarse_4[7][7] * @x24);
+          }
+;
+        }
+;
+      }
+      {
+        
+        {
+          block_x[3][0] = 0;
+          
+          {
+            block_x[3][0] += (coeff_iDCT_2D_reference_coarse_4[0][0] * @x25);
+          }
+          {
+            block_x[3][0] += (coeff_iDCT_2D_reference_coarse_4[1][0] * @x26);
+          }
+          {
+            block_x[3][0] += (coeff_iDCT_2D_reference_coarse_4[2][0] * @x27);
+          }
+          {
+            block_x[3][0] += (coeff_iDCT_2D_reference_coarse_4[3][0] * @x28);
+          }
+          {
+            block_x[3][0] += (coeff_iDCT_2D_reference_coarse_4[4][0] * @x29);
+          }
+          {
+            block_x[3][0] += (coeff_iDCT_2D_reference_coarse_4[5][0] * @x30);
+          }
+          {
+            block_x[3][0] += (coeff_iDCT_2D_reference_coarse_4[6][0] * @x31);
+          }
+          {
+            block_x[3][0] += (coeff_iDCT_2D_reference_coarse_4[7][0] * @x32);
+          }
+;
+        }
+        {
+          block_x[3][1] = 0;
+          
+          {
+            block_x[3][1] += (coeff_iDCT_2D_reference_coarse_4[0][1] * @x25);
+          }
+          {
+            block_x[3][1] += (coeff_iDCT_2D_reference_coarse_4[1][1] * @x26);
+          }
+          {
+            block_x[3][1] += (coeff_iDCT_2D_reference_coarse_4[2][1] * @x27);
+          }
+          {
+            block_x[3][1] += (coeff_iDCT_2D_reference_coarse_4[3][1] * @x28);
+          }
+          {
+            block_x[3][1] += (coeff_iDCT_2D_reference_coarse_4[4][1] * @x29);
+          }
+          {
+            block_x[3][1] += (coeff_iDCT_2D_reference_coarse_4[5][1] * @x30);
+          }
+          {
+            block_x[3][1] += (coeff_iDCT_2D_reference_coarse_4[6][1] * @x31);
+          }
+          {
+            block_x[3][1] += (coeff_iDCT_2D_reference_coarse_4[7][1] * @x32);
+          }
+;
+        }
+        {
+          block_x[3][2] = 0;
+          
+          {
+            block_x[3][2] += (coeff_iDCT_2D_reference_coarse_4[0][2] * @x25);
+          }
+          {
+            block_x[3][2] += (coeff_iDCT_2D_reference_coarse_4[1][2] * @x26);
+          }
+          {
+            block_x[3][2] += (coeff_iDCT_2D_reference_coarse_4[2][2] * @x27);
+          }
+          {
+            block_x[3][2] += (coeff_iDCT_2D_reference_coarse_4[3][2] * @x28);
+          }
+          {
+            block_x[3][2] += (coeff_iDCT_2D_reference_coarse_4[4][2] * @x29);
+          }
+          {
+            block_x[3][2] += (coeff_iDCT_2D_reference_coarse_4[5][2] * @x30);
+          }
+          {
+            block_x[3][2] += (coeff_iDCT_2D_reference_coarse_4[6][2] * @x31);
+          }
+          {
+            block_x[3][2] += (coeff_iDCT_2D_reference_coarse_4[7][2] * @x32);
+          }
+;
+        }
+        {
+          block_x[3][3] = 0;
+          
+          {
+            block_x[3][3] += (coeff_iDCT_2D_reference_coarse_4[0][3] * @x25);
+          }
+          {
+            block_x[3][3] += (coeff_iDCT_2D_reference_coarse_4[1][3] * @x26);
+          }
+          {
+            block_x[3][3] += (coeff_iDCT_2D_reference_coarse_4[2][3] * @x27);
+          }
+          {
+            block_x[3][3] += (coeff_iDCT_2D_reference_coarse_4[3][3] * @x28);
+          }
+          {
+            block_x[3][3] += (coeff_iDCT_2D_reference_coarse_4[4][3] * @x29);
+          }
+          {
+            block_x[3][3] += (coeff_iDCT_2D_reference_coarse_4[5][3] * @x30);
+          }
+          {
+            block_x[3][3] += (coeff_iDCT_2D_reference_coarse_4[6][3] * @x31);
+          }
+          {
+            block_x[3][3] += (coeff_iDCT_2D_reference_coarse_4[7][3] * @x32);
+          }
+;
+        }
+        {
+          block_x[3][4] = 0;
+          
+          {
+            block_x[3][4] += (coeff_iDCT_2D_reference_coarse_4[0][4] * @x25);
+          }
+          {
+            block_x[3][4] += (coeff_iDCT_2D_reference_coarse_4[1][4] * @x26);
+          }
+          {
+            block_x[3][4] += (coeff_iDCT_2D_reference_coarse_4[2][4] * @x27);
+          }
+          {
+            block_x[3][4] += (coeff_iDCT_2D_reference_coarse_4[3][4] * @x28);
+          }
+          {
+            block_x[3][4] += (coeff_iDCT_2D_reference_coarse_4[4][4] * @x29);
+          }
+          {
+            block_x[3][4] += (coeff_iDCT_2D_reference_coarse_4[5][4] * @x30);
+          }
+          {
+            block_x[3][4] += (coeff_iDCT_2D_reference_coarse_4[6][4] * @x31);
+          }
+          {
+            block_x[3][4] += (coeff_iDCT_2D_reference_coarse_4[7][4] * @x32);
+          }
+;
+        }
+        {
+          block_x[3][5] = 0;
+          
+          {
+            block_x[3][5] += (coeff_iDCT_2D_reference_coarse_4[0][5] * @x25);
+          }
+          {
+            block_x[3][5] += (coeff_iDCT_2D_reference_coarse_4[1][5] * @x26);
+          }
+          {
+            block_x[3][5] += (coeff_iDCT_2D_reference_coarse_4[2][5] * @x27);
+          }
+          {
+            block_x[3][5] += (coeff_iDCT_2D_reference_coarse_4[3][5] * @x28);
+          }
+          {
+            block_x[3][5] += (coeff_iDCT_2D_reference_coarse_4[4][5] * @x29);
+          }
+          {
+            block_x[3][5] += (coeff_iDCT_2D_reference_coarse_4[5][5] * @x30);
+          }
+          {
+            block_x[3][5] += (coeff_iDCT_2D_reference_coarse_4[6][5] * @x31);
+          }
+          {
+            block_x[3][5] += (coeff_iDCT_2D_reference_coarse_4[7][5] * @x32);
+          }
+;
+        }
+        {
+          block_x[3][6] = 0;
+          
+          {
+            block_x[3][6] += (coeff_iDCT_2D_reference_coarse_4[0][6] * @x25);
+          }
+          {
+            block_x[3][6] += (coeff_iDCT_2D_reference_coarse_4[1][6] * @x26);
+          }
+          {
+            block_x[3][6] += (coeff_iDCT_2D_reference_coarse_4[2][6] * @x27);
+          }
+          {
+            block_x[3][6] += (coeff_iDCT_2D_reference_coarse_4[3][6] * @x28);
+          }
+          {
+            block_x[3][6] += (coeff_iDCT_2D_reference_coarse_4[4][6] * @x29);
+          }
+          {
+            block_x[3][6] += (coeff_iDCT_2D_reference_coarse_4[5][6] * @x30);
+          }
+          {
+            block_x[3][6] += (coeff_iDCT_2D_reference_coarse_4[6][6] * @x31);
+          }
+          {
+            block_x[3][6] += (coeff_iDCT_2D_reference_coarse_4[7][6] * @x32);
+          }
+;
+        }
+        {
+          block_x[3][7] = 0;
+          
+          {
+            block_x[3][7] += (coeff_iDCT_2D_reference_coarse_4[0][7] * @x25);
+          }
+          {
+            block_x[3][7] += (coeff_iDCT_2D_reference_coarse_4[1][7] * @x26);
+          }
+          {
+            block_x[3][7] += (coeff_iDCT_2D_reference_coarse_4[2][7] * @x27);
+          }
+          {
+            block_x[3][7] += (coeff_iDCT_2D_reference_coarse_4[3][7] * @x28);
+          }
+          {
+            block_x[3][7] += (coeff_iDCT_2D_reference_coarse_4[4][7] * @x29);
+          }
+          {
+            block_x[3][7] += (coeff_iDCT_2D_reference_coarse_4[5][7] * @x30);
+          }
+          {
+            block_x[3][7] += (coeff_iDCT_2D_reference_coarse_4[6][7] * @x31);
+          }
+          {
+            block_x[3][7] += (coeff_iDCT_2D_reference_coarse_4[7][7] * @x32);
+          }
+;
+        }
+;
+      }
+      {
+        
+        {
+          block_x[4][0] = 0;
+          
+          {
+            block_x[4][0] += (coeff_iDCT_2D_reference_coarse_4[0][0] * @x33);
+          }
+          {
+            block_x[4][0] += (coeff_iDCT_2D_reference_coarse_4[1][0] * @x34);
+          }
+          {
+            block_x[4][0] += (coeff_iDCT_2D_reference_coarse_4[2][0] * @x35);
+          }
+          {
+            block_x[4][0] += (coeff_iDCT_2D_reference_coarse_4[3][0] * @x36);
+          }
+          {
+            block_x[4][0] += (coeff_iDCT_2D_reference_coarse_4[4][0] * @x37);
+          }
+          {
+            block_x[4][0] += (coeff_iDCT_2D_reference_coarse_4[5][0] * @x38);
+          }
+          {
+            block_x[4][0] += (coeff_iDCT_2D_reference_coarse_4[6][0] * @x39);
+          }
+          {
+            block_x[4][0] += (coeff_iDCT_2D_reference_coarse_4[7][0] * @x40);
+          }
+;
+        }
+        {
+          block_x[4][1] = 0;
+          
+          {
+            block_x[4][1] += (coeff_iDCT_2D_reference_coarse_4[0][1] * @x33);
+          }
+          {
+            block_x[4][1] += (coeff_iDCT_2D_reference_coarse_4[1][1] * @x34);
+          }
+          {
+            block_x[4][1] += (coeff_iDCT_2D_reference_coarse_4[2][1] * @x35);
+          }
+          {
+            block_x[4][1] += (coeff_iDCT_2D_reference_coarse_4[3][1] * @x36);
+          }
+          {
+            block_x[4][1] += (coeff_iDCT_2D_reference_coarse_4[4][1] * @x37);
+          }
+          {
+            block_x[4][1] += (coeff_iDCT_2D_reference_coarse_4[5][1] * @x38);
+          }
+          {
+            block_x[4][1] += (coeff_iDCT_2D_reference_coarse_4[6][1] * @x39);
+          }
+          {
+            block_x[4][1] += (coeff_iDCT_2D_reference_coarse_4[7][1] * @x40);
+          }
+;
+        }
+        {
+          block_x[4][2] = 0;
+          
+          {
+            block_x[4][2] += (coeff_iDCT_2D_reference_coarse_4[0][2] * @x33);
+          }
+          {
+            block_x[4][2] += (coeff_iDCT_2D_reference_coarse_4[1][2] * @x34);
+          }
+          {
+            block_x[4][2] += (coeff_iDCT_2D_reference_coarse_4[2][2] * @x35);
+          }
+          {
+            block_x[4][2] += (coeff_iDCT_2D_reference_coarse_4[3][2] * @x36);
+          }
+          {
+            block_x[4][2] += (coeff_iDCT_2D_reference_coarse_4[4][2] * @x37);
+          }
+          {
+            block_x[4][2] += (coeff_iDCT_2D_reference_coarse_4[5][2] * @x38);
+          }
+          {
+            block_x[4][2] += (coeff_iDCT_2D_reference_coarse_4[6][2] * @x39);
+          }
+          {
+            block_x[4][2] += (coeff_iDCT_2D_reference_coarse_4[7][2] * @x40);
+          }
+;
+        }
+        {
+          block_x[4][3] = 0;
+          
+          {
+            block_x[4][3] += (coeff_iDCT_2D_reference_coarse_4[0][3] * @x33);
+          }
+          {
+            block_x[4][3] += (coeff_iDCT_2D_reference_coarse_4[1][3] * @x34);
+          }
+          {
+            block_x[4][3] += (coeff_iDCT_2D_reference_coarse_4[2][3] * @x35);
+          }
+          {
+            block_x[4][3] += (coeff_iDCT_2D_reference_coarse_4[3][3] * @x36);
+          }
+          {
+            block_x[4][3] += (coeff_iDCT_2D_reference_coarse_4[4][3] * @x37);
+          }
+          {
+            block_x[4][3] += (coeff_iDCT_2D_reference_coarse_4[5][3] * @x38);
+          }
+          {
+            block_x[4][3] += (coeff_iDCT_2D_reference_coarse_4[6][3] * @x39);
+          }
+          {
+            block_x[4][3] += (coeff_iDCT_2D_reference_coarse_4[7][3] * @x40);
+          }
+;
+        }
+        {
+          block_x[4][4] = 0;
+          
+          {
+            block_x[4][4] += (coeff_iDCT_2D_reference_coarse_4[0][4] * @x33);
+          }
+          {
+            block_x[4][4] += (coeff_iDCT_2D_reference_coarse_4[1][4] * @x34);
+          }
+          {
+            block_x[4][4] += (coeff_iDCT_2D_reference_coarse_4[2][4] * @x35);
+          }
+          {
+            block_x[4][4] += (coeff_iDCT_2D_reference_coarse_4[3][4] * @x36);
+          }
+          {
+            block_x[4][4] += (coeff_iDCT_2D_reference_coarse_4[4][4] * @x37);
+          }
+          {
+            block_x[4][4] += (coeff_iDCT_2D_reference_coarse_4[5][4] * @x38);
+          }
+          {
+            block_x[4][4] += (coeff_iDCT_2D_reference_coarse_4[6][4] * @x39);
+          }
+          {
+            block_x[4][4] += (coeff_iDCT_2D_reference_coarse_4[7][4] * @x40);
+          }
+;
+        }
+        {
+          block_x[4][5] = 0;
+          
+          {
+            block_x[4][5] += (coeff_iDCT_2D_reference_coarse_4[0][5] * @x33);
+          }
+          {
+            block_x[4][5] += (coeff_iDCT_2D_reference_coarse_4[1][5] * @x34);
+          }
+          {
+            block_x[4][5] += (coeff_iDCT_2D_reference_coarse_4[2][5] * @x35);
+          }
+          {
+            block_x[4][5] += (coeff_iDCT_2D_reference_coarse_4[3][5] * @x36);
+          }
+          {
+            block_x[4][5] += (coeff_iDCT_2D_reference_coarse_4[4][5] * @x37);
+          }
+          {
+            block_x[4][5] += (coeff_iDCT_2D_reference_coarse_4[5][5] * @x38);
+          }
+          {
+            block_x[4][5] += (coeff_iDCT_2D_reference_coarse_4[6][5] * @x39);
+          }
+          {
+            block_x[4][5] += (coeff_iDCT_2D_reference_coarse_4[7][5] * @x40);
+          }
+;
+        }
+        {
+          block_x[4][6] = 0;
+          
+          {
+            block_x[4][6] += (coeff_iDCT_2D_reference_coarse_4[0][6] * @x33);
+          }
+          {
+            block_x[4][6] += (coeff_iDCT_2D_reference_coarse_4[1][6] * @x34);
+          }
+          {
+            block_x[4][6] += (coeff_iDCT_2D_reference_coarse_4[2][6] * @x35);
+          }
+          {
+            block_x[4][6] += (coeff_iDCT_2D_reference_coarse_4[3][6] * @x36);
+          }
+          {
+            block_x[4][6] += (coeff_iDCT_2D_reference_coarse_4[4][6] * @x37);
+          }
+          {
+            block_x[4][6] += (coeff_iDCT_2D_reference_coarse_4[5][6] * @x38);
+          }
+          {
+            block_x[4][6] += (coeff_iDCT_2D_reference_coarse_4[6][6] * @x39);
+          }
+          {
+            block_x[4][6] += (coeff_iDCT_2D_reference_coarse_4[7][6] * @x40);
+          }
+;
+        }
+        {
+          block_x[4][7] = 0;
+          
+          {
+            block_x[4][7] += (coeff_iDCT_2D_reference_coarse_4[0][7] * @x33);
+          }
+          {
+            block_x[4][7] += (coeff_iDCT_2D_reference_coarse_4[1][7] * @x34);
+          }
+          {
+            block_x[4][7] += (coeff_iDCT_2D_reference_coarse_4[2][7] * @x35);
+          }
+          {
+            block_x[4][7] += (coeff_iDCT_2D_reference_coarse_4[3][7] * @x36);
+          }
+          {
+            block_x[4][7] += (coeff_iDCT_2D_reference_coarse_4[4][7] * @x37);
+          }
+          {
+            block_x[4][7] += (coeff_iDCT_2D_reference_coarse_4[5][7] * @x38);
+          }
+          {
+            block_x[4][7] += (coeff_iDCT_2D_reference_coarse_4[6][7] * @x39);
+          }
+          {
+            block_x[4][7] += (coeff_iDCT_2D_reference_coarse_4[7][7] * @x40);
+          }
+;
+        }
+;
+      }
+      {
+        
+        {
+          block_x[5][0] = 0;
+          
+          {
+            block_x[5][0] += (coeff_iDCT_2D_reference_coarse_4[0][0] * @x41);
+          }
+          {
+            block_x[5][0] += (coeff_iDCT_2D_reference_coarse_4[1][0] * @x42);
+          }
+          {
+            block_x[5][0] += (coeff_iDCT_2D_reference_coarse_4[2][0] * @x43);
+          }
+          {
+            block_x[5][0] += (coeff_iDCT_2D_reference_coarse_4[3][0] * @x44);
+          }
+          {
+            block_x[5][0] += (coeff_iDCT_2D_reference_coarse_4[4][0] * @x45);
+          }
+          {
+            block_x[5][0] += (coeff_iDCT_2D_reference_coarse_4[5][0] * @x46);
+          }
+          {
+            block_x[5][0] += (coeff_iDCT_2D_reference_coarse_4[6][0] * @x47);
+          }
+          {
+            block_x[5][0] += (coeff_iDCT_2D_reference_coarse_4[7][0] * @x48);
+          }
+;
+        }
+        {
+          block_x[5][1] = 0;
+          
+          {
+            block_x[5][1] += (coeff_iDCT_2D_reference_coarse_4[0][1] * @x41);
+          }
+          {
+            block_x[5][1] += (coeff_iDCT_2D_reference_coarse_4[1][1] * @x42);
+          }
+          {
+            block_x[5][1] += (coeff_iDCT_2D_reference_coarse_4[2][1] * @x43);
+          }
+          {
+            block_x[5][1] += (coeff_iDCT_2D_reference_coarse_4[3][1] * @x44);
+          }
+          {
+            block_x[5][1] += (coeff_iDCT_2D_reference_coarse_4[4][1] * @x45);
+          }
+          {
+            block_x[5][1] += (coeff_iDCT_2D_reference_coarse_4[5][1] * @x46);
+          }
+          {
+            block_x[5][1] += (coeff_iDCT_2D_reference_coarse_4[6][1] * @x47);
+          }
+          {
+            block_x[5][1] += (coeff_iDCT_2D_reference_coarse_4[7][1] * @x48);
+          }
+;
+        }
+        {
+          block_x[5][2] = 0;
+          
+          {
+            block_x[5][2] += (coeff_iDCT_2D_reference_coarse_4[0][2] * @x41);
+          }
+          {
+            block_x[5][2] += (coeff_iDCT_2D_reference_coarse_4[1][2] * @x42);
+          }
+          {
+            block_x[5][2] += (coeff_iDCT_2D_reference_coarse_4[2][2] * @x43);
+          }
+          {
+            block_x[5][2] += (coeff_iDCT_2D_reference_coarse_4[3][2] * @x44);
+          }
+          {
+            block_x[5][2] += (coeff_iDCT_2D_reference_coarse_4[4][2] * @x45);
+          }
+          {
+            block_x[5][2] += (coeff_iDCT_2D_reference_coarse_4[5][2] * @x46);
+          }
+          {
+            block_x[5][2] += (coeff_iDCT_2D_reference_coarse_4[6][2] * @x47);
+          }
+          {
+            block_x[5][2] += (coeff_iDCT_2D_reference_coarse_4[7][2] * @x48);
+          }
+;
+        }
+        {
+          block_x[5][3] = 0;
+          
+          {
+            block_x[5][3] += (coeff_iDCT_2D_reference_coarse_4[0][3] * @x41);
+          }
+          {
+            block_x[5][3] += (coeff_iDCT_2D_reference_coarse_4[1][3] * @x42);
+          }
+          {
+            block_x[5][3] += (coeff_iDCT_2D_reference_coarse_4[2][3] * @x43);
+          }
+          {
+            block_x[5][3] += (coeff_iDCT_2D_reference_coarse_4[3][3] * @x44);
+          }
+          {
+            block_x[5][3] += (coeff_iDCT_2D_reference_coarse_4[4][3] * @x45);
+          }
+          {
+            block_x[5][3] += (coeff_iDCT_2D_reference_coarse_4[5][3] * @x46);
+          }
+          {
+            block_x[5][3] += (coeff_iDCT_2D_reference_coarse_4[6][3] * @x47);
+          }
+          {
+            block_x[5][3] += (coeff_iDCT_2D_reference_coarse_4[7][3] * @x48);
+          }
+;
+        }
+        {
+          block_x[5][4] = 0;
+          
+          {
+            block_x[5][4] += (coeff_iDCT_2D_reference_coarse_4[0][4] * @x41);
+          }
+          {
+            block_x[5][4] += (coeff_iDCT_2D_reference_coarse_4[1][4] * @x42);
+          }
+          {
+            block_x[5][4] += (coeff_iDCT_2D_reference_coarse_4[2][4] * @x43);
+          }
+          {
+            block_x[5][4] += (coeff_iDCT_2D_reference_coarse_4[3][4] * @x44);
+          }
+          {
+            block_x[5][4] += (coeff_iDCT_2D_reference_coarse_4[4][4] * @x45);
+          }
+          {
+            block_x[5][4] += (coeff_iDCT_2D_reference_coarse_4[5][4] * @x46);
+          }
+          {
+            block_x[5][4] += (coeff_iDCT_2D_reference_coarse_4[6][4] * @x47);
+          }
+          {
+            block_x[5][4] += (coeff_iDCT_2D_reference_coarse_4[7][4] * @x48);
+          }
+;
+        }
+        {
+          block_x[5][5] = 0;
+          
+          {
+            block_x[5][5] += (coeff_iDCT_2D_reference_coarse_4[0][5] * @x41);
+          }
+          {
+            block_x[5][5] += (coeff_iDCT_2D_reference_coarse_4[1][5] * @x42);
+          }
+          {
+            block_x[5][5] += (coeff_iDCT_2D_reference_coarse_4[2][5] * @x43);
+          }
+          {
+            block_x[5][5] += (coeff_iDCT_2D_reference_coarse_4[3][5] * @x44);
+          }
+          {
+            block_x[5][5] += (coeff_iDCT_2D_reference_coarse_4[4][5] * @x45);
+          }
+          {
+            block_x[5][5] += (coeff_iDCT_2D_reference_coarse_4[5][5] * @x46);
+          }
+          {
+            block_x[5][5] += (coeff_iDCT_2D_reference_coarse_4[6][5] * @x47);
+          }
+          {
+            block_x[5][5] += (coeff_iDCT_2D_reference_coarse_4[7][5] * @x48);
+          }
+;
+        }
+        {
+          block_x[5][6] = 0;
+          
+          {
+            block_x[5][6] += (coeff_iDCT_2D_reference_coarse_4[0][6] * @x41);
+          }
+          {
+            block_x[5][6] += (coeff_iDCT_2D_reference_coarse_4[1][6] * @x42);
+          }
+          {
+            block_x[5][6] += (coeff_iDCT_2D_reference_coarse_4[2][6] * @x43);
+          }
+          {
+            block_x[5][6] += (coeff_iDCT_2D_reference_coarse_4[3][6] * @x44);
+          }
+          {
+            block_x[5][6] += (coeff_iDCT_2D_reference_coarse_4[4][6] * @x45);
+          }
+          {
+            block_x[5][6] += (coeff_iDCT_2D_reference_coarse_4[5][6] * @x46);
+          }
+          {
+            block_x[5][6] += (coeff_iDCT_2D_reference_coarse_4[6][6] * @x47);
+          }
+          {
+            block_x[5][6] += (coeff_iDCT_2D_reference_coarse_4[7][6] * @x48);
+          }
+;
+        }
+        {
+          block_x[5][7] = 0;
+          
+          {
+            block_x[5][7] += (coeff_iDCT_2D_reference_coarse_4[0][7] * @x41);
+          }
+          {
+            block_x[5][7] += (coeff_iDCT_2D_reference_coarse_4[1][7] * @x42);
+          }
+          {
+            block_x[5][7] += (coeff_iDCT_2D_reference_coarse_4[2][7] * @x43);
+          }
+          {
+            block_x[5][7] += (coeff_iDCT_2D_reference_coarse_4[3][7] * @x44);
+          }
+          {
+            block_x[5][7] += (coeff_iDCT_2D_reference_coarse_4[4][7] * @x45);
+          }
+          {
+            block_x[5][7] += (coeff_iDCT_2D_reference_coarse_4[5][7] * @x46);
+          }
+          {
+            block_x[5][7] += (coeff_iDCT_2D_reference_coarse_4[6][7] * @x47);
+          }
+          {
+            block_x[5][7] += (coeff_iDCT_2D_reference_coarse_4[7][7] * @x48);
+          }
+;
+        }
+;
+      }
+      {
+        
+        {
+          block_x[6][0] = 0;
+          
+          {
+            block_x[6][0] += (coeff_iDCT_2D_reference_coarse_4[0][0] * @x49);
+          }
+          {
+            block_x[6][0] += (coeff_iDCT_2D_reference_coarse_4[1][0] * @x50);
+          }
+          {
+            block_x[6][0] += (coeff_iDCT_2D_reference_coarse_4[2][0] * @x51);
+          }
+          {
+            block_x[6][0] += (coeff_iDCT_2D_reference_coarse_4[3][0] * @x52);
+          }
+          {
+            block_x[6][0] += (coeff_iDCT_2D_reference_coarse_4[4][0] * @x53);
+          }
+          {
+            block_x[6][0] += (coeff_iDCT_2D_reference_coarse_4[5][0] * @x54);
+          }
+          {
+            block_x[6][0] += (coeff_iDCT_2D_reference_coarse_4[6][0] * @x55);
+          }
+          {
+            block_x[6][0] += (coeff_iDCT_2D_reference_coarse_4[7][0] * @x56);
+          }
+;
+        }
+        {
+          block_x[6][1] = 0;
+          
+          {
+            block_x[6][1] += (coeff_iDCT_2D_reference_coarse_4[0][1] * @x49);
+          }
+          {
+            block_x[6][1] += (coeff_iDCT_2D_reference_coarse_4[1][1] * @x50);
+          }
+          {
+            block_x[6][1] += (coeff_iDCT_2D_reference_coarse_4[2][1] * @x51);
+          }
+          {
+            block_x[6][1] += (coeff_iDCT_2D_reference_coarse_4[3][1] * @x52);
+          }
+          {
+            block_x[6][1] += (coeff_iDCT_2D_reference_coarse_4[4][1] * @x53);
+          }
+          {
+            block_x[6][1] += (coeff_iDCT_2D_reference_coarse_4[5][1] * @x54);
+          }
+          {
+            block_x[6][1] += (coeff_iDCT_2D_reference_coarse_4[6][1] * @x55);
+          }
+          {
+            block_x[6][1] += (coeff_iDCT_2D_reference_coarse_4[7][1] * @x56);
+          }
+;
+        }
+        {
+          block_x[6][2] = 0;
+          
+          {
+            block_x[6][2] += (coeff_iDCT_2D_reference_coarse_4[0][2] * @x49);
+          }
+          {
+            block_x[6][2] += (coeff_iDCT_2D_reference_coarse_4[1][2] * @x50);
+          }
+          {
+            block_x[6][2] += (coeff_iDCT_2D_reference_coarse_4[2][2] * @x51);
+          }
+          {
+            block_x[6][2] += (coeff_iDCT_2D_reference_coarse_4[3][2] * @x52);
+          }
+          {
+            block_x[6][2] += (coeff_iDCT_2D_reference_coarse_4[4][2] * @x53);
+          }
+          {
+            block_x[6][2] += (coeff_iDCT_2D_reference_coarse_4[5][2] * @x54);
+          }
+          {
+            block_x[6][2] += (coeff_iDCT_2D_reference_coarse_4[6][2] * @x55);
+          }
+          {
+            block_x[6][2] += (coeff_iDCT_2D_reference_coarse_4[7][2] * @x56);
+          }
+;
+        }
+        {
+          block_x[6][3] = 0;
+          
+          {
+            block_x[6][3] += (coeff_iDCT_2D_reference_coarse_4[0][3] * @x49);
+          }
+          {
+            block_x[6][3] += (coeff_iDCT_2D_reference_coarse_4[1][3] * @x50);
+          }
+          {
+            block_x[6][3] += (coeff_iDCT_2D_reference_coarse_4[2][3] * @x51);
+          }
+          {
+            block_x[6][3] += (coeff_iDCT_2D_reference_coarse_4[3][3] * @x52);
+          }
+          {
+            block_x[6][3] += (coeff_iDCT_2D_reference_coarse_4[4][3] * @x53);
+          }
+          {
+            block_x[6][3] += (coeff_iDCT_2D_reference_coarse_4[5][3] * @x54);
+          }
+          {
+            block_x[6][3] += (coeff_iDCT_2D_reference_coarse_4[6][3] * @x55);
+          }
+          {
+            block_x[6][3] += (coeff_iDCT_2D_reference_coarse_4[7][3] * @x56);
+          }
+;
+        }
+        {
+          block_x[6][4] = 0;
+          
+          {
+            block_x[6][4] += (coeff_iDCT_2D_reference_coarse_4[0][4] * @x49);
+          }
+          {
+            block_x[6][4] += (coeff_iDCT_2D_reference_coarse_4[1][4] * @x50);
+          }
+          {
+            block_x[6][4] += (coeff_iDCT_2D_reference_coarse_4[2][4] * @x51);
+          }
+          {
+            block_x[6][4] += (coeff_iDCT_2D_reference_coarse_4[3][4] * @x52);
+          }
+          {
+            block_x[6][4] += (coeff_iDCT_2D_reference_coarse_4[4][4] * @x53);
+          }
+          {
+            block_x[6][4] += (coeff_iDCT_2D_reference_coarse_4[5][4] * @x54);
+          }
+          {
+            block_x[6][4] += (coeff_iDCT_2D_reference_coarse_4[6][4] * @x55);
+          }
+          {
+            block_x[6][4] += (coeff_iDCT_2D_reference_coarse_4[7][4] * @x56);
+          }
+;
+        }
+        {
+          block_x[6][5] = 0;
+          
+          {
+            block_x[6][5] += (coeff_iDCT_2D_reference_coarse_4[0][5] * @x49);
+          }
+          {
+            block_x[6][5] += (coeff_iDCT_2D_reference_coarse_4[1][5] * @x50);
+          }
+          {
+            block_x[6][5] += (coeff_iDCT_2D_reference_coarse_4[2][5] * @x51);
+          }
+          {
+            block_x[6][5] += (coeff_iDCT_2D_reference_coarse_4[3][5] * @x52);
+          }
+          {
+            block_x[6][5] += (coeff_iDCT_2D_reference_coarse_4[4][5] * @x53);
+          }
+          {
+            block_x[6][5] += (coeff_iDCT_2D_reference_coarse_4[5][5] * @x54);
+          }
+          {
+            block_x[6][5] += (coeff_iDCT_2D_reference_coarse_4[6][5] * @x55);
+          }
+          {
+            block_x[6][5] += (coeff_iDCT_2D_reference_coarse_4[7][5] * @x56);
+          }
+;
+        }
+        {
+          block_x[6][6] = 0;
+          
+          {
+            block_x[6][6] += (coeff_iDCT_2D_reference_coarse_4[0][6] * @x49);
+          }
+          {
+            block_x[6][6] += (coeff_iDCT_2D_reference_coarse_4[1][6] * @x50);
+          }
+          {
+            block_x[6][6] += (coeff_iDCT_2D_reference_coarse_4[2][6] * @x51);
+          }
+          {
+            block_x[6][6] += (coeff_iDCT_2D_reference_coarse_4[3][6] * @x52);
+          }
+          {
+            block_x[6][6] += (coeff_iDCT_2D_reference_coarse_4[4][6] * @x53);
+          }
+          {
+            block_x[6][6] += (coeff_iDCT_2D_reference_coarse_4[5][6] * @x54);
+          }
+          {
+            block_x[6][6] += (coeff_iDCT_2D_reference_coarse_4[6][6] * @x55);
+          }
+          {
+            block_x[6][6] += (coeff_iDCT_2D_reference_coarse_4[7][6] * @x56);
+          }
+;
+        }
+        {
+          block_x[6][7] = 0;
+          
+          {
+            block_x[6][7] += (coeff_iDCT_2D_reference_coarse_4[0][7] * @x49);
+          }
+          {
+            block_x[6][7] += (coeff_iDCT_2D_reference_coarse_4[1][7] * @x50);
+          }
+          {
+            block_x[6][7] += (coeff_iDCT_2D_reference_coarse_4[2][7] * @x51);
+          }
+          {
+            block_x[6][7] += (coeff_iDCT_2D_reference_coarse_4[3][7] * @x52);
+          }
+          {
+            block_x[6][7] += (coeff_iDCT_2D_reference_coarse_4[4][7] * @x53);
+          }
+          {
+            block_x[6][7] += (coeff_iDCT_2D_reference_coarse_4[5][7] * @x54);
+          }
+          {
+            block_x[6][7] += (coeff_iDCT_2D_reference_coarse_4[6][7] * @x55);
+          }
+          {
+            block_x[6][7] += (coeff_iDCT_2D_reference_coarse_4[7][7] * @x56);
+          }
+;
+        }
+;
+      }
+      {
+        
+        {
+          block_x[7][0] = 0;
+          
+          {
+            block_x[7][0] += (coeff_iDCT_2D_reference_coarse_4[0][0] * @x57);
+          }
+          {
+            block_x[7][0] += (coeff_iDCT_2D_reference_coarse_4[1][0] * @x58);
+          }
+          {
+            block_x[7][0] += (coeff_iDCT_2D_reference_coarse_4[2][0] * @x59);
+          }
+          {
+            block_x[7][0] += (coeff_iDCT_2D_reference_coarse_4[3][0] * @x60);
+          }
+          {
+            block_x[7][0] += (coeff_iDCT_2D_reference_coarse_4[4][0] * @x61);
+          }
+          {
+            block_x[7][0] += (coeff_iDCT_2D_reference_coarse_4[5][0] * @x62);
+          }
+          {
+            block_x[7][0] += (coeff_iDCT_2D_reference_coarse_4[6][0] * @x63);
+          }
+          {
+            block_x[7][0] += (coeff_iDCT_2D_reference_coarse_4[7][0] * @x64);
+          }
+;
+        }
+        {
+          block_x[7][1] = 0;
+          
+          {
+            block_x[7][1] += (coeff_iDCT_2D_reference_coarse_4[0][1] * @x57);
+          }
+          {
+            block_x[7][1] += (coeff_iDCT_2D_reference_coarse_4[1][1] * @x58);
+          }
+          {
+            block_x[7][1] += (coeff_iDCT_2D_reference_coarse_4[2][1] * @x59);
+          }
+          {
+            block_x[7][1] += (coeff_iDCT_2D_reference_coarse_4[3][1] * @x60);
+          }
+          {
+            block_x[7][1] += (coeff_iDCT_2D_reference_coarse_4[4][1] * @x61);
+          }
+          {
+            block_x[7][1] += (coeff_iDCT_2D_reference_coarse_4[5][1] * @x62);
+          }
+          {
+            block_x[7][1] += (coeff_iDCT_2D_reference_coarse_4[6][1] * @x63);
+          }
+          {
+            block_x[7][1] += (coeff_iDCT_2D_reference_coarse_4[7][1] * @x64);
+          }
+;
+        }
+        {
+          block_x[7][2] = 0;
+          
+          {
+            block_x[7][2] += (coeff_iDCT_2D_reference_coarse_4[0][2] * @x57);
+          }
+          {
+            block_x[7][2] += (coeff_iDCT_2D_reference_coarse_4[1][2] * @x58);
+          }
+          {
+            block_x[7][2] += (coeff_iDCT_2D_reference_coarse_4[2][2] * @x59);
+          }
+          {
+            block_x[7][2] += (coeff_iDCT_2D_reference_coarse_4[3][2] * @x60);
+          }
+          {
+            block_x[7][2] += (coeff_iDCT_2D_reference_coarse_4[4][2] * @x61);
+          }
+          {
+            block_x[7][2] += (coeff_iDCT_2D_reference_coarse_4[5][2] * @x62);
+          }
+          {
+            block_x[7][2] += (coeff_iDCT_2D_reference_coarse_4[6][2] * @x63);
+          }
+          {
+            block_x[7][2] += (coeff_iDCT_2D_reference_coarse_4[7][2] * @x64);
+          }
+;
+        }
+        {
+          block_x[7][3] = 0;
+          
+          {
+            block_x[7][3] += (coeff_iDCT_2D_reference_coarse_4[0][3] * @x57);
+          }
+          {
+            block_x[7][3] += (coeff_iDCT_2D_reference_coarse_4[1][3] * @x58);
+          }
+          {
+            block_x[7][3] += (coeff_iDCT_2D_reference_coarse_4[2][3] * @x59);
+          }
+          {
+            block_x[7][3] += (coeff_iDCT_2D_reference_coarse_4[3][3] * @x60);
+          }
+          {
+            block_x[7][3] += (coeff_iDCT_2D_reference_coarse_4[4][3] * @x61);
+          }
+          {
+            block_x[7][3] += (coeff_iDCT_2D_reference_coarse_4[5][3] * @x62);
+          }
+          {
+            block_x[7][3] += (coeff_iDCT_2D_reference_coarse_4[6][3] * @x63);
+          }
+          {
+            block_x[7][3] += (coeff_iDCT_2D_reference_coarse_4[7][3] * @x64);
+          }
+;
+        }
+        {
+          block_x[7][4] = 0;
+          
+          {
+            block_x[7][4] += (coeff_iDCT_2D_reference_coarse_4[0][4] * @x57);
+          }
+          {
+            block_x[7][4] += (coeff_iDCT_2D_reference_coarse_4[1][4] * @x58);
+          }
+          {
+            block_x[7][4] += (coeff_iDCT_2D_reference_coarse_4[2][4] * @x59);
+          }
+          {
+            block_x[7][4] += (coeff_iDCT_2D_reference_coarse_4[3][4] * @x60);
+          }
+          {
+            block_x[7][4] += (coeff_iDCT_2D_reference_coarse_4[4][4] * @x61);
+          }
+          {
+            block_x[7][4] += (coeff_iDCT_2D_reference_coarse_4[5][4] * @x62);
+          }
+          {
+            block_x[7][4] += (coeff_iDCT_2D_reference_coarse_4[6][4] * @x63);
+          }
+          {
+            block_x[7][4] += (coeff_iDCT_2D_reference_coarse_4[7][4] * @x64);
+          }
+;
+        }
+        {
+          block_x[7][5] = 0;
+          
+          {
+            block_x[7][5] += (coeff_iDCT_2D_reference_coarse_4[0][5] * @x57);
+          }
+          {
+            block_x[7][5] += (coeff_iDCT_2D_reference_coarse_4[1][5] * @x58);
+          }
+          {
+            block_x[7][5] += (coeff_iDCT_2D_reference_coarse_4[2][5] * @x59);
+          }
+          {
+            block_x[7][5] += (coeff_iDCT_2D_reference_coarse_4[3][5] * @x60);
+          }
+          {
+            block_x[7][5] += (coeff_iDCT_2D_reference_coarse_4[4][5] * @x61);
+          }
+          {
+            block_x[7][5] += (coeff_iDCT_2D_reference_coarse_4[5][5] * @x62);
+          }
+          {
+            block_x[7][5] += (coeff_iDCT_2D_reference_coarse_4[6][5] * @x63);
+          }
+          {
+            block_x[7][5] += (coeff_iDCT_2D_reference_coarse_4[7][5] * @x64);
+          }
+;
+        }
+        {
+          block_x[7][6] = 0;
+          
+          {
+            block_x[7][6] += (coeff_iDCT_2D_reference_coarse_4[0][6] * @x57);
+          }
+          {
+            block_x[7][6] += (coeff_iDCT_2D_reference_coarse_4[1][6] * @x58);
+          }
+          {
+            block_x[7][6] += (coeff_iDCT_2D_reference_coarse_4[2][6] * @x59);
+          }
+          {
+            block_x[7][6] += (coeff_iDCT_2D_reference_coarse_4[3][6] * @x60);
+          }
+          {
+            block_x[7][6] += (coeff_iDCT_2D_reference_coarse_4[4][6] * @x61);
+          }
+          {
+            block_x[7][6] += (coeff_iDCT_2D_reference_coarse_4[5][6] * @x62);
+          }
+          {
+            block_x[7][6] += (coeff_iDCT_2D_reference_coarse_4[6][6] * @x63);
+          }
+          {
+            block_x[7][6] += (coeff_iDCT_2D_reference_coarse_4[7][6] * @x64);
+          }
+;
+        }
+        {
+          block_x[7][7] = 0;
+          
+          {
+            block_x[7][7] += (coeff_iDCT_2D_reference_coarse_4[0][7] * @x57);
+          }
+          {
+            block_x[7][7] += (coeff_iDCT_2D_reference_coarse_4[1][7] * @x58);
+          }
+          {
+            block_x[7][7] += (coeff_iDCT_2D_reference_coarse_4[2][7] * @x59);
+          }
+          {
+            block_x[7][7] += (coeff_iDCT_2D_reference_coarse_4[3][7] * @x60);
+          }
+          {
+            block_x[7][7] += (coeff_iDCT_2D_reference_coarse_4[4][7] * @x61);
+          }
+          {
+            block_x[7][7] += (coeff_iDCT_2D_reference_coarse_4[5][7] * @x62);
+          }
+          {
+            block_x[7][7] += (coeff_iDCT_2D_reference_coarse_4[6][7] * @x63);
+          }
+          {
+            block_x[7][7] += (coeff_iDCT_2D_reference_coarse_4[7][7] * @x64);
+          }
+;
+        }
+;
+      }
+;
+      
+      {
+        
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][0] * block_x[k][0]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y1=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][0] * block_x[k][1]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y2=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][0] * block_x[k][2]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y3=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][0] * block_x[k][3]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y4=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][0] * block_x[k][4]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y5=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][0] * block_x[k][5]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y6=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][0] * block_x[k][6]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y7=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][0] * block_x[k][7]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y8=((int)(block_y));
+        }
+;
+      }
+      {
+        
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][1] * block_x[k][0]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y9=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][1] * block_x[k][1]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y10=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][1] * block_x[k][2]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y11=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][1] * block_x[k][3]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y12=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][1] * block_x[k][4]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y13=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][1] * block_x[k][5]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y14=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][1] * block_x[k][6]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y15=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][1] * block_x[k][7]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y16=((int)(block_y));
+        }
+;
+      }
+      {
+        
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][2] * block_x[k][0]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y17=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][2] * block_x[k][1]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y18=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][2] * block_x[k][2]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y19=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][2] * block_x[k][3]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y20=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][2] * block_x[k][4]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y21=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][2] * block_x[k][5]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y22=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][2] * block_x[k][6]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y23=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][2] * block_x[k][7]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y24=((int)(block_y));
+        }
+;
+      }
+      {
+        
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][3] * block_x[k][0]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y25=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][3] * block_x[k][1]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y26=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][3] * block_x[k][2]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y27=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][3] * block_x[k][3]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y28=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][3] * block_x[k][4]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y29=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][3] * block_x[k][5]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y30=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][3] * block_x[k][6]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y31=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][3] * block_x[k][7]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y32=((int)(block_y));
+        }
+;
+      }
+      {
+        
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][4] * block_x[k][0]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y33=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][4] * block_x[k][1]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y34=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][4] * block_x[k][2]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y35=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][4] * block_x[k][3]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y36=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][4] * block_x[k][4]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y37=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][4] * block_x[k][5]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y38=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][4] * block_x[k][6]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y39=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][4] * block_x[k][7]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y40=((int)(block_y));
+        }
+;
+      }
+      {
+        
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][5] * block_x[k][0]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y41=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][5] * block_x[k][1]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y42=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][5] * block_x[k][2]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y43=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][5] * block_x[k][3]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y44=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][5] * block_x[k][4]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y45=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][5] * block_x[k][5]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y46=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][5] * block_x[k][6]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y47=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][5] * block_x[k][7]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y48=((int)(block_y));
+        }
+;
+      }
+      {
+        
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][6] * block_x[k][0]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y49=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][6] * block_x[k][1]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y50=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][6] * block_x[k][2]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y51=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][6] * block_x[k][3]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y52=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][6] * block_x[k][4]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y53=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][6] * block_x[k][5]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y54=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][6] * block_x[k][6]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y55=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][6] * block_x[k][7]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y56=((int)(block_y));
+        }
+;
+      }
+      {
+        
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][7] * block_x[k][0]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y57=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][7] * block_x[k][1]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y58=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][7] * block_x[k][2]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y59=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][7] * block_x[k][3]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y60=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][7] * block_x[k][4]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y61=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][7] * block_x[k][5]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y62=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][7] * block_x[k][6]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y63=((int)(block_y));
+        }
+        {
+          float block_y = 0.0f;
+          for (k = 0; (k < 8); k++) {
+            block_y += (coeff_iDCT_2D_reference_coarse_4[k][7] * block_x[k][7]);
+          };
+          block_y = floor((block_y + 0.5f));
+          @y64=((int)(block_y));
+        }
+;
+      }
+;
+      
+      {
+        @x1;
+      }
+      {
+        @x2;
+      }
+      {
+        @x3;
+      }
+      {
+        @x4;
+      }
+      {
+        @x5;
+      }
+      {
+        @x6;
+      }
+      {
+        @x7;
+      }
+      {
+        @x8;
+      }
+      {
+        @x9;
+      }
+      {
+        @x10;
+      }
+      {
+        @x11;
+      }
+      {
+        @x12;
+      }
+      {
+        @x13;
+      }
+      {
+        @x14;
+      }
+      {
+        @x15;
+      }
+      {
+        @x16;
+      }
+      {
+        @x17;
+      }
+      {
+        @x18;
+      }
+      {
+        @x19;
+      }
+      {
+        @x20;
+      }
+      {
+        @x21;
+      }
+      {
+        @x22;
+      }
+      {
+        @x23;
+      }
+      {
+        @x24;
+      }
+      {
+        @x25;
+      }
+      {
+        @x26;
+      }
+      {
+        @x27;
+      }
+      {
+        @x28;
+      }
+      {
+        @x29;
+      }
+      {
+        @x30;
+      }
+      {
+        @x31;
+      }
+      {
+        @x32;
+      }
+      {
+        @x33;
+      }
+      {
+        @x34;
+      }
+      {
+        @x35;
+      }
+      {
+        @x36;
+      }
+      {
+        @x37;
+      }
+      {
+        @x38;
+      }
+      {
+        @x39;
+      }
+      {
+        @x40;
+      }
+      {
+        @x41;
+      }
+      {
+        @x42;
+      }
+      {
+        @x43;
+      }
+      {
+        @x44;
+      }
+      {
+        @x45;
+      }
+      {
+        @x46;
+      }
+      {
+        @x47;
+      }
+      {
+        @x48;
+      }
+      {
+        @x49;
+      }
+      {
+        @x50;
+      }
+      {
+        @x51;
+      }
+      {
+        @x52;
+      }
+      {
+        @x53;
+      }
+      {
+        @x54;
+      }
+      {
+        @x55;
+      }
+      {
+        @x56;
+      }
+      {
+        @x57;
+      }
+      {
+        @x58;
+      }
+      {
+        @x59;
+      }
+      {
+        @x60;
+      }
+      {
+        @x61;
+      }
+      {
+        @x62;
+      }
+      {
+        @x63;
+      }
+      {
+        @x64;
+      }
+;
+    }
+    output:
+      FloatPrinter_3: y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16,y17,y18,y19,y20,y21,y22,y23,y24,y25,y26,y27,y28,y29,y30,y31,y32,y33,y34,y35,y36,y37,y38,y39,y40,y41,y42,y43,y44,y45,y46,y47,y48,y49,y50,y51,y52,y53,y54,y55,y56,y57,y58,y59,y60,y61,y62,y63,y64;
+  }
+
+  actor Source_1
+  {
+    init:
+    {
+      printf("Enter seed: ");
+      scanf("%d", &seed);
+      srand(seed);
+    }
+    firing:
+    {
+      @y1 = rand_r(&seed);
+      @y2 = rand_r(&seed);
+      @y3 = rand_r(&seed);
+      @y4 = rand_r(&seed);
+      @y5 = rand_r(&seed);
+      @y6 = rand_r(&seed);
+      @y7 = rand_r(&seed);
+      @y8 = rand_r(&seed);
+      @y9 = rand_r(&seed);
+      @y10 = rand_r(&seed);
+      @y11 = rand_r(&seed);
+      @y12 = rand_r(&seed);
+      @y13 = rand_r(&seed);
+      @y14 = rand_r(&seed);
+      @y15 = rand_r(&seed);
+      @y16 = rand_r(&seed);
+    }
+    output:
+      iDCT_2D_reference_coarse_4: y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15,y16;
+  }
+
+  actor FloatPrinter_3
+  {
+    input:
+      iDCT_2D_reference_coarse_4: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16;
+    firing:
+    {
+      int x = 0;
+      
+      {
+        x = @x1;
+        ;
+      }
+      {
+        x = @x2;
+        ;
+      }
+      {
+        x = @x3;
+        ;
+      }
+      {
+        x = @x4;
+        ;
+      }
+      {
+        x = @x5;
+        ;
+      }
+      {
+        x = @x6;
+        ;
+      }
+      {
+        x = @x7;
+        ;
+      }
+      {
+        x = @x8;
+        ;
+      }
+      {
+        x = @x9;
+        ;
+      }
+      {
+        x = @x10;
+        ;
+      }
+      {
+        x = @x11;
+        ;
+      }
+      {
+        x = @x12;
+        ;
+      }
+      {
+        x = @x13;
+        ;
+      }
+      {
+        x = @x14;
+        ;
+      }
+      {
+        x = @x15;
+        ;
+      }
+      {
+        x = @x16;
+        ;
+      }
+;
+      sum += @x1;
+      sum += @x2;
+      sum += @x3;
+      sum += @x4;
+      sum += @x5;
+      sum += @x6;
+      sum += @x7;
+      sum += @x8;
+      sum += @x9;
+      sum += @x10;
+      sum += @x11;
+      sum += @x12;
+      sum += @x13;
+      sum += @x14;
+      sum += @x15;
+      sum += @x16;
+    }
+  }
+
+}
+
+postamble {
+int main(){
+  DCT();
+  printf("sum: %lld\n", sum);
+  return 0;
+}
+}

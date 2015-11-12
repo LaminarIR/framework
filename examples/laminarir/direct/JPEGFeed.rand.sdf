@@ -1,0 +1,2363 @@
+preamble
+{
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+#define PI 3.1415927
+#define LOC_RAND_MAX 20
+
+volatile long long sum=0;
+static unsigned int seed;
+
+static const int out[64] = 
+    {139, 144, 149, 153, 155, 155, 155, 155,
+     144, 151, 153, 156, 149, 156, 156, 156,
+     150, 155, 160, 163, 158, 156, 156, 156,
+     159, 161, 162, 160, 160, 159, 159, 159,
+     159, 160, 161, 162, 162, 155, 155, 155,
+     161, 161, 161, 161, 160, 157, 157, 157,
+     162, 162, 161, 163, 162, 157, 157, 157,
+     162, 162, 161, 161, 163, 158, 158, 158};
+
+static const int quantizationTable[64] = 
+   {16, 11, 10, 16, 24, 40, 51, 61,
+    12, 12, 14, 19, 26, 58, 60, 55,
+	14, 13, 16, 24, 40, 57, 69, 56,
+	14, 17, 22, 29, 51, 87, 80, 62,
+	18, 22, 37, 56, 68, 109, 103, 77,
+	24, 35, 55, 64, 81, 104, 113, 92,
+	49, 64, 78, 87, 103, 121, 120, 101,
+	72, 92, 95, 98, 112, 100, 103, 99};
+
+static const int Ordering[64] = 
+   { 0,  1,  8, 16,  9,  2,  3, 10, 
+    17, 24, 32, 25, 18, 11,  4,  5,
+    12, 19, 26, 33, 40, 48, 41, 34,
+    27, 20, 13,  6,  7, 14, 21, 28,
+    35, 42, 49, 56, 57, 50, 43, 36, 
+    29, 22, 15, 23, 30, 37, 44, 51, 
+    58, 59, 52, 45, 38, 31, 39, 46,
+    53, 60, 61, 54, 47, 55, 62, 63};
+
+static const int UnOrdering[64] = 
+   { 0,  1,  5,  6, 14, 15, 27, 28,
+     2,  4,  7, 13, 16, 26, 29, 42,
+     3,  8, 12, 17, 25, 30, 41, 43,
+     9, 11, 18, 24, 31, 40, 44, 53,
+    10, 19, 23, 32, 39, 45, 52, 54,
+    20, 22, 33, 38, 46, 51, 55, 60,
+    21, 34, 37, 47, 50, 56, 59, 61,
+    35, 36, 48, 49, 57, 58, 62, 63};
+
+}
+
+sdf JPEGFeed {
+  int ACMSample8BitBlock -> Int2Float;
+  float Int2Float -> Add;
+
+  float Add -> DCT_X_Splitter (64);
+  for (int size_x=0:7)
+  begin
+    float DCT_X_Splitter (8) -> DCT_X[size_x];
+    float DCT_X[size_x] -> DCT_X_Joiner (8);
+  end
+  float DCT_X_Joiner (64) -> DCT_Y_Splitter (8);
+  for (int size_y=0:7)
+  begin
+    float DCT_Y_Splitter (1) -> DCT_Y[size_y];
+    float DCT_Y[size_y] -> DCT_Y_Joiner (1);
+  end
+  float DCT_Y_Joiner (8) -> staticExampleLuminanceQuantization;
+  int staticExampleLuminanceQuantization -> EncoderSplitter (64);
+
+  int EncoderSplitter (1) -> EncoderFeedJoiner (1);
+  int EncoderSplitter (63) -> EncoderId ;
+  int EncoderFeedSplitter (1) -> EncoderFeedJoiner (1) = { { 0 } };
+  int EncoderFeedJoiner (2) -> AnonEncoder;
+  int AnonEncoder -> EncoderFeedSplitter (2);
+  int EncoderFeedSplitter (1) -> EncoderJoiner (1);
+  int EncoderId -> EncoderJoiner (63);
+
+  int EncoderJoiner (64) -> ZigZagOrdering;
+  int ZigZagOrdering -> RunLengthEncoder;
+  int RunLengthEncoder -> RunLengthDecoder;
+  int RunLengthDecoder -> ZigZagUnordering;
+  int ZigZagUnordering -> DecoderSplitter (64);
+
+  int DecoderSplitter (1) -> DecoderFeedJoiner (1);
+  int DecoderSplitter (63) -> DecoderId;
+  int DecoderFeedSplitter (1) -> DecoderFeedJoiner (1) = { { 0 } };
+  int DecoderFeedJoiner (2) -> AnonDecoder;
+  int AnonDecoder -> DecoderFeedSplitter (2);
+  int DecoderFeedSplitter (1) -> DecoderJoiner (1);
+  int DecoderId -> DecoderJoiner (63);
+
+  int DecoderJoiner (64) -> staticExampleLuminanceDeQuantization;
+  float staticExampleLuminanceDeQuantization -> iDCT_X_Splitter (64);
+  for (int isize_x=0:7)
+  begin
+    float iDCT_X_Splitter (8) -> iDCT_X[isize_x];
+    float iDCT_X[isize_x] -> iDCT_X_Joiner (8);
+  end
+  float iDCT_X_Joiner (64) -> iDCT_Y_Splitter (8);
+  for (int isize_y=0:7)
+  begin
+    float iDCT_Y_Splitter (1) -> iDCT_Y[isize_y];
+    float iDCT_Y[isize_y] -> iDCT_Y_Joiner (1);
+  end
+  float iDCT_Y_Joiner (8) -> iAdd;
+  float iAdd -> Float2Int;
+  int Float2Int -> Display8BitIntBlock;
+
+  actor EncoderId {
+    input: 
+      EncoderSplitter: x1;
+    firing:
+    {
+      @y1=@x1;
+    }
+    output:
+      EncoderJoiner: y1;
+  }
+
+  actor DecoderId {
+    input: 
+      DecoderSplitter: x1;
+    firing:
+    {
+      @y1=@x1;
+    }
+    output:
+      DecoderJoiner: y1;
+  }
+
+
+  actor ACMSample8BitBlock {
+    init:
+    {
+        printf("Enter seed: ");
+        scanf ("%d", &seed);
+        srand(seed);  
+    }
+    firing:
+    {
+        @y1 = rand_r(&seed);
+        @y2 = rand_r(&seed);
+        @y3 = rand_r(&seed);
+        @y4 = rand_r(&seed);
+        @y5 = rand_r(&seed);
+        @y6 = rand_r(&seed);
+        @y7 = rand_r(&seed);
+        @y8 = rand_r(&seed);
+    }
+    output:
+        Int2Float: y[1-8];
+  }
+
+  actor Int2Float {
+    input:
+      ACMSample8BitBlock: x1;
+    firing:{
+        @y1=(float)@x1;
+    }
+    output:
+      Add: y1;
+  }
+
+  actor Add {
+    input: 
+      Int2Float: x1;
+    firing:
+    {
+      @y1=@x1-128;
+    }
+    output:
+      DCT_X_Splitter: y1;
+  }
+
+  actor DCT_X {
+    input:
+      DCT_X_Splitter: x[1-8];
+    firing:
+    {
+      float Cu = 0;
+      int u = 0;
+      int x = 0;
+      float tempsum = 0;
+
+      // u = 0
+      u = 0;
+      if (u == 0){
+        Cu = 1/sqrt(2);
+      }else{
+        Cu = 1;
+      }
+      tempsum = @x1*cos(u*PI*(2.0*0+1)/(2.0*8));
+      tempsum += @x2*cos(u*PI*(2.0*1+1)/(2.0*8));
+      tempsum += @x3*cos(u*PI*(2.0*2+1)/(2.0*8));
+      tempsum += @x4*cos(u*PI*(2.0*3+1)/(2.0*8));
+      tempsum += @x5*cos(u*PI*(2.0*4+1)/(2.0*8));
+      tempsum += @x6*cos(u*PI*(2.0*5+1)/(2.0*8));
+      tempsum += @x7*cos(u*PI*(2.0*6+1)/(2.0*8));
+      tempsum += @x8*cos(u*PI*(2.0*7+1)/(2.0*8));
+      @y1=(1.0/2.0)*Cu*tempsum;
+
+      // u = 1
+      u = 1;
+      if (u == 0){
+        Cu = 1/sqrt(2);
+      }else{
+        Cu = 1;
+      }
+      tempsum = @x1*cos(u*PI*(2.0*0+1)/(2.0*8));
+      tempsum += @x2*cos(u*PI*(2.0*1+1)/(2.0*8));
+      tempsum += @x3*cos(u*PI*(2.0*2+1)/(2.0*8));
+      tempsum += @x4*cos(u*PI*(2.0*3+1)/(2.0*8));
+      tempsum += @x5*cos(u*PI*(2.0*4+1)/(2.0*8));
+      tempsum += @x6*cos(u*PI*(2.0*5+1)/(2.0*8));
+      tempsum += @x7*cos(u*PI*(2.0*6+1)/(2.0*8));
+      tempsum += @x8*cos(u*PI*(2.0*7+1)/(2.0*8));
+      @y2=(1.0/2.0)*Cu*tempsum;
+
+      // u = 2
+      u = 2;
+      if (u == 0){
+        Cu = 1/sqrt(2);
+      }else{
+        Cu = 1;
+      }
+      tempsum = @x1*cos(u*PI*(2.0*0+1)/(2.0*8));
+      tempsum += @x2*cos(u*PI*(2.0*1+1)/(2.0*8));
+      tempsum += @x3*cos(u*PI*(2.0*2+1)/(2.0*8));
+      tempsum += @x4*cos(u*PI*(2.0*3+1)/(2.0*8));
+      tempsum += @x5*cos(u*PI*(2.0*4+1)/(2.0*8));
+      tempsum += @x6*cos(u*PI*(2.0*5+1)/(2.0*8));
+      tempsum += @x7*cos(u*PI*(2.0*6+1)/(2.0*8));
+      tempsum += @x8*cos(u*PI*(2.0*7+1)/(2.0*8));
+      @y3=(1.0/2.0)*Cu*tempsum;
+
+       // u = 3
+      u = 3;
+      if (u == 0){
+        Cu = 1/sqrt(2);
+      }else{
+        Cu = 1;
+      }
+      tempsum = @x1*cos(u*PI*(2.0*0+1)/(2.0*8));
+      tempsum += @x2*cos(u*PI*(2.0*1+1)/(2.0*8));
+      tempsum += @x3*cos(u*PI*(2.0*2+1)/(2.0*8));
+      tempsum += @x4*cos(u*PI*(2.0*3+1)/(2.0*8));
+      tempsum += @x5*cos(u*PI*(2.0*4+1)/(2.0*8));
+      tempsum += @x6*cos(u*PI*(2.0*5+1)/(2.0*8));
+      tempsum += @x7*cos(u*PI*(2.0*6+1)/(2.0*8));
+      tempsum += @x8*cos(u*PI*(2.0*7+1)/(2.0*8));
+      @y4=(1.0/2.0)*Cu*tempsum;
+     
+      // u = 4
+      u = 4;
+      if (u == 0){
+        Cu = 1/sqrt(2);
+      }else{
+        Cu = 1;
+      }
+      tempsum = @x1*cos(u*PI*(2.0*0+1)/(2.0*8));
+      tempsum += @x2*cos(u*PI*(2.0*1+1)/(2.0*8));
+      tempsum += @x3*cos(u*PI*(2.0*2+1)/(2.0*8));
+      tempsum += @x4*cos(u*PI*(2.0*3+1)/(2.0*8));
+      tempsum += @x5*cos(u*PI*(2.0*4+1)/(2.0*8));
+      tempsum += @x6*cos(u*PI*(2.0*5+1)/(2.0*8));
+      tempsum += @x7*cos(u*PI*(2.0*6+1)/(2.0*8));
+      tempsum += @x8*cos(u*PI*(2.0*7+1)/(2.0*8));
+      @y5=(1.0/2.0)*Cu*tempsum;
+
+      // u = 5
+      u = 5;
+      if (u == 0){
+        Cu = 1/sqrt(2);
+      }else{
+        Cu = 1;
+      }
+      tempsum = @x1*cos(u*PI*(2.0*0+1)/(2.0*8));
+      tempsum += @x2*cos(u*PI*(2.0*1+1)/(2.0*8));
+      tempsum += @x3*cos(u*PI*(2.0*2+1)/(2.0*8));
+      tempsum += @x4*cos(u*PI*(2.0*3+1)/(2.0*8));
+      tempsum += @x5*cos(u*PI*(2.0*4+1)/(2.0*8));
+      tempsum += @x6*cos(u*PI*(2.0*5+1)/(2.0*8));
+      tempsum += @x7*cos(u*PI*(2.0*6+1)/(2.0*8));
+      tempsum += @x8*cos(u*PI*(2.0*7+1)/(2.0*8));
+      @y6=(1.0/2.0)*Cu*tempsum;
+
+      // u = 6
+      u = 6;
+      if (u == 0){
+        Cu = 1/sqrt(2);
+      }else{
+        Cu = 1;
+      }
+      tempsum = @x1*cos(u*PI*(2.0*0+1)/(2.0*8));
+      tempsum += @x2*cos(u*PI*(2.0*1+1)/(2.0*8));
+      tempsum += @x3*cos(u*PI*(2.0*2+1)/(2.0*8));
+      tempsum += @x4*cos(u*PI*(2.0*3+1)/(2.0*8));
+      tempsum += @x5*cos(u*PI*(2.0*4+1)/(2.0*8));
+      tempsum += @x6*cos(u*PI*(2.0*5+1)/(2.0*8));
+      tempsum += @x7*cos(u*PI*(2.0*6+1)/(2.0*8));
+      tempsum += @x8*cos(u*PI*(2.0*7+1)/(2.0*8));
+      @y7=(1.0/2.0)*Cu*tempsum;
+
+
+      // u = 7
+      u = 7;
+      if (u == 0){
+        Cu = 1/sqrt(2);
+      }else{
+        Cu = 1;
+      }
+      tempsum = @x1*cos(u*PI*(2.0*0+1)/(2.0*8));
+      tempsum += @x2*cos(u*PI*(2.0*1+1)/(2.0*8));
+      tempsum += @x3*cos(u*PI*(2.0*2+1)/(2.0*8));
+      tempsum += @x4*cos(u*PI*(2.0*3+1)/(2.0*8));
+      tempsum += @x5*cos(u*PI*(2.0*4+1)/(2.0*8));
+      tempsum += @x6*cos(u*PI*(2.0*5+1)/(2.0*8));
+      tempsum += @x7*cos(u*PI*(2.0*6+1)/(2.0*8));
+      tempsum += @x8*cos(u*PI*(2.0*7+1)/(2.0*8));
+      @y8=(1.0/2.0)*Cu*tempsum;
+    }
+    output:
+      DCT_X_Joiner: y[1-8];
+  }
+
+  actor DCT_Y {
+    input:
+      DCT_Y_Splitter: x[1-8];
+    firing:
+    {
+
+      float Cu;
+      int u;
+      int x;
+      float tempsum = 0;
+
+      // u = 0
+      u = 0;
+      if (u == 0){
+        Cu = 1/sqrt(2);
+      }else{
+        Cu = 1;
+      }
+
+      tempsum = @x1*cos(u*PI*(2.0*0+1)/(2.0*8));
+      tempsum += @x2*cos(u*PI*(2.0*1+1)/(2.0*8));
+      tempsum += @x3*cos(u*PI*(2.0*2+1)/(2.0*8));
+      tempsum += @x4*cos(u*PI*(2.0*3+1)/(2.0*8));
+      tempsum += @x5*cos(u*PI*(2.0*4+1)/(2.0*8));
+      tempsum += @x6*cos(u*PI*(2.0*5+1)/(2.0*8));
+      tempsum += @x7*cos(u*PI*(2.0*6+1)/(2.0*8));
+      tempsum += @x8*cos(u*PI*(2.0*7+1)/(2.0*8));
+      @y1=(1.0/2.0)*Cu*tempsum;
+
+      // u = 1
+      u = 1;
+      if (u == 0){
+        Cu = 1/sqrt(2);
+      }else{
+        Cu = 1;
+      }
+
+      tempsum = @x1*cos(u*PI*(2.0*0+1)/(2.0*8));
+      tempsum += @x2*cos(u*PI*(2.0*1+1)/(2.0*8));
+      tempsum += @x3*cos(u*PI*(2.0*2+1)/(2.0*8));
+      tempsum += @x4*cos(u*PI*(2.0*3+1)/(2.0*8));
+      tempsum += @x5*cos(u*PI*(2.0*4+1)/(2.0*8));
+      tempsum += @x6*cos(u*PI*(2.0*5+1)/(2.0*8));
+      tempsum += @x7*cos(u*PI*(2.0*6+1)/(2.0*8));
+      tempsum += @x8*cos(u*PI*(2.0*7+1)/(2.0*8));
+      @y2=(1.0/2.0)*Cu*tempsum;
+
+      // u = 2
+      u = 2;
+      if (u == 0){
+        Cu = 1/sqrt(2);
+      }else{
+        Cu = 1;
+      }
+
+      tempsum = @x1*cos(u*PI*(2.0*0+1)/(2.0*8));
+      tempsum += @x2*cos(u*PI*(2.0*1+1)/(2.0*8));
+      tempsum += @x3*cos(u*PI*(2.0*2+1)/(2.0*8));
+      tempsum += @x4*cos(u*PI*(2.0*3+1)/(2.0*8));
+      tempsum += @x5*cos(u*PI*(2.0*4+1)/(2.0*8));
+      tempsum += @x6*cos(u*PI*(2.0*5+1)/(2.0*8));
+      tempsum += @x7*cos(u*PI*(2.0*6+1)/(2.0*8));
+      tempsum += @x8*cos(u*PI*(2.0*7+1)/(2.0*8));
+      @y3=(1.0/2.0)*Cu*tempsum;
+
+       // u = 3
+      u = 3;
+      if (u == 0){
+        Cu = 1/sqrt(2);
+      }else{
+        Cu = 1;
+      }
+
+      tempsum = @x1*cos(u*PI*(2.0*0+1)/(2.0*8));
+      tempsum += @x2*cos(u*PI*(2.0*1+1)/(2.0*8));
+      tempsum += @x3*cos(u*PI*(2.0*2+1)/(2.0*8));
+      tempsum += @x4*cos(u*PI*(2.0*3+1)/(2.0*8));
+      tempsum += @x5*cos(u*PI*(2.0*4+1)/(2.0*8));
+      tempsum += @x6*cos(u*PI*(2.0*5+1)/(2.0*8));
+      tempsum += @x7*cos(u*PI*(2.0*6+1)/(2.0*8));
+      tempsum += @x8*cos(u*PI*(2.0*7+1)/(2.0*8));
+      @y4=(1.0/2.0)*Cu*tempsum;
+     
+      // u = 4
+      u = 4;
+      if (u == 0){
+        Cu = 1/sqrt(2);
+      }else{
+        Cu = 1;
+      }
+
+      tempsum = @x1*cos(u*PI*(2.0*0+1)/(2.0*8));
+      tempsum += @x2*cos(u*PI*(2.0*1+1)/(2.0*8));
+      tempsum += @x3*cos(u*PI*(2.0*2+1)/(2.0*8));
+      tempsum += @x4*cos(u*PI*(2.0*3+1)/(2.0*8));
+      tempsum += @x5*cos(u*PI*(2.0*4+1)/(2.0*8));
+      tempsum += @x6*cos(u*PI*(2.0*5+1)/(2.0*8));
+      tempsum += @x7*cos(u*PI*(2.0*6+1)/(2.0*8));
+      tempsum += @x8*cos(u*PI*(2.0*7+1)/(2.0*8));
+      @y5=(1.0/2.0)*Cu*tempsum;
+
+      // u = 5
+      u = 5;
+      if (u == 0){
+        Cu = 1/sqrt(2);
+      }else{
+        Cu = 1;
+      }
+
+      tempsum = @x1*cos(u*PI*(2.0*0+1)/(2.0*8));
+      tempsum += @x2*cos(u*PI*(2.0*1+1)/(2.0*8));
+      tempsum += @x3*cos(u*PI*(2.0*2+1)/(2.0*8));
+      tempsum += @x4*cos(u*PI*(2.0*3+1)/(2.0*8));
+      tempsum += @x5*cos(u*PI*(2.0*4+1)/(2.0*8));
+      tempsum += @x6*cos(u*PI*(2.0*5+1)/(2.0*8));
+      tempsum += @x7*cos(u*PI*(2.0*6+1)/(2.0*8));
+      tempsum += @x8*cos(u*PI*(2.0*7+1)/(2.0*8));
+      @y6=(1.0/2.0)*Cu*tempsum;
+
+      // u = 6
+      u = 6;
+      if (u == 0){
+        Cu = 1/sqrt(2);
+      }else{
+        Cu = 1;
+      }
+      tempsum = @x1*cos(u*PI*(2.0*0+1)/(2.0*8));
+      tempsum += @x2*cos(u*PI*(2.0*1+1)/(2.0*8));
+      tempsum += @x3*cos(u*PI*(2.0*2+1)/(2.0*8));
+      tempsum += @x4*cos(u*PI*(2.0*3+1)/(2.0*8));
+      tempsum += @x5*cos(u*PI*(2.0*4+1)/(2.0*8));
+      tempsum += @x6*cos(u*PI*(2.0*5+1)/(2.0*8));
+      tempsum += @x7*cos(u*PI*(2.0*6+1)/(2.0*8));
+      tempsum += @x8*cos(u*PI*(2.0*7+1)/(2.0*8));
+      @y7=(1.0/2.0)*Cu*tempsum;
+
+
+      // u = 7
+      u = 7;
+      if (u == 0){
+        Cu = 1/sqrt(2);
+      }else{
+        Cu = 1;
+      }
+      tempsum = @x1*cos(u*PI*(2.0*0+1)/(2.0*8));
+      tempsum += @x2*cos(u*PI*(2.0*1+1)/(2.0*8));
+      tempsum += @x3*cos(u*PI*(2.0*2+1)/(2.0*8));
+      tempsum += @x4*cos(u*PI*(2.0*3+1)/(2.0*8));
+      tempsum += @x5*cos(u*PI*(2.0*4+1)/(2.0*8));
+      tempsum += @x6*cos(u*PI*(2.0*5+1)/(2.0*8));
+      tempsum += @x7*cos(u*PI*(2.0*6+1)/(2.0*8));
+      tempsum += @x8*cos(u*PI*(2.0*7+1)/(2.0*8));
+      @y8=(1.0/2.0)*Cu*tempsum;
+    }
+    output:
+      DCT_Y_Joiner: y[1-8];
+  }
+
+  actor staticExampleLuminanceQuantization {
+    input:
+      DCT_Y_Joiner: x[1-64];
+    firing:
+    {
+      float val;
+      val = @x1 / quantizationTable[0];
+      @y1 = ((int) (round(val)));
+      val = @x2 / quantizationTable[1];
+      @y2 = ((int) (round(val)));
+      val = @x3 / quantizationTable[2];
+      @y3 = ((int) (round(val)));
+      val = @x4 / quantizationTable[3];
+      @y4 = ((int) (round(val)));
+      val = @x5 / quantizationTable[4];
+      @y5 = ((int) (round(val)));
+      val = @x6 / quantizationTable[5];
+      @y6 = ((int) (round(val)));
+      val = @x7 / quantizationTable[6];
+      @y7 = ((int) (round(val)));
+      val = @x8 / quantizationTable[7];
+      @y8 = ((int) (round(val)));
+      val = @x9 / quantizationTable[8];
+      @y9 = ((int) (round(val)));
+      val = @x10 / quantizationTable[9];
+      @y10 = ((int) (round(val)));
+      val = @x11 / quantizationTable[10];
+      @y11 = ((int) (round(val)));
+      val = @x12 / quantizationTable[11];
+      @y12 = ((int) (round(val)));
+      val = @x13 / quantizationTable[12];
+      @y13 = ((int) (round(val)));
+      val = @x14 / quantizationTable[13];
+      @y14 = ((int) (round(val)));
+      val = @x15 / quantizationTable[14];
+      @y15 = ((int) (round(val)));
+      val = @x16 / quantizationTable[15];
+      @y16 = ((int) (round(val)));
+      val = @x17 / quantizationTable[16];
+      @y17 = ((int) (round(val)));
+      val = @x18 / quantizationTable[17];
+      @y18 = ((int) (round(val)));
+      val = @x19 / quantizationTable[18];
+      @y19 = ((int) (round(val)));
+      val = @x20 / quantizationTable[19];
+      @y20 = ((int) (round(val)));
+      val = @x21 / quantizationTable[20];
+      @y21 = ((int) (round(val)));
+      val = @x22 / quantizationTable[21];
+      @y22 = ((int) (round(val)));
+      val = @x23 / quantizationTable[22];
+      @y23 = ((int) (round(val)));
+      val = @x24 / quantizationTable[23];
+      @y24 = ((int) (round(val)));
+      val = @x25 / quantizationTable[24];
+      @y25 = ((int) (round(val)));
+      val = @x26 / quantizationTable[25];
+      @y26 = ((int) (round(val)));
+      val = @x27 / quantizationTable[26];
+      @y27 = ((int) (round(val)));
+      val = @x28 / quantizationTable[27];
+      @y28 = ((int) (round(val)));
+      val = @x29 / quantizationTable[28];
+      @y29 = ((int) (round(val)));
+      val = @x30 / quantizationTable[29];
+      @y30 = ((int) (round(val)));
+      val = @x31 / quantizationTable[30];
+      @y31 = ((int) (round(val)));
+      val = @x32 / quantizationTable[31];
+      @y32 = ((int) (round(val)));
+      val = @x33 / quantizationTable[32];
+      @y33 = ((int) (round(val)));
+      val = @x34 / quantizationTable[33];
+      @y34 = ((int) (round(val)));
+      val = @x35 / quantizationTable[34];
+      @y35 = ((int) (round(val)));
+      val = @x36 / quantizationTable[35];
+      @y36 = ((int) (round(val)));
+      val = @x37 / quantizationTable[36];
+      @y37 = ((int) (round(val)));
+      val = @x38 / quantizationTable[37];
+      @y38 = ((int) (round(val)));
+      val = @x39 / quantizationTable[38];
+      @y39 = ((int) (round(val)));
+      val = @x40 / quantizationTable[39];
+      @y40 = ((int) (round(val)));
+      val = @x41 / quantizationTable[40];
+      @y41 = ((int) (round(val)));
+      val = @x42 / quantizationTable[41];
+      @y42 = ((int) (round(val)));
+      val = @x43 / quantizationTable[42];
+      @y43 = ((int) (round(val)));
+      val = @x44 / quantizationTable[43];
+      @y44 = ((int) (round(val)));
+      val = @x45 / quantizationTable[44];
+      @y45 = ((int) (round(val)));
+      val = @x46 / quantizationTable[45];
+      @y46 = ((int) (round(val)));
+      val = @x47 / quantizationTable[46];
+      @y47 = ((int) (round(val)));
+      val = @x48 / quantizationTable[47];
+      @y48 = ((int) (round(val)));
+      val = @x49 / quantizationTable[48];
+      @y49 = ((int) (round(val)));
+      val = @x50 / quantizationTable[49];
+      @y50 = ((int) (round(val)));
+      val = @x51 / quantizationTable[50];
+      @y51 = ((int) (round(val)));
+      val = @x52 / quantizationTable[51];
+      @y52 = ((int) (round(val)));
+      val = @x53 / quantizationTable[52];
+      @y53 = ((int) (round(val)));
+      val = @x54 / quantizationTable[53];
+      @y54 = ((int) (round(val)));
+      val = @x55 / quantizationTable[54];
+      @y55 = ((int) (round(val)));
+      val = @x56 / quantizationTable[55];
+      @y56 = ((int) (round(val)));
+      val = @x57 / quantizationTable[56];
+      @y57 = ((int) (round(val)));
+      val = @x58 / quantizationTable[57];
+      @y58 = ((int) (round(val)));
+      val = @x59 / quantizationTable[58];
+      @y59 = ((int) (round(val)));
+      val = @x60 / quantizationTable[59];
+      @y60 = ((int) (round(val)));
+      val = @x61 / quantizationTable[60];
+      @y61 = ((int) (round(val)));
+      val = @x62 / quantizationTable[61];
+      @y62 = ((int) (round(val)));
+      val = @x63 / quantizationTable[62];
+      @y63 = ((int) (round(val)));
+      val = @x64 / quantizationTable[63];
+      @y64 = ((int) (round(val)));
+    }
+    output:
+      EncoderSplitter: y[1-64];
+  }
+
+  actor AnonEncoder {
+    input:
+      EncoderFeedJoiner: x1,x2;
+    firing:
+    {
+      @y1=@x1;
+      @y2=@x1-@x2;
+    }
+    output:
+      EncoderFeedSplitter:y1,y2;
+  }
+
+  actor ZigZagOrdering {
+    input:
+      EncoderJoiner: x[1-64];
+    firing:
+    {
+        int in_array[64]={
+            @x1, @x2, @x3, @x4, @x5, @x6, @x7, @x8, @x9, @x10,
+            @x11, @x12, @x13, @x14, @x15, @x16, @x17, @x18, @x19, @x20,
+            @x21, @x22, @x23, @x24, @x25, @x26, @x27, @x28, @x29, @x30,
+            @x31, @x32, @x33, @x34, @x35, @x36, @x37, @x38, @x39, @x40,
+            @x41, @x42, @x43, @x44, @x45, @x46, @x47, @x48, @x49, @x50,
+            @x51, @x52, @x53, @x54, @x55, @x56, @x57, @x58, @x59, @x60,
+            @x61, @x62, @x63, @x64};
+        @y1=in_array[Ordering[0]];
+        @y2=in_array[Ordering[1]];
+        @y3=in_array[Ordering[2]];
+        @y4=in_array[Ordering[3]];
+        @y5=in_array[Ordering[4]];
+        @y6=in_array[Ordering[5]];
+        @y7=in_array[Ordering[6]];
+        @y8=in_array[Ordering[7]];
+        @y9=in_array[Ordering[8]];
+        @y10=in_array[Ordering[9]];
+        @y11=in_array[Ordering[10]];
+        @y12=in_array[Ordering[11]];
+        @y13=in_array[Ordering[12]];
+        @y14=in_array[Ordering[13]];
+        @y15=in_array[Ordering[14]];
+        @y16=in_array[Ordering[15]];
+        @y17=in_array[Ordering[16]];
+        @y18=in_array[Ordering[17]];
+        @y19=in_array[Ordering[18]];
+        @y20=in_array[Ordering[19]];
+        @y21=in_array[Ordering[20]];
+        @y22=in_array[Ordering[21]];
+        @y23=in_array[Ordering[22]];
+        @y24=in_array[Ordering[23]];
+        @y25=in_array[Ordering[24]];
+        @y26=in_array[Ordering[25]];
+        @y27=in_array[Ordering[26]];
+        @y28=in_array[Ordering[27]];
+        @y29=in_array[Ordering[28]];
+        @y30=in_array[Ordering[29]];
+        @y31=in_array[Ordering[30]];
+        @y32=in_array[Ordering[31]];
+        @y33=in_array[Ordering[32]];
+        @y34=in_array[Ordering[33]];
+        @y35=in_array[Ordering[34]];
+        @y36=in_array[Ordering[35]];
+        @y37=in_array[Ordering[36]];
+        @y38=in_array[Ordering[37]];
+        @y39=in_array[Ordering[38]];
+        @y40=in_array[Ordering[39]];
+        @y41=in_array[Ordering[40]];
+        @y42=in_array[Ordering[41]];
+        @y43=in_array[Ordering[42]];
+        @y44=in_array[Ordering[43]];
+        @y45=in_array[Ordering[44]];
+        @y46=in_array[Ordering[45]];
+        @y47=in_array[Ordering[46]];
+        @y48=in_array[Ordering[47]];
+        @y49=in_array[Ordering[48]];
+        @y50=in_array[Ordering[49]];
+        @y51=in_array[Ordering[50]];
+        @y52=in_array[Ordering[51]];
+        @y53=in_array[Ordering[52]];
+        @y54=in_array[Ordering[53]];
+        @y55=in_array[Ordering[54]];
+        @y56=in_array[Ordering[55]];
+        @y57=in_array[Ordering[56]];
+        @y58=in_array[Ordering[57]];
+        @y59=in_array[Ordering[58]];
+        @y60=in_array[Ordering[59]];
+        @y61=in_array[Ordering[60]];
+        @y62=in_array[Ordering[61]];
+        @y63=in_array[Ordering[62]];
+        @y64=in_array[Ordering[63]];
+    }
+    output:
+      RunLengthEncoder: y[1-64];
+  }
+
+  actor RunLengthEncoder {
+    input: 
+      ZigZagOrdering: x[1-64];
+    firing:
+    {
+      int i = 0;
+      int lastInt = 0;
+      int count = 0;
+      int starting = 1;
+      int curInt = 0;
+      int in_array[64]={
+          @x1, @x2, @x3, @x4, @x5, @x6, @x7, @x8, @x9, @x10,
+          @x11, @x12, @x13, @x14, @x15, @x16, @x17, @x18, @x19, @x20,
+          @x21, @x22, @x23, @x24, @x25, @x26, @x27, @x28, @x29, @x30,
+          @x31, @x32, @x33, @x34, @x35, @x36, @x37, @x38, @x39, @x40,
+          @x41, @x42, @x43, @x44, @x45, @x46, @x47, @x48, @x49, @x50,
+          @x51, @x52, @x53, @x54, @x55, @x56, @x57, @x58, @x59, @x60,
+          @x61, @x62, @x63, @x64};
+      int out_array[64]={0};
+      int out_idx =0;
+
+      for (i = 0; i < 64; i++){
+        curInt = in_array[i];
+        if (starting) {
+            lastInt = curInt;
+            count = 1;
+            starting = 0;
+        } else {
+            if (curInt == lastInt) {
+                count++;
+            } else {
+                out_array[out_idx++]=count;
+                out_array[out_idx++]=lastInt;
+                lastInt = curInt;
+                count = 1;
+            }
+        }
+      }
+      out_array[out_idx++]=count;
+      out_array[out_idx++]=lastInt;
+     
+      @y1=out_array[0];
+      @y2=out_array[1];
+      @y3=out_array[2];
+      @y4=out_array[3];
+      @y5=out_array[4];
+      @y6=out_array[5];
+      @y7=out_array[6];
+      @y8=out_array[7];
+      @y9=out_array[8];
+      @y10=out_array[9];
+      @y11=out_array[10];
+      @y12=out_array[11];
+      @y13=out_array[12];
+      @y14=out_array[13];
+      @y15=out_array[14];
+      @y16=out_array[15];
+      @y17=out_array[16];
+      @y18=out_array[17];
+      @y19=out_array[18];
+      @y20=out_array[19];
+      @y21=out_array[20];
+      @y22=out_array[21];
+      @y23=out_array[22];
+      @y24=out_array[23];
+      @y25=out_array[24];
+      @y26=out_array[25];
+      @y27=out_array[26];
+      @y28=out_array[27];
+      @y29=out_array[28];
+      @y30=out_array[29];
+      @y31=out_array[30];
+      @y32=out_array[31];
+      @y33=out_array[32];
+      @y34=out_array[33];
+      @y35=out_array[34];
+      @y36=out_array[35];
+      @y37=out_array[36];
+      @y38=out_array[37];
+      @y39=out_array[38];
+      @y40=out_array[39];
+      @y41=out_array[40];
+      @y42=out_array[41];
+      @y43=out_array[42];
+      @y44=out_array[43];
+      @y45=out_array[44];
+      @y46=out_array[45];
+      @y47=out_array[46];
+      @y48=out_array[47];
+      @y49=out_array[48];
+      @y50=out_array[49];
+      @y51=out_array[50];
+      @y52=out_array[51];
+      @y53=out_array[52];
+      @y54=out_array[53];
+      @y55=out_array[54];
+      @y56=out_array[55];
+      @y57=out_array[56];
+      @y58=out_array[57];
+      @y59=out_array[58];
+      @y60=out_array[59];
+      @y61=out_array[60];
+      @y62=out_array[61];
+      @y63=out_array[62];
+      @y64=out_array[63];
+    }
+    output:
+      RunLengthDecoder: y[1-64];
+  }
+
+  actor RunLengthDecoder {
+    input: 
+      RunLengthEncoder: x[1-64];
+    firing:
+    {
+        int i; 
+        int storage[64] = {0};
+        int storage_head = 0;
+        int storage_tail = 0;
+        int count = @x1;
+        int curInt = @x2;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+
+        count =  @x3;
+        curInt = @x4;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+
+        count =  @x5;
+        curInt = @x6;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count =  @x7;
+        curInt = @x8;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count =  @x9;
+        curInt = @x10;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count =  @x11;
+        curInt = @x12;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count =  @x13;
+        curInt = @x14;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count =  @x15;
+        curInt = @x16;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count =  @x17;
+        curInt = @x18;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count =  @x19;
+        curInt = @x20;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count = @x21;
+        curInt = @x22;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+
+        count =  @x23;
+        curInt = @x24;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+
+        count =  @x25;
+        curInt = @x26;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count =  @x27;
+        curInt = @x28;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count =  @x29;
+        curInt = @x30;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count = @x31;
+        curInt = @x32;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+
+        count =  @x33;
+        curInt = @x34;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+
+        count =  @x35;
+        curInt = @x36;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count =  @x37;
+        curInt = @x38;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count =  @x39;
+        curInt = @x40;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count = @x41;
+        curInt = @x42;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+
+        count =  @x43;
+        curInt = @x44;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+
+        count =  @x45;
+        curInt = @x46;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count =  @x47;
+        curInt = @x48;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count =  @x49;
+        curInt = @x50;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count = @x51;
+        curInt = @x52;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+
+        count =  @x53;
+        curInt = @x54;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+
+        count =  @x55;
+        curInt = @x56;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count =  @x57;
+        curInt = @x58;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count =  @x59;
+        curInt = @x60;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+        count = @x61;
+        curInt = @x62;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+
+        count =  @x63;
+        curInt = @x64;
+        for (i = 0; i < count; i++){
+            storage[storage_tail++]=curInt;
+        }
+
+        @y1=storage[0];
+        @y2=storage[1];
+        @y3=storage[2];
+        @y4=storage[3];
+        @y5=storage[4];
+        @y6=storage[5];
+        @y7=storage[6];
+        @y8=storage[7];
+        @y9=storage[8];
+        @y10=storage[9];
+        @y11=storage[10];
+        @y12=storage[11];
+        @y13=storage[12];
+        @y14=storage[13];
+        @y15=storage[14];
+        @y16=storage[15];
+        @y17=storage[16];
+        @y18=storage[17];
+        @y19=storage[18];
+        @y20=storage[19];
+        @y21=storage[20];
+        @y22=storage[21];
+        @y23=storage[22];
+        @y24=storage[23];
+        @y25=storage[24];
+        @y26=storage[25];
+        @y27=storage[26];
+        @y28=storage[27];
+        @y29=storage[28];
+        @y30=storage[29];
+        @y31=storage[30];
+        @y32=storage[31];
+        @y33=storage[32];
+        @y34=storage[33];
+        @y35=storage[34];
+        @y36=storage[35];
+        @y37=storage[36];
+        @y38=storage[37];
+        @y39=storage[38];
+        @y40=storage[39];
+        @y41=storage[40];
+        @y42=storage[41];
+        @y43=storage[42];
+        @y44=storage[43];
+        @y45=storage[44];
+        @y46=storage[45];
+        @y47=storage[46];
+        @y48=storage[47];
+        @y49=storage[48];
+        @y50=storage[49];
+        @y51=storage[50];
+        @y52=storage[51];
+        @y53=storage[52];
+        @y54=storage[53];
+        @y55=storage[54];
+        @y56=storage[55];
+        @y57=storage[56];
+        @y58=storage[57];
+        @y59=storage[58];
+        @y60=storage[59];
+        @y61=storage[60];
+        @y62=storage[61];
+        @y63=storage[62];
+        @y64=storage[63];
+    }
+    output:
+      ZigZagUnordering: y[1-64];
+  }
+
+  actor ZigZagUnordering {
+    input:
+      RunLengthDecoder: x[1-64];
+    firing:
+    {
+        int in_array[64]={
+            @x1, @x2, @x3, @x4, @x5, @x6, @x7, @x8, @x9, @x10,
+            @x11, @x12, @x13, @x14, @x15, @x16, @x17, @x18, @x19, @x20,
+            @x21, @x22, @x23, @x24, @x25, @x26, @x27, @x28, @x29, @x30,
+            @x31, @x32, @x33, @x34, @x35, @x36, @x37, @x38, @x39, @x40,
+            @x41, @x42, @x43, @x44, @x45, @x46, @x47, @x48, @x49, @x50,
+            @x51, @x52, @x53, @x54, @x55, @x56, @x57, @x58, @x59, @x60,
+            @x61, @x62, @x63, @x64};
+       
+        @y1=in_array[UnOrdering[0]];
+        @y2=in_array[UnOrdering[1]];
+        @y3=in_array[UnOrdering[2]];
+        @y4=in_array[UnOrdering[3]];
+        @y5=in_array[UnOrdering[4]];
+        @y6=in_array[UnOrdering[5]];
+        @y7=in_array[UnOrdering[6]];
+        @y8=in_array[UnOrdering[7]];
+        @y9=in_array[UnOrdering[8]];
+        @y10=in_array[UnOrdering[9]];
+        @y11=in_array[UnOrdering[10]];
+        @y12=in_array[UnOrdering[11]];
+        @y13=in_array[UnOrdering[12]];
+        @y14=in_array[UnOrdering[13]];
+        @y15=in_array[UnOrdering[14]];
+        @y16=in_array[UnOrdering[15]];
+        @y17=in_array[UnOrdering[16]];
+        @y18=in_array[UnOrdering[17]];
+        @y19=in_array[UnOrdering[18]];
+        @y20=in_array[UnOrdering[19]];
+        @y21=in_array[UnOrdering[20]];
+        @y22=in_array[UnOrdering[21]];
+        @y23=in_array[UnOrdering[22]];
+        @y24=in_array[UnOrdering[23]];
+        @y25=in_array[UnOrdering[24]];
+        @y26=in_array[UnOrdering[25]];
+        @y27=in_array[UnOrdering[26]];
+        @y28=in_array[UnOrdering[27]];
+        @y29=in_array[UnOrdering[28]];
+        @y30=in_array[UnOrdering[29]];
+        @y31=in_array[UnOrdering[30]];
+        @y32=in_array[UnOrdering[31]];
+        @y33=in_array[UnOrdering[32]];
+        @y34=in_array[UnOrdering[33]];
+        @y35=in_array[UnOrdering[34]];
+        @y36=in_array[UnOrdering[35]];
+        @y37=in_array[UnOrdering[36]];
+        @y38=in_array[UnOrdering[37]];
+        @y39=in_array[UnOrdering[38]];
+        @y40=in_array[UnOrdering[39]];
+        @y41=in_array[UnOrdering[40]];
+        @y42=in_array[UnOrdering[41]];
+        @y43=in_array[UnOrdering[42]];
+        @y44=in_array[UnOrdering[43]];
+        @y45=in_array[UnOrdering[44]];
+        @y46=in_array[UnOrdering[45]];
+        @y47=in_array[UnOrdering[46]];
+        @y48=in_array[UnOrdering[47]];
+        @y49=in_array[UnOrdering[48]];
+        @y50=in_array[UnOrdering[49]];
+        @y51=in_array[UnOrdering[50]];
+        @y52=in_array[UnOrdering[51]];
+        @y53=in_array[UnOrdering[52]];
+        @y54=in_array[UnOrdering[53]];
+        @y55=in_array[UnOrdering[54]];
+        @y56=in_array[UnOrdering[55]];
+        @y57=in_array[UnOrdering[56]];
+        @y58=in_array[UnOrdering[57]];
+        @y59=in_array[UnOrdering[58]];
+        @y60=in_array[UnOrdering[59]];
+        @y61=in_array[UnOrdering[60]];
+        @y62=in_array[UnOrdering[61]];
+        @y63=in_array[UnOrdering[62]];
+        @y64=in_array[UnOrdering[63]];
+    }
+    output:
+      DecoderSplitter: y[1-64];
+  }
+
+  actor AnonDecoder {
+    input:
+      DecoderFeedJoiner: x1,x2;
+    firing:
+    {
+      @y1=@x2;
+      @y2=@x1+@x2;
+    }
+    output:
+      DecoderFeedSplitter: y1,y2;
+  }
+
+  actor staticExampleLuminanceDeQuantization {
+    input:
+      DecoderJoiner: x[1-64];
+    firing:
+    {
+      int val;
+      val = @x1 * quantizationTable[0];
+      @y1 = ((float) (round(val)));
+      val = @x2 * quantizationTable[1];
+      @y2 = ((float) (round(val)));
+      val = @x3 * quantizationTable[2];
+      @y3 = ((float) (round(val)));
+      val = @x4 * quantizationTable[3];
+      @y4 = ((float) (round(val)));
+      val = @x5 * quantizationTable[4];
+      @y5 = ((float) (round(val)));
+      val = @x6 * quantizationTable[5];
+      @y6 = ((float) (round(val)));
+      val = @x7 * quantizationTable[6];
+      @y7 = ((float) (round(val)));
+      val = @x8 * quantizationTable[7];
+      @y8 = ((float) (round(val)));
+      val = @x9 * quantizationTable[8];
+      @y9 = ((float) (round(val)));
+      val = @x10 * quantizationTable[9];
+      @y10 = ((float) (round(val)));
+      val = @x11 * quantizationTable[10];
+      @y11 = ((float) (round(val)));
+      val = @x12 * quantizationTable[11];
+      @y12 = ((float) (round(val)));
+      val = @x13 * quantizationTable[12];
+      @y13 = ((float) (round(val)));
+      val = @x14 * quantizationTable[13];
+      @y14 = ((float) (round(val)));
+      val = @x15 * quantizationTable[14];
+      @y15 = ((float) (round(val)));
+      val = @x16 * quantizationTable[15];
+      @y16 = ((float) (round(val)));
+      val = @x17 * quantizationTable[16];
+      @y17 = ((float) (round(val)));
+      val = @x18 * quantizationTable[17];
+      @y18 = ((float) (round(val)));
+      val = @x19 * quantizationTable[18];
+      @y19 = ((float) (round(val)));
+      val = @x20 * quantizationTable[19];
+      @y20 = ((float) (round(val)));
+      val = @x21 * quantizationTable[20];
+      @y21 = ((float) (round(val)));
+      val = @x22 * quantizationTable[21];
+      @y22 = ((float) (round(val)));
+      val = @x23 * quantizationTable[22];
+      @y23 = ((float) (round(val)));
+      val = @x24 * quantizationTable[23];
+      @y24 = ((float) (round(val)));
+      val = @x25 * quantizationTable[24];
+      @y25 = ((float) (round(val)));
+      val = @x26 * quantizationTable[25];
+      @y26 = ((float) (round(val)));
+      val = @x27 * quantizationTable[26];
+      @y27 = ((float) (round(val)));
+      val = @x28 * quantizationTable[27];
+      @y28 = ((float) (round(val)));
+      val = @x29 * quantizationTable[28];
+      @y29 = ((float) (round(val)));
+      val = @x30 * quantizationTable[29];
+      @y30 = ((float) (round(val)));
+      val = @x31 * quantizationTable[30];
+      @y31 = ((float) (round(val)));
+      val = @x32 * quantizationTable[31];
+      @y32 = ((float) (round(val)));
+      val = @x33 * quantizationTable[32];
+      @y33 = ((float) (round(val)));
+      val = @x34 * quantizationTable[33];
+      @y34 = ((float) (round(val)));
+      val = @x35 * quantizationTable[34];
+      @y35 = ((float) (round(val)));
+      val = @x36 * quantizationTable[35];
+      @y36 = ((float) (round(val)));
+      val = @x37 * quantizationTable[36];
+      @y37 = ((float) (round(val)));
+      val = @x38 * quantizationTable[37];
+      @y38 = ((float) (round(val)));
+      val = @x39 * quantizationTable[38];
+      @y39 = ((float) (round(val)));
+      val = @x40 * quantizationTable[39];
+      @y40 = ((float) (round(val)));
+      val = @x41 * quantizationTable[40];
+      @y41 = ((float) (round(val)));
+      val = @x42 * quantizationTable[41];
+      @y42 = ((float) (round(val)));
+      val = @x43 * quantizationTable[42];
+      @y43 = ((float) (round(val)));
+      val = @x44 * quantizationTable[43];
+      @y44 = ((float) (round(val)));
+      val = @x45 * quantizationTable[44];
+      @y45 = ((float) (round(val)));
+      val = @x46 * quantizationTable[45];
+      @y46 = ((float) (round(val)));
+      val = @x47 * quantizationTable[46];
+      @y47 = ((float) (round(val)));
+      val = @x48 * quantizationTable[47];
+      @y48 = ((float) (round(val)));
+      val = @x49 * quantizationTable[48];
+      @y49 = ((float) (round(val)));
+      val = @x50 * quantizationTable[49];
+      @y50 = ((float) (round(val)));
+      val = @x51 * quantizationTable[50];
+      @y51 = ((float) (round(val)));
+      val = @x52 * quantizationTable[51];
+      @y52 = ((float) (round(val)));
+      val = @x53 * quantizationTable[52];
+      @y53 = ((float) (round(val)));
+      val = @x54 * quantizationTable[53];
+      @y54 = ((float) (round(val)));
+      val = @x55 * quantizationTable[54];
+      @y55 = ((float) (round(val)));
+      val = @x56 * quantizationTable[55];
+      @y56 = ((float) (round(val)));
+      val = @x57 * quantizationTable[56];
+      @y57 = ((float) (round(val)));
+      val = @x58 * quantizationTable[57];
+      @y58 = ((float) (round(val)));
+      val = @x59 * quantizationTable[58];
+      @y59 = ((float) (round(val)));
+      val = @x60 * quantizationTable[59];
+      @y60 = ((float) (round(val)));
+      val = @x61 * quantizationTable[60];
+      @y61 = ((float) (round(val)));
+      val = @x62 * quantizationTable[61];
+      @y62 = ((float) (round(val)));
+      val = @x63 * quantizationTable[62];
+      @y63 = ((float) (round(val)));
+      val = @x64 * quantizationTable[63];
+      @y64 = ((float) (round(val)));
+    }
+    output:
+      iDCT_X_Splitter: y[1-64];
+  }
+
+  actor iDCT_X {
+    input: 
+      iDCT_X_Splitter: x[1-8];
+    firing:
+    {
+        int x;
+        int u;
+        float Cu;
+        float tempsum = 0;
+
+        x = 0;
+        tempsum = 0;
+        u = 0;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x1*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 1;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x2*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 2;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x3*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 3;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x4*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 4;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x5*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 5;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x6*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 6;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x7*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 7;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x8*cos(u*PI*(2.0*x+1)/(2.0*8));
+        @y1=((1.0/2.0)*tempsum);
+
+        
+        x = 1;
+        tempsum = 0;
+        u = 0;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x1*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 1;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x2*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 2;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x3*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 3;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x4*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 4;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x5*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 5;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x6*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 6;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x7*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 7;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x8*cos(u*PI*(2.0*x+1)/(2.0*8));
+        @y2=((1.0/2.0)*tempsum);
+
+        x = 2;
+        tempsum = 0;
+        u = 0;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x1*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 1;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x2*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 2;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x3*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 3;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x4*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 4;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x5*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 5;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x6*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 6;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x7*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 7;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x8*cos(u*PI*(2.0*x+1)/(2.0*8));
+        @y3=((1.0/2.0)*tempsum);
+
+        x = 3;
+        tempsum = 0;
+        u = 0;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x1*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 1;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x2*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 2;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x3*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 3;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x4*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 4;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x5*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 5;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x6*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 6;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x7*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 7;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x8*cos(u*PI*(2.0*x+1)/(2.0*8));
+        @y4=((1.0/2.0)*tempsum);
+
+        
+        x = 4;
+        tempsum = 0;
+        u = 0;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x1*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 1;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x2*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 2;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x3*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 3;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x4*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 4;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x5*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 5;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x6*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 6;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x7*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 7;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x8*cos(u*PI*(2.0*x+1)/(2.0*8));
+        @y5=((1.0/2.0)*tempsum);
+
+        x = 5;
+        tempsum = 0;
+        u = 0;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x1*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 1;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x2*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 2;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x3*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 3;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x4*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 4;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x5*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 5;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x6*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 6;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x7*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 7;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x8*cos(u*PI*(2.0*x+1)/(2.0*8));
+        @y6=((1.0/2.0)*tempsum);
+
+        x = 6;
+        tempsum = 0;
+        u = 0;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x1*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 1;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x2*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 2;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x3*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 3;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x4*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 4;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x5*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 5;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x6*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 6;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x7*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 7;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x8*cos(u*PI*(2.0*x+1)/(2.0*8));
+        @y7=((1.0/2.0)*tempsum);
+
+
+        x = 7;
+        tempsum = 0;
+        u = 0;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x1*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 1;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x2*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 2;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x3*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 3;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x4*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 4;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x5*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 5;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x6*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 6;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x7*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 7;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x8*cos(u*PI*(2.0*x+1)/(2.0*8));
+        @y8=((1.0/2.0)*tempsum);
+    }
+    output:
+      iDCT_X_Joiner: y[1-8];
+  }
+
+  actor iDCT_Y {
+    input:
+      iDCT_Y_Splitter: x[1-8];
+    firing:
+    {
+        int x;
+        int u;
+        float Cu;
+        float tempsum = 0;
+
+        x = 0;
+        tempsum = 0;
+        u = 0;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x1*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 1;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x2*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 2;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x3*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 3;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x4*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 4;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x5*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 5;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x6*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 6;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x7*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 7;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x8*cos(u*PI*(2.0*x+1)/(2.0*8));
+        @y1=((1.0/2.0)*tempsum);
+
+        
+        x = 1;
+        tempsum = 0;
+        u = 0;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x1*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 1;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x2*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 2;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x3*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 3;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x4*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 4;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x5*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 5;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x6*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 6;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x7*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 7;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x8*cos(u*PI*(2.0*x+1)/(2.0*8));
+        @y2=((1.0/2.0)*tempsum);
+
+        x = 2;
+        tempsum = 0;
+        u = 0;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x1*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 1;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x2*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 2;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x3*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 3;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x4*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 4;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x5*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 5;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x6*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 6;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x7*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 7;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x8*cos(u*PI*(2.0*x+1)/(2.0*8));
+        @y3=((1.0/2.0)*tempsum);
+
+        x = 3;
+        tempsum = 0;
+        u = 0;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x1*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 1;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x2*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 2;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x3*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 3;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x4*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 4;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x5*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 5;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x6*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 6;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x7*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 7;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x8*cos(u*PI*(2.0*x+1)/(2.0*8));
+        @y4=((1.0/2.0)*tempsum);
+
+        
+        x = 4;
+        tempsum = 0;
+        u = 0;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x1*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 1;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x2*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 2;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x3*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 3;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x4*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 4;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x5*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 5;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x6*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 6;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x7*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 7;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x8*cos(u*PI*(2.0*x+1)/(2.0*8));
+        @y5=((1.0/2.0)*tempsum);
+
+        x = 5;
+        tempsum = 0;
+        u = 0;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x1*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 1;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x2*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 2;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x3*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 3;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x4*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 4;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x5*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 5;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x6*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 6;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x7*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 7;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x8*cos(u*PI*(2.0*x+1)/(2.0*8));
+        @y6=((1.0/2.0)*tempsum);
+
+        x = 6;
+        tempsum = 0;
+        u = 0;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x1*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 1;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x2*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 2;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x3*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 3;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x4*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 4;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x5*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 5;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x6*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 6;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x7*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 7;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x8*cos(u*PI*(2.0*x+1)/(2.0*8));
+        @y7=((1.0/2.0)*tempsum);
+
+
+        x = 7;
+        tempsum = 0;
+        u = 0;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x1*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 1;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x2*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 2;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x3*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 3;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x4*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 4;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x5*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 5;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x6*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 6;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x7*cos(u*PI*(2.0*x+1)/(2.0*8));
+        u = 7;
+        if (u == 0){
+          Cu = 1/sqrt(2);
+        }else{
+          Cu = 1;
+        }
+        tempsum += Cu*@x8*cos(u*PI*(2.0*x+1)/(2.0*8));
+        @y8=((1.0/2.0)*tempsum);
+    }
+    output:
+      iDCT_Y_Joiner: y[1-8];
+  }
+
+  actor iAdd {
+    input: 
+      iDCT_Y_Joiner: x1;
+    firing:
+    {
+      @y1=@x1+128;
+    }
+    output:
+      Float2Int: y1;
+  }
+
+  actor Float2Int {
+    input:
+      iAdd: x1;
+    firing:
+    {
+        @y1=((int)round(@x1));
+    }
+    output:
+      Display8BitIntBlock: y1;
+  }
+
+  actor Display8BitIntBlock {
+    input:
+      Float2Int: x[1-8];
+    firing:
+    {
+        int i;
+        int in[8]={0};
+        in[0] = @x1;
+        in[1] = @x2;
+        in[2] = @x3;
+        in[3] = @x4;
+        in[4] = @x5;
+        in[5] = @x6;
+        in[6] = @x7;
+        in[7] = @x8;
+        //printf("NEWLINE\n");
+        for (i = 0; i < 8; i++) {
+          //printf("%d\n", in[i]);
+          sum+=in[i];
+        }
+    }
+  }
+}
+
+
+postamble
+{
+int main(){
+    JPEGFeed();
+    printf("%lld\n", sum);
+    return 0;
+}
+}
