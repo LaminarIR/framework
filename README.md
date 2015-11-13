@@ -6,7 +6,7 @@ between actors. In contrast to prior work, tokens on data channels
 are named, which enables a compiler to shift data channel management 
 from run-time to compile-time. 
 
-The compiler for LaminarIR is written in Python that generates C code
+The compiler for LaminarIR is written in Python and generates C code
 for a given LaminarIR program. Currently, LaminarIR has only a single 
 front-end that translates StreamIt to LaminarIR.  
 
@@ -15,7 +15,7 @@ the adapted StreamIt frontend to translate StreamIt to LaminarIR, and
 a set of StreamIt benchmarks for performance evaluation.
 
 The LaminarIR framework is open source software distributed under the terms of
-the license agreement found in LICENSE.TXT.
+the license agreement found in LICENSE.txt.
 
 # CONTACTS
 
@@ -25,23 +25,24 @@ the license agreement found in LICENSE.TXT.
 
 # INSTALLATION
 
-The LaminarIR framework requires a Linux system that has installed the following software packages:
+The LaminarIR framework requires a Linux system that has installed the following 
+software packages (stated versions are known to work):
 
  * JDK       1.7.0
  * Python    2.7.6
  * pygraph   1.8.2
  * StreamIt  github.r8592
  * Clang & LLVM  3.5.0, 3.7.0
- * Likwid    3.1.2, 3.1.3
- * PAPI      5.2.0, 5.3.2
+ * [LIKWID](https://code.google.com/p/likwid/)    3.1.2, 3.1.3
+ * [PAPI](http://icl.cs.utk.edu/papi/)      5.2.0, 5.3.2
  * ANTLR v3.1 (3.1, 3.1.1, 3.1.2)
 
 JDK is needed for the parser generator of LaminarIR and the execution of 
 StreamIt. Python and pygraph are required for the LaminarIR compiler. 
 StreamIt is required to evaluate StreamIt for benchmarking.
 Clang and LLVM are required to compile C codes and generate 
-compiler optimization statistics.  Likwid and PAPI are required for
-performance measurements.  Likwid is used to pin threads to specific cores,
+compiler optimization statistics.  LIKWID and PAPI are required for
+performance measurements.  LIKWID is used to pin threads to specific cores,
 and PAPI provides a wrapper to access hardware performance counters.  ANTLR
 v3.1 is required to generate LaminarIR parser. Please download the ANTLR v.3.1 jar
 file and locate under src/bin.
