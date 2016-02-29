@@ -19,8 +19,8 @@ the license agreement found in LICENSE.txt.
 
 # CONTACTS
 
- * Yousun Ko           <yousun.ko@cs.yonsei.ac.kr>
- * Bernd Burgstaller   <bburg@cs.yonsei.ac.kr>
+ * Yousun Ko           <yousun.ko@yonsei.ac.kr>
+ * Bernd Burgstaller   <bburg@yonsei.ac.kr>
  * Bernhard Scholz     <Bernhard.Scholz@sydney.edu.au>
 
 # INSTALLATION
